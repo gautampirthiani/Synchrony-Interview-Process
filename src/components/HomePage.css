@@ -1,0 +1,84 @@
+/* src/components/HomePage.css */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.homepage-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 15px;
+    background-color: #fff;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.navbar-logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2a7dfa;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.nav-links a:hover {
+    background-color: #2a7dfa;
+    color: #fff;
+}
+
+.homepage-image {
+    max-width: 100%;
+    border-radius: 15px;
+    margin: 50px 0;
+}
+
+.homepage-heading {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.footer {
+    padding: 20px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    background-color: #f8f9fa; 
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.logo-image {
+    max-width: 200px; 
+    margin: 0 auto;
+}
