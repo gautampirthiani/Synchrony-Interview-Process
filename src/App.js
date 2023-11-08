@@ -5,12 +5,19 @@ import HomePage from './components/HomePage';
 import Interviews from './components/Dashboard/Interviews';
 import NewInterview from './components/Dashboard/NewInterview';
 import DataVisualization from './components/Dashboard/DataVisualization';
+import HomePageAnimation from './components/HomePageAnimation';
 import './App.css';
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={
+          <>
+          <HomePageAnimation />
+          <HomePage />
+          </>
+        } />
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard/interviews" element={<Interviews />} />
         <Route path="/dashboard/new-interview" element={<NewInterview />} />
