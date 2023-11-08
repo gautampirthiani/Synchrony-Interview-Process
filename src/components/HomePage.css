@@ -3,7 +3,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
+    background-color: #3f4159;
     color: #333;
 }
 
@@ -81,4 +81,81 @@ body {
 .logo-image {
     max-width: 200px; 
     margin: 0 auto;
+}
+
+/* Add to src/components/HomePage.css */
+.footer {
+    background-color: #2a2d3e;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer a {
+    color: #5591ff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer a:hover {
+    color: #fff;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 60px;
+}
+
+.footer-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-heading {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li a {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.footer-contact-item i {
+    margin-right: 10px;
+}
+
+.footer-contact-item a {
+    transition: color 0.2s ease;
+}
+
+.footer-contact-item a:hover {
+    color: #5591ff;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+    }
+
+    .footer-section {
+        margin-bottom: 30px;
+    }
 }
