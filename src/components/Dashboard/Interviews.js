@@ -1,30 +1,18 @@
-// src/components/Dashboard/Interviews.js
-import React, { useEffect, useState } from 'react';
+// src/components/Dashboard/NewInterview.js
+import React from 'react';
 
-const Interviews = () => {
-  const [interviews, setInterviews] = useState([]);
-
-  useEffect(() => {
-    // Fetch data from backend
-    async function fetchData() {
-      const response = await fetch('/api/interviews'); // Backend API endpoint
-      const data = await response.json();
-      setInterviews(data);
-    }
-
-    fetchData();
-  }, []);
+const NewInterview = () => {
+  // Preloaded templates can be fetched or imported
 
   return (
     <div>
-      <h2>All Interviews</h2>
-      {interviews.map((interview, index) => (
-        <div key={index}>
-          {/* Display interview data here */}
-        </div>
-      ))}
+      <h2>Interviews</h2>
+      {/* Display templates here */}
     </div>
   );
 };
 
-export default Interviews;
+export default NewInterview;
+
+
+//DELTE ALL OF THISCODE START FROM SCRATCH

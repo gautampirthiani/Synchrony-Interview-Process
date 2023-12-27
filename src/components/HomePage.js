@@ -1,10 +1,28 @@
 // src/components/HomePage.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import logoimage from './synchrony-logo-1.png';
+import logoimage from './synchrony-logo-2.png';
 import './HomePage.css';
 
 const HomePage = () => {
+  // Placeholder state to hold interview data from the database
+  const [interviews, setInterviews] = useState([]);
+
+  // Placeholder for fetching data from the database
+  useEffect(() => {
+    // Simulate fetching data
+    const fetchData = async () => {
+      const exampleData = [
+        { id: '001', name: 'Front-end Developer Interview', interviewer: 'John Doe' },
+        { id: '002', name: 'Back-end Developer Interview', interviewer: 'Jane Smith' },
+        // Add more data here
+      ];
+      setInterviews(exampleData);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="homepage-container">
       
@@ -12,18 +30,38 @@ const HomePage = () => {
         <img src={logoimage} alt="Company Logo" className="logo-image" />
       </div>
 
-      <div className="navbar">
-        <span className="navbar-logo">Synchrony</span>
-        <ul className="nav-links">
-          <li><Link to="/dashboard/interviews">Interviews</Link></li>
-          <li><Link to="/dashboard/new-interview">New Interview</Link></li>
-          <li><Link to="/dashboard/edit-templates">Edit Templates</Link></li>
-          <li><Link to="/dashboard/data-analysis">Data Analysis</Link></li>
-        </ul>
+      <div className="nav-bar-container">
+        <div className="navbar">
+          <ul className="nav-links">
+            <li><Link to="/dashboard/interviews">Interviews</Link></li>
+            <li><Link to="/dashboard/new-interview">New Interview</Link></li>
+            <li><Link to="/dashboard/edit-templates">Edit Templates</Link></li>
+            <li><Link to="/dashboard/data-analysis">Data Analysis</Link></li>
+          </ul>
+        </div>
       </div>
+
+      <h2 className="homepage-heading">Recent Interviews</h2>
       
-      <h2 className="homepage-heading">Synchrony Interviews</h2>
-      
+      <table className="interviews-table">
+        <thead>
+          <tr>
+            <th>Interview ID</th>
+            <th>Interview Name</th>
+            <th>Interviewer</th>
+          </tr>
+        </thead>
+        <tbody>
+          {interviews.map((interview) => (
+            <tr key={interview.id}>
+              <td>{interview.id}</td>
+              <td>{interview.name}</td>
+              <td>{interview.interviewer}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-section">
