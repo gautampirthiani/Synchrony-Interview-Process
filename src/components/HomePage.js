@@ -1,23 +1,22 @@
-// src/components/HomePage.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logoimage from './synchrony-logo-2.png';
 import './HomePage.css';
 
 const HomePage = () => {
-  // Placeholder state to hold interview data from the database
   const [interviews, setInterviews] = useState([]);
 
-  // Placeholder for fetching data from the database
   useEffect(() => {
-    // Simulate fetching data
+    const apiEndpoint = 'https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/InterviewsAccess';
+
     const fetchData = async () => {
-      const exampleData = [
-        { id: '001', name: 'Front-end Developer Interview', interviewer: 'John Doe' },
-        { id: '002', name: 'Back-end Developer Interview', interviewer: 'Jane Smith' },
-        // Add more data here
-      ];
-      setInterviews(exampleData);
+      try {
+        const response = await fetch(apiEndpoint);
+        const data = await response.json();
+        setInterviews(data);
+      } catch (err) {
+        console.error("Error fetching data", err);
+      }
     };
 
     fetchData();
@@ -25,7 +24,6 @@ const HomePage = () => {
 
   return (
     <div className="homepage-container">
-      
       <div className="logo-container">
         <img src={logoimage} alt="Company Logo" className="logo-image" />
       </div>
@@ -47,16 +45,14 @@ const HomePage = () => {
         <thead>
           <tr>
             <th>Interview ID</th>
-            <th>Interview Name</th>
-            <th>Interviewer</th>
+            <th>Name</th>
           </tr>
         </thead>
         <tbody>
           {interviews.map((interview) => (
-            <tr key={interview.id}>
-              <td>{interview.id}</td>
-              <td>{interview.name}</td>
-              <td>{interview.interviewer}</td>
+            <tr key={interview.InterviewID}>
+              <td>{interview.InterviewID}</td>
+              <td>{interview.Name}</td>
             </tr>
           ))}
         </tbody>
@@ -105,7 +101,6 @@ const HomePage = () => {
           &copy; 2023 Synchrony. All Rights Reserved.
         </div>
       </footer>
-      
     </div>
   );
 };
