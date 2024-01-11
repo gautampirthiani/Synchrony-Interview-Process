@@ -46,6 +46,7 @@ const HomePage = () => {
           <tr>
             <th>Interview ID</th>
             <th>Name</th>
+            <th>Interviewer</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +54,7 @@ const HomePage = () => {
             <tr key={interview.InterviewID}>
               <td>{interview.InterviewID}</td>
               <td>{interview.Name}</td>
+              <td>{interview.Interviewer}</td>
             </tr>
           ))}
         </tbody>
