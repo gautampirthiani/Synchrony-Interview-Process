@@ -5,7 +5,7 @@ const DataVisualization = () => {
   return (
     <div>
       <h2>Data Visualization</h2>
-      {/* Visualization will be added here */}
+      {}
     </div>
   );
 };
