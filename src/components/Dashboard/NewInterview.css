@@ -1,0 +1,34 @@
+/* src/components/Dashboard/NewInterview.css */
+.new-interview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .job-positions {
+    margin-top: 20px;
+  }
+  
+  .job-positions h3 {
+    margin-bottom: 10px;
+  }
+  
+  .job-positions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .job-positions li {
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .selected-job-position {
+    margin-top: 20px;
+  }
+  
