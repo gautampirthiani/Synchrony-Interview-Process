@@ -1,161 +1,59 @@
-/* src/components/HomePage.css */
-body {
+/* General Page Styles */
+.homepage-container {
     font-family: 'Arial', sans-serif;
+    color: #333;
     margin: 0;
     padding: 0;
-    background-color: #3f4159;
-    color: #333;
 }
 
-.homepage-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 60px 15px;
-    background-color: #fff;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px solid #e5e5e5;
-}
-
-.navbar-logo {
-    font-size: 28px;
-    font-weight: 700;
-    color: #2a7dfa;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 600;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
-}
-
-.nav-links a:hover {
-    background-color: #2a7dfa;
-    color: #fff;
-}
-
-.homepage-image {
-    max-width: 100%;
-    border-radius: 15px;
-    margin: 50px 0;
-}
-
-.homepage-heading {
-    font-size: 42px;
-    font-weight: 800;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.footer {
-    padding: 20px 0;
-    text-align: center;
-    font-size: 14px;
-    color: #777;
-}
-
+/* Logo Styles */
 .logo-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 20px 0;
-    background-color: #f8f9fa; 
-    border-bottom: 1px solid #e5e5e5;
+    margin-top: 20px;
 }
 
 .logo-image {
-    max-width: 200px; 
-    margin: 0 auto;
+    width: 150px;
+    height: auto;
 }
 
-/* Add to src/components/HomePage.css */
+/* Main Heading Styles */
+.homepage-heading {
+    text-align: center;
+    color: #005AA7; /* Synchrony Blue */
+    margin-top: 40px;
+}
+
+/* Footer Styles */
 .footer {
-    background-color: #2a2d3e;
-    color: #fff;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.footer a {
-    color: #5591ff;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer a:hover {
-    color: #fff;
+    background-color: #f4f4f4;
+    padding: 20px;
+    text-align: center;
 }
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
-    padding: 40px 60px;
+    justify-content: center;
+    align-items: center;
 }
 
 .footer-section {
-    display: flex;
-    flex-direction: column;
+    margin: 10px;
 }
 
 .footer-heading {
+    color: #005AA7; /* Synchrony Blue */
     font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.footer-links {
-    list-style: none;
-    padding: 0;
-}
-
-.footer-links li a {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.footer-contact {
-    display: flex;
-    flex-direction: column;
 }
 
 .footer-contact-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+    color: #333;
+    margin: 5px 0;
 }
 
-.footer-contact-item i {
-    margin-right: 10px;
-}
-
-.footer-contact-item a {
-    transition: color 0.2s ease;
-}
-
-.footer-contact-item a:hover {
-    color: #5591ff;
-}
-
-@media (max-width: 768px) {
-    .footer-content {
-        flex-direction: column;
-    }
-
-    .footer-section {
-        margin-bottom: 30px;
-    }
+.footer-bottom-text {
+    color: #666;
+    font-size: 14px;
+    margin-top: 20px;
 }
