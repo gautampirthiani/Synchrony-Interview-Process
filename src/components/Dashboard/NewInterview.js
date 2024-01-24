@@ -1,60 +1,74 @@
-// src/components/Dashboard/NewInterview.js
-import React, { useState, useEffect } from 'react';
+// NewInterview.js
+
+import React, { useState } from 'react';
 import axios from 'axios';
-import logoimage from './synchrony-logo-1.png'; // Update the path accordingly
-import './Interviews.css';
+import logoImage from './synchrony-logo-1.png'; // Make sure this is the correct path to your logo
+import './NewInterview.css';
+import Navbar from '../Navbar'; // Make sure this is the correct path to your Navbar component
 
-const NewInterview = () => {
-  const [jobPositions, setJobPositions] = useState([]);
-  const [selectedJobPosition, setSelectedJobPosition] = useState(null);
+function NewInterview() {
+  const [positions, setPositions] = useState([]);
+  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [template, setTemplate] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    // Fetch job positions from the backend
-    axios.get('https://your-backend-endpoint/job-positions')
-      .then((response) => {
-        setJobPositions(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching job positions:', error);
-      });
-  }, []);
+  const handlePositionSearch = async (event) => {
+    setSearchTerm(event.target.value);
+    if (event.target.value) {
+      try {
+        const { data } = await axios.get(`/api/positions?search=${event.target.value}`);
+        setPositions(data);
+      } catch (error) {
+        console.error('Error searching positions:', error);
+      }
+    } else {
+      setPositions([]);
+    }
+  };
 
-  const handleJobPositionClick = (jobPosition) => {
-    setSelectedJobPosition(jobPosition);
-    // Additional logic for fetching and handling templates for the selected job position
+  const selectPosition = async (position) => {
+    setSelectedPosition(position);
+    try {
+      const { data } = await axios.get(`/api/templates/${position.id}`);
+      setTemplate(data);
+    } catch (error) {
+      console.error('Error fetching template:', error);
+    }
   };
 
   return (
-    <div className="homepage-container">
-      <div className="logo-container">
-        <img src={logoimage} alt="Company Logo" className="logo-image" />
+    <div className="new-interview-container">
+      <div className="header">
+        <img src={logoImage} alt="Synchrony Logo" className="logo" />
+        <Navbar />
       </div>
-
-      <div className="homepage-content">
-        <h1>New Interview</h1>
-
-        {/* Display job positions */}
-        <div className="job-positions">
-          <h3>Select a Job Position:</h3>
-          <ul>
-            {jobPositions.map((jobPosition) => (
-              <li key={jobPosition.id} onClick={() => handleJobPositionClick(jobPosition)}>
-                {jobPosition.title}
-              </li>
-            ))}
-          </ul>
+      <div className="portal-header-container">
+        <h1 className="recruiting-portal-header">New Interview</h1>
+      </div>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search by job position"
+          value={searchTerm}
+          onChange={handlePositionSearch}
+          className="search-bar"
+        />
+        <div className="position-list">
+          {positions.map((position) => (
+            <div key={position.id} onClick={() => selectPosition(position)} className="position-item">
+              {position.title}
+            </div>
+          ))}
         </div>
-
-        {/* Display selected job position details */}
-        {selectedJobPosition && (
-          <div className="selected-job-position">
-            <h3>Selected Job Position: {selectedJobPosition.title}</h3>
-            {/* Additional components for interacting with templates and collecting interviewee answers */}
-          </div>
-        )}
       </div>
+      {selectedPosition && (
+        <div className="template-container">
+          {/* Render the template here */}
+          <div>{template}</div>
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default NewInterview;
