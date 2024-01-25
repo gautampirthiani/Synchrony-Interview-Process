@@ -74,4 +74,25 @@
   margin-bottom: 2rem; /* Space after search bar */
 }
 
+.interviews-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.interview-item {
+  background-color: #fff;
+  color: #000;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  width: 80%; /* Adjust the width as needed */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.interview-item p {
+  margin: 5px 0;
+}
+
+
 /* Add additional styles below */
