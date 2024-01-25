@@ -1,4 +1,5 @@
-/* General Page Styles */
+/* HomePage.css */
+
 .homepage-container {
     font-family: 'Arial', sans-serif;
     color: #333;
@@ -6,7 +7,6 @@
     padding: 0;
 }
 
-/* Logo Styles */
 .logo-container {
     display: flex;
     justify-content: center;
@@ -18,14 +18,12 @@
     height: auto;
 }
 
-/* Main Heading Styles */
 .homepage-heading {
     text-align: center;
-    color: #005AA7; /* Synchrony Blue */
+    color: #005AA7; 
     margin-top: 40px;
 }
 
-/* Footer Styles */
 .footer {
     background-color: #f4f4f4;
     padding: 20px;
@@ -43,7 +41,7 @@
 }
 
 .footer-heading {
-    color: #005AA7; /* Synchrony Blue */
+    color: #005AA7; 
     font-size: 18px;
 }
 
@@ -56,4 +54,26 @@
     color: #666;
     font-size: 14px;
     margin-top: 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.sign-out-button {
+    background-color: #005AA7; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+}
+
+.sign-out-button:hover {
+    background-color: #004080; 
 }

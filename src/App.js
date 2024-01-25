@@ -6,7 +6,7 @@ import HomePage from './components/HomePage';
 import Interviews from './components/Dashboard/Interviews';
 import NewInterview from './components/Dashboard/NewInterview';
 import EditTemplates from './components/Dashboard/EditTemplates';
-import Login from './components/Login';
+
 
 import './App.css';
 
