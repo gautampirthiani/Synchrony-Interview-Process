@@ -1,12 +1,5 @@
-<<<<<<< Updated upstream
 // src/components/Dashboard/NewInterview.js
 import React, { useState, useEffect } from 'react';
-=======
-// NewInterview.js
-
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
->>>>>>> Stashed changes
 import axios from 'axios';
 import logoimage from './synchrony-logo-1.png'; // Update the path accordingly
 import './Interviews.css';
@@ -32,18 +25,9 @@ const NewInterview = () => {
   };
 
   return (
-<<<<<<< Updated upstream
     <div className="homepage-container">
       <div className="logo-container">
         <img src={logoimage} alt="Company Logo" className="logo-image" />
-=======
-    <div className="new-interview-container">
-      <div className="header">
-      <Link to ="/">
-        <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
->>>>>>> Stashed changes
       </div>
 
       <div className="homepage-content">
