@@ -1,0 +1,56 @@
+/* NewInterview.css */
+
+.new-interview-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #002244; /* Consistent background color */
+  color: white;
+  min-height: 100vh;
+}
+
+/* Reuse the same header styles */
+.header {
+  /* ... */
+}
+
+.logo {
+  /* ... */
+}
+
+/* Reuse the navbar styles */
+.navbar {
+  /* ... */
+}
+
+/* ... (Keep the rest of the existing styles) */
+
+/* Add new styles for position list */
+.position-list {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+  max-height: 200px; /* Limit the height of the list */
+  overflow-y: auto; /* Enable scrolling if list is too long */
+  border-radius: 5px;
+  margin-top: 1rem;
+}
+
+.position-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Separator for list items */
+  cursor: pointer;
+}
+
+.position-item:hover {
+  background-color: #f2f2f2; /* Hover effect for list items */
+}
+
+.template-container {
+  margin: 20px;
+  padding: 20px;
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+}
+
+/* You may need to add additional styles for the template display */
