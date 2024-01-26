@@ -1,0 +1,65 @@
+/* HomePage.css */
+
+.homepage-container {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.logo-image {
+    width: 150px;
+    height: auto;
+}
+
+.homepage-heading {
+    text-align: center;
+    color: #005AA7; 
+    margin-top: 40px;
+}
+
+.footer {
+    background-color: #f4f4f4;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-section {
+    margin: 10px;
+}
+
+.footer-heading {
+    color: #005AA7; 
+    font-size: 18px;
+}
+
+.footer-contact-item {
+    color: #333;
+    margin: 5px 0;
+}
+
+.footer-bottom-text {
+    color: #666;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
