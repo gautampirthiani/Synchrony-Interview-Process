@@ -1,0 +1,98 @@
+/* Interviews.css */
+
+.interviews-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #002244; /* Very dark blue background for the rest of the page */
+  color: white;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Align logo to the left and other items to the right */
+  background-color: #FFF;
+  padding: 0.5rem 1rem;
+}
+
+.logo {
+  height: 120px; /* Bigger logo as requested */
+  margin-left: left; /* Push the logo to the left */
+}
+
+/* Styles for the navbar links */
+.navbar {
+  margin-left: auto;
+}
+
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar ul li {
+  margin-left: 20px; /* Spacing between nav items */
+}
+
+.navbar ul li:last-child {
+  margin-right: 0; /* No margin for the last item */
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: black; /* Black font color for nav links */
+  font-size: 16px;
+  padding: 0.5rem 1rem; /* Padding for nav links */
+}
+
+
+.portal-header-container {
+  text-align: center; /* Center the portal header text */
+  margin: 20px 0;
+}
+
+.recruiting-portal-header {
+  font-size: 24px;
+  color: white; /* White text for the header */
+}
+
+.search-container {
+  display: flex;
+  justify-content: center; /* Center search bar container */
+  padding: 20px;
+}
+
+.search-bar {
+  width: 50%; /* Or any other width as per design */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 2rem; /* Space after search bar */
+}
+
+.interviews-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.interview-item {
+  background-color: #fff;
+  color: #000;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  width: 80%; /* Adjust the width as needed */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.interview-item p {
+  margin: 5px 0;
+}
+
+
+/* Add additional styles below */
