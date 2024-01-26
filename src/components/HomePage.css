@@ -63,17 +63,3 @@
     padding: 10px 20px;
 }
 
-.sign-out-button {
-    background-color: #005AA7; 
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    outline: none;
-}
-
-.sign-out-button:hover {
-    background-color: #004080; 
-}

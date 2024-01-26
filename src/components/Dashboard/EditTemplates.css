@@ -1,69 +1,68 @@
 /* EditTemplates.css */
 
 .edit-templates-container {
-    font-family: 'Arial', sans-serif;
-    background-color: #002244; /* Consistent with other pages */
-    color: white;
-    min-height: 100vh;
-  }
-  
-  /* Reuse header and logo styles */
-  .header {
-    /* ... */
-  }
-  
-  .logo {
-    /* ... */
-  }
-  
-  /* Reuse navbar styles */
-  .navbar {
-    /* ... */
-  }
-  
-  /* Reuse portal header styles */
-  .portal-header-container {
-    /* ... */
-  }
-  
-  .recruiting-portal-header {
-    /* ... */
-  }
-  
-  /* Reuse search bar styles */
-  .search-container {
-    /* ... */
-  }
-  
-  .search-bar {
-    /* ... */
-  }
-  
-  /* Styles for the positions and templates lists */
-  .positions-container {
-    display: flex;
-    flex-direction: column;
-    max-height: 300px;
-    overflow-y: auto;
-    margin: 1rem;
-    padding: 0.5rem;
-    border-radius: 5px;
-  }
-  
-  .position-item {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-  }
-  
-  .position-item:hover {
-    background-color: #f2f2f2;
-    color: black;
-  }
-  
-  .templates-container {
-    margin: 1rem;
-    padding: 0.5rem;
-  }
-  
-  
+  font-family: 'Arial', sans-serif;
+  background-color: #002244; /* Consistent with other pages */
+  color: white;
+  min-height: 100vh;
+}
+
+/* Reuse header and logo styles */
+.header {
+  /* ... */
+}
+
+.logo {
+  /* ... */
+}
+
+/* Reuse navbar styles */
+.navbar {
+  /* ... */
+}
+
+/* Reuse portal header styles */
+.portal-header-container {
+  /* ... */
+}
+
+.recruiting-portal-header {
+  /* ... */
+}
+
+/* Reuse search bar styles */
+.search-container {
+  /* ... */
+}
+
+.search-bar {
+  /* ... */
+}
+
+/* Styles for the positions and templates lists */
+.positions-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.position-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.position-item:hover {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+.templates-container {
+  margin: 1rem;
+  padding: 0.5rem;
+}
+

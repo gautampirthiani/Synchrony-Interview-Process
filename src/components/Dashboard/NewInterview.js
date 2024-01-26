@@ -5,6 +5,7 @@ import axios from 'axios';
 import logoImage from './synchrony-logo-1.png'; // Make sure this is the correct path to your logo
 import './NewInterview.css';
 import Navbar from '../Navbar'; // Make sure this is the correct path to your Navbar component
+import { Link } from 'react-router-dom';
 
 function NewInterview() {
   const [positions, setPositions] = useState([]);
@@ -39,7 +40,9 @@ function NewInterview() {
   return (
     <div className="new-interview-container">
       <div className="header">
+        <Link to ="/">
         <img src={logoImage} alt="Synchrony Logo" className="logo" />
+        </Link>
         <Navbar />
       </div>
       <div className="portal-header-container">

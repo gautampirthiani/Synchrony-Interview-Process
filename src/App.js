@@ -11,10 +11,6 @@ import EditTemplates from './components/Dashboard/EditTemplates';
 import './App.css';
 
 function App() {
-  // const [token, setToken] = useState();
-  // if(!token) {
-  //   return <Login setToken={setToken} />
-  // }
   return (
     <Router>
       <Routes>
