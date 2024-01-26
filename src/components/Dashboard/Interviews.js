@@ -43,11 +43,29 @@ function Interviews() {
     setSearchTerm(event.target.value);
   };
 
+  const handleInterviewItemClick = async (interviewID) => {
+    try {
+      const requestBody = {
+        interviewID: interviewID  // Change the key to match your Lambda function expectation
+      };
+      // Make POST request to your Lambda function endpoint
+      const response = await axios.post(
+        'https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/openInterview',
+        requestBody  // Send the requestBody directly
+      );
+      // Handle the response as needed
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error posting to Lambda function:', error);
+    }
+  };
+  
+
   return (
     <div className="interviews-container">
       <div className="header">
-        <Link to ="/">
-        <img src={logoImage} alt="Synchrony Logo" className="logo" />
+        <Link to="/">
+          <img src={logoImage} alt="Synchrony Logo" className="logo" />
         </Link>
         <Navbar />
       </div>
@@ -64,17 +82,53 @@ function Interviews() {
         />
       </div>
       <div className="interviews-list">
-  {filteredInterviews.map((interview) => (
-    <div key={interview.InterviewID} className="interview-item">
-      <p>Interview ID: {interview.InterviewID}</p>
-      <p>Interviewer: {interview.Interviewer || 'N/A'}</p> {/* If interviewer is undefined, display 'N/A' */}
-      <p>Name: {interview.Name}</p>
-    </div>
-  ))}
-</div>
-
+        {filteredInterviews.map((interview) => (
+          // The entire interview item is now clickable
+          <div key={interview.InterviewID} className="interview-item" onClick={() => handleInterviewItemClick(interview.InterviewID)}>
+            <p>Interview ID: {interview.InterviewID}</p>
+            <p>Interviewer: {interview.Interviewer || 'N/A'}</p>
+            <p>Name: {interview.Name}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
+  
+
+
+
+//   return (
+//     <div className="interviews-container">
+//       <div className="header">
+//         <Link to ="/">
+//         <img src={logoImage} alt="Synchrony Logo" className="logo" />
+//         </Link>
+//         <Navbar />
+//       </div>
+//       <div className="portal-header-container">
+//         <h1 className="recruiting-portal-header">Recruiting Portal</h1>
+//       </div>
+//       <div className="search-container">
+//         <input
+//           type="text"
+//           placeholder="Search by interviewer, applicant, or date"
+//           value={searchTerm}
+//           onChange={handleSearch}
+//           className="search-bar"
+//         />
+//       </div>
+//       <div className="interviews-list">
+//   {filteredInterviews.map((interview) => (
+//     <div key={interview.InterviewID} className="interview-item">
+//       <p>Interview ID: {interview.InterviewID}</p>
+//       <p>Interviewer: {interview.Interviewer || 'N/A'}</p> {/* If interviewer is undefined, display 'N/A' */}
+//       <p>Name: {interview.Name}</p>
+//     </div>
+//   ))}
+// </div>
+
+//     </div>
+//   );
 }
 
 export default Interviews;
