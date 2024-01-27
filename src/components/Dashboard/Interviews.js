@@ -5,6 +5,10 @@ import logoImage from './synchrony-logo-1.png';
 import './Interviews.css';
 import Navbar from '../Navbar';
 import HomePage from '../HomePage';
+import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import InterviewDetails from '../InterviewDetails';
+
 
 function Interviews() {
   const [interviews, setInterviews] = useState([]);
@@ -43,11 +47,17 @@ function Interviews() {
     setSearchTerm(event.target.value);
   };
 
+  const navigate = useNavigate();
+  // This function will be called when the user clicks on an interview item
+  const handleInterviewItemClick = (interviewID) => {
+    navigate(`/interview-details/${interviewID}`);
+  };
+
   return (
     <div className="interviews-container">
       <div className="header">
-        <Link to ="/">
-        <img src={logoImage} alt="Synchrony Logo" className="logo" />
+        <Link to="/">
+          <img src={logoImage} alt="Synchrony Logo" className="logo" />
         </Link>
         <Navbar />
       </div>
@@ -64,15 +74,15 @@ function Interviews() {
         />
       </div>
       <div className="interviews-list">
-  {filteredInterviews.map((interview) => (
-    <div key={interview.InterviewID} className="interview-item">
-      <p>Interview ID: {interview.InterviewID}</p>
-      <p>Interviewer: {interview.Interviewer || 'N/A'}</p> {/* If interviewer is undefined, display 'N/A' */}
-      <p>Name: {interview.Name}</p>
-    </div>
-  ))}
-</div>
-
+        {filteredInterviews.map((interview) => (
+          // The entire interview item is now clickable
+          <div key={interview.InterviewID} className="interview-item" onClick={() => handleInterviewItemClick(interview.InterviewID)}>
+            <p>Interview ID: {interview.InterviewID}</p>
+            <p>Interviewer: {interview.Interviewer || 'N/A'}</p>
+            <p>Name: {interview.Name}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
