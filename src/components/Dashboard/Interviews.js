@@ -66,11 +66,11 @@ function Interviews() {
   })
   .then(data => {
       // Handle the response data
-      console.log('Success:', data);
+      console.log('Success: ', data);
   })
   .catch((error) => {
       // Handle any errors
-      console.error('Error:', error);
+      console.error('Error: ', error);
   });
   };
   
