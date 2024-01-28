@@ -128,8 +128,6 @@ function Interviews() {
       </div>
     </div>
   );
-  
-
 
 
 //   return (
