@@ -21,6 +21,7 @@ function App() {
         <Route path="/dashboard/New-interview" element={<NewInterview />} />
         <Route path="/dashboard/edit-templates" element={<EditTemplates />} />
         <Route path="/interview-details/:interviewID" element={<InterviewDetails />} />
+        
       </Routes>
     </Router>
   );
