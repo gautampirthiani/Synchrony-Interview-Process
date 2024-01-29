@@ -9,7 +9,6 @@ import { useHistory } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import InterviewDetails from '../InterviewDetails';
 
-
 function Interviews() {
   const [interviews, setInterviews] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');

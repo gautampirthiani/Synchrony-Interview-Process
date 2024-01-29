@@ -150,4 +150,6 @@ function NewTemplates() {
     );
 }
 
+
 export default NewTemplates;
+
