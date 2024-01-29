@@ -1,0 +1,114 @@
+/* NewTemplates.css */
+
+.new-templates-container {
+    font-family: 'Arial', sans-serif;
+    background-color: #002244; /* Consistent with other pages */
+    color: white;
+    min-height: 100vh;
+  }
+  
+  /* Reuse header and logo styles */
+  .header {
+    /* ... */
+  }
+  
+  .logo {
+    /* ... */
+  }
+  
+  /* Reuse navbar styles */
+  .navbar {
+    /* ... */
+  }
+  
+  /* Reuse portal header styles */
+  .portal-header-container {
+    /* ... */
+  }
+  
+  .recruiting-portal-header {
+    /* ... */
+  }
+  
+  /* Reuse search bar styles */
+  .search-container {
+    /* ... */
+  }
+  
+  .search-bar {
+    /* ... */
+  }
+
+  #save-new-templates-btn {
+    display: block; /* or 'inline-block' if you prefer */   
+    margin-left: auto; /* this pushes the button to the right */
+    padding: 8px 16px; /* adjust padding to your preference */
+    background-color: #ffffff; /* example button color */
+    color: rgb(0, 0, 0); /* text color */
+    text-align: center;
+    border: none;
+    border-radius: 4px; /* rounded corners */
+    cursor: pointer; /* mouse cursor changes to pointer on hover */
+    /* Add other styles like font size, box-shadow, etc., as per your design */
+  }
+  
+  
+  /* 附加输入框的容器 */
+  .additional-inputs-container {
+    display: flex;
+    justify-content: space-between; /* 输入框之间有一定间隔 */
+    margin: 1rem 2rem; /* 增加左右的页边距 */
+    padding: 0; /* 如果需要，也可以设置内部空间 */
+  }
+  /* 修改后的附加输入框样式 */
+  .additional-input {
+    padding: 10px;
+    /* 页边距已经在容器中设置，这里可以不设置或根据需要调整 */
+    border: 1px solid #ddd; /* 边框颜色和样式 */
+    border-radius: 4px; /* 边框圆角 */
+  }
+  
+  /* 第一个附加输入框，占2/3宽度 */
+  .additional-input:first-child {
+    flex-grow: 2; /* 使用 flex-grow 来分配空间 */
+    /* flex-basis 设置为0，flex-grow会根据比例分配剩余空间 */
+    flex-basis: 0;
+    margin-right: 10px; /* 右边间隔，保持与之前相同 */
+  }
+  
+  /* 第二个附加输入框，占1/3宽度 */
+  .additional-input:last-child {
+    flex-grow: 1; /* 使用 flex-grow 来分配空间 */
+    /* flex-basis 设置为0，flex-grow会根据比例分配剩余空间 */
+    flex-basis: 0;
+    margin-left: 10px; /* 左边间隔，保持与之前相同 */
+  }
+  
+  /* Styles for the positions and templates lists */
+  .positions-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+  }
+  
+  .position-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .position-item:hover {
+    background-color: #f2f2f2;
+    color: black;
+  }
+  
+  .templates-container {
+    margin: 1rem;
+    padding: 0.5rem;
+  }
+
+  
