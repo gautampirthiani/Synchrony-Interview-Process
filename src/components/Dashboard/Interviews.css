@@ -81,17 +81,28 @@
 }
 
 .interview-item {
-  background-color: #fff;
-  color: #000;
+  background-color: #fff; /* White background */
+  color: #000; /* Set text color to black for contrast */
   margin-bottom: 10px;
   padding: 15px;
   border-radius: 5px;
   width: 80%; /* Adjust the width as needed */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  /* existing styles */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for click and hover effects */
+  cursor: pointer; /* Changes the cursor to indicate the item is clickable */
 }
-
+.interview-item:hover {
+  transform: translateY(-2px); /* Slightly raise the item to give a hover effect */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Increase the shadow to give depth */
+}
+.interview-item:active {
+  transform: translateY(1px); /* Move the item down to simulate a click */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Decrease the shadow to simulate being pressed */
+}
 .interview-item p {
   margin: 5px 0;
+  color: #000; /* Ensuring that paragraph text is also black */
 }
 
 

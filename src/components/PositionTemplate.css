@@ -1,18 +1,18 @@
-.interview-details-container {
-    margin: 20px;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    color: #333;
-    margin-bottom: 16px;
-  }
-  
-  p {
-    color: #666;
-    font-size: 16px;
-  }
-  
+.position-template-container {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.position-template-container h2 {
+  color: #333333;
+  text-align: center;
+}
+
+
+.position-detail strong {
+  margin-right: 10px;
+}

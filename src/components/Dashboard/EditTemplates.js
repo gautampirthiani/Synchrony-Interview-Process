@@ -6,6 +6,7 @@ import logoImage from './synchrony-logo-1.png'; // Correct path to your logo
 import './EditTemplates.css';
 import Navbar from '../Navbar'; // Correct path to your Navbar component
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function EditTemplates() {
@@ -13,6 +14,12 @@ function EditTemplates() {
   const [templates, setTemplates] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const navigate = useNavigate();
+  //new templates
+  const redirectToNewTemplates = () => {
+    navigate('/dashboard/new-templates'); 
+  };
 
   useEffect(() => {
     const fetchPositions = async () => {
@@ -54,14 +61,15 @@ function EditTemplates() {
   return (
     <div className="edit-templates-container">
       <div className="header">
-        <Link to ="/">
-        <img src={logoImage} alt="Synchrony Logo" className="logo" />
+        <Link to="/">
+          <img src={logoImage} alt="Synchrony Logo" className="logo" />
         </Link>
         <Navbar />
       </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Edit Templates</h1>
       </div>
+      <button id="create-new-templates-btn" onClick={redirectToNewTemplates}>Create New Templates</button>
       <div className="search-container">
         <input
           type="text"
