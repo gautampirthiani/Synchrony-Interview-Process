@@ -2,7 +2,8 @@
 
 .edit-templates-container {
   font-family: 'Arial', sans-serif;
-  background-color: #002244; /* Consistent with other pages */
+  background-color: #002244;
+  /* Consistent with other pages */
   color: white;
   min-height: 100vh;
 }
@@ -39,6 +40,11 @@
   /* ... */
 }
 
+#create-new-templates-btn {
+  position: absolute;
+  right: 10px;
+}
+
 /* Styles for the positions and templates lists */
 .positions-container {
   display: flex;
@@ -65,4 +71,3 @@
   margin: 1rem;
   padding: 0.5rem;
 }
-

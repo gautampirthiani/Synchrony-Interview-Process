@@ -4,7 +4,7 @@ import axios from 'axios';
 import logoImage from './synchrony-logo-1.png';
 import './Interviews.css';
 import Navbar from '../Navbar';
-import HomePage from '../HomePage';
+import HomePage from '../HomePage'; 
 
 function Interviews() {
   const [interviews, setInterviews] = useState([]);
