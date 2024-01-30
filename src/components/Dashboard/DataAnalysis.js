@@ -17,7 +17,7 @@ function DataAnalysis() {
         <Navbar />
       </div>
       <div className="data-analysis-header-container">
-        <h1 className="data-analysis-header">Data Analysis</h1>
+        <h1 className="data-analysis-header">Data Analysis Dashboard</h1>
       </div>
       <div className="search-container">
         <input
@@ -27,7 +27,7 @@ function DataAnalysis() {
         />
       </div>
       <div className="data-analysis-main">
-        Placeholder...
+        Placeholder
       </div>
     </div>
   )
