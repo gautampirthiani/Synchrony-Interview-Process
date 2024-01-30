@@ -29,14 +29,39 @@ function DataAnalysis() {
               className="search-bar"
             />
           </div>
+          <div className="filter-section">
+            <h3>Filters</h3>
+            <div className="filter-option">
+              <label>
+                <input type="radio" name="filter" value="option1" /> Option 1
+              </label>
+            </div>
+            <div className="filter-option">
+              <label>
+                <input type="radio" name="filter" value="option2" /> Option 2
+              </label>
+            </div>
+            <div className="filter-option">
+              <input type="range" min="1" max="100" className="slider" />
+            </div>
+            <div className="filter-option">
+              <select className="selection-box">
+                <option value="select1">Select 1</option>
+                <option value="select2">Select 2</option>
+              </select>
+            </div>
+          </div>
           {/* Add more content here if needed */}
         </div>
         <div className="right-column">
           <div className="stats-container">
-            {/* Stat squares will go here */}
+            <div className="stat-box">Average: 100</div>
+            <div className="stat-box">Total: 200</div>
+            {/* More stat boxes as needed */}
           </div>
           <div className="graph-container">
             {/* Graph will go here */}
+            Graph Placeholder
           </div>
         </div>
       </div>

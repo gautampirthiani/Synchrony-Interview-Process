@@ -84,6 +84,8 @@
 .left-column {
   flex: 1; /* 1/4 of the space */
   padding: 1rem;
+  background: white;
+  border-radius: 15px;
 }
 
 .right-column {
@@ -99,6 +101,7 @@
   align-items: center;
   padding: 1rem;
   flex-grow: 1;
+
   /* You can set a specific height or leave it to grow as per content */
 }
 
@@ -106,9 +109,10 @@
   flex-grow: 2;
   /* Set a background color or border for visual separation if desired */
   border: 1px solid #ffffff;
-  margin-top: 1rem;
   padding: 1rem;
   /* You can set a specific height or leave it to grow as per content */
+  border-radius: 15px;
+  margin-top: 1rem;
 }
 
 /* Adjust the search bar width in the left column */
@@ -116,3 +120,34 @@
   width: 100%; /* Adjust this as needed */
   /* Other styles remain the same */
 }
+
+
+
+/* Styles for prettying filters and statistics boxes */
+
+
+.filter-section {
+  margin-top: 1rem;
+}
+
+.filter-option {
+  margin-bottom: 1rem;
+}
+
+.slider {
+  width: 100%;
+}
+
+.selection-box {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.stat-box {
+  padding: 1rem;
+  border: 2px solid #ffffff;
+  border-radius: 15px;
+  margin: 0.5rem;
+}
+
