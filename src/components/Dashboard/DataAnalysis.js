@@ -19,7 +19,13 @@ function DataAnalysis() {
       <div className="data-analysis-header-container">
         <h1 className="data-analysis-header">Data Analysis</h1>
       </div>
-      
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="What would you like to know?"
+          className="search-bar"
+        />
+      </div>
       <div className="data-analysis-main">
         Placeholder...
       </div>
@@ -28,7 +34,6 @@ function DataAnalysis() {
 }
 
 export default DataAnalysis;
-
 
 
 // import React from 'react';
