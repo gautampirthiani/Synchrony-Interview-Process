@@ -1,7 +1,7 @@
-// src/components/Dashboard/DataVisualization.js
+// src/components/Dashboard/DataAnalyis.js
 import React from 'react';
 
-const DataVisualization = () => {
+const DataAnalysis = () => {
   return (
     <div>
       <h2>Data Visualization</h2>
@@ -10,4 +10,4 @@ const DataVisualization = () => {
   );
 };
 
-export default DataVisualization;
+export default DataAnalysis;
