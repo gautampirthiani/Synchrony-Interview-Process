@@ -55,13 +55,14 @@ function DataAnalysis() {
         </div>
         <div className="right-column">
           <div className="stats-container">
-            <div className="stat-box">Average: 100</div>
-            <div className="stat-box">Total: 200</div>
+            <div className="stat-box">Average candidacy length: 3 weeks</div>
+            <div className="stat-box">Total open positions: 4</div>
+            <div className="stat-box">Total interviews: 33</div>
             {/* More stat boxes as needed */}
           </div>
           <div className="graph-container">
             {/* Graph will go here */}
-            Graph Placeholder
+            Chart goes here and will update in real time based upon filter and option selection in left column.
           </div>
         </div>
       </div>
