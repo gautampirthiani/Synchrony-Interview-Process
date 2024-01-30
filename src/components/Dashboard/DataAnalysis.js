@@ -16,7 +16,7 @@ function DataAnalysis() {
         </Link>
         <Navbar />
       </div>
-      <div className="portal-header-container">
+      <div className="data-analysis-header-container">
         <h1 className="data-analysis-header">Data Analysis</h1>
       </div>
       

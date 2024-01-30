@@ -1,10 +1,11 @@
+/* DataAnalysis.css */
+
 .data-analysis-container {
   font-family: 'Arial', sans-serif;
   background-color: #002244; /* Very dark blue background for the rest of the page */
   color: white;
   min-height: 100vh;
 }
-
 
 .header {
   display: flex;
@@ -48,12 +49,27 @@
 }
 
 
-.portal-header-container {
+.data-analysis-header-container {
   text-align: center; /* Center the portal header text */
   margin: 20px 0;
 }
 
-.recruiting-portal-header {
+.data-analysis-header {
   font-size: 24px;
   color: white; /* White text for the header */
+}
+
+.search-container {
+  display: flex;
+  justify-content: center; /* Center search bar container */
+  padding: 20px;
+}
+
+.search-bar {
+  width: 50%; /* Or any other width as per design */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 2rem; /* Space after search bar */
 }
