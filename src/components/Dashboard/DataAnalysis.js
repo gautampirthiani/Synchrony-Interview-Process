@@ -6,7 +6,49 @@ import './DataAnalysis.css'
 import Navbar from "../Navbar";
 
 
+
+
 function DataAnalysis() {
+  return(
+    <div className="data-analysis-container">
+      <div className="header">
+        <Link to="/">
+          <img src={logoImage} alt="Synchrony Logo" className="logo" />
+        </Link>
+        <Navbar />
+      </div>
+      <div className="data-analysis-header-container">
+        <h1 className="data-analysis-header">Data Analysis Dashboard</h1>
+      </div>
+      <div className="content-container">
+        <div className="left-column">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="What would you like to know?"
+              className="search-bar"
+            />
+          </div>
+          {/* Add more content here if needed */}
+        </div>
+        <div className="right-column">
+          <div className="stats-container">
+            {/* Stat squares will go here */}
+          </div>
+          <div className="graph-container">
+            {/* Graph will go here */}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+
+
+
+
+function DataAnalysis_old1() {
 
   return(
     <div className="data-analysis-container">

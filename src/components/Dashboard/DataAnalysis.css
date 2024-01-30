@@ -74,3 +74,45 @@
   margin-bottom: 2rem; /* Space after search bar */
 }
 
+/* Additional styles for two-column layout */
+
+.content-container {
+  display: flex;
+  margin: 1rem;
+}
+
+.left-column {
+  flex: 1; /* 1/4 of the space */
+  padding: 1rem;
+}
+
+.right-column {
+  flex: 2; /* 3/4 of the space */
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  flex-grow: 1;
+  /* You can set a specific height or leave it to grow as per content */
+}
+
+.graph-container {
+  flex-grow: 2;
+  /* Set a background color or border for visual separation if desired */
+  border: 1px solid #ffffff;
+  margin-top: 1rem;
+  padding: 1rem;
+  /* You can set a specific height or leave it to grow as per content */
+}
+
+/* Adjust the search bar width in the left column */
+.search-bar {
+  width: 100%; /* Adjust this as needed */
+  /* Other styles remain the same */
+}
