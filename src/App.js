@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { useState } from 'react';
+//import { useState } from 'react';   // commented because not used
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import Interviews from './components/Dashboard/Interviews';

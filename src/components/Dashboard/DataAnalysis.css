@@ -1,35 +1,59 @@
-/* DataAnalysis.css */
+.data-analysis-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #002244; /* Very dark blue background for the rest of the page */
+  color: white;
+  min-height: 100vh;
+}
 
-  
-  /* Reuse header and logo styles */
-  .header {
-    /* ... */
-  }
-  
-  .logo {
-    /* ... */
-  }
-  
-  /* Reuse navbar styles */
-  .navbar {
-    /* ... */
-  }
-  
-  /* Reuse portal header styles */
-  .portal-header-container {
-    /* ... */
-  }
-  
-  .recruiting-portal-header {
-    /* ... */
-  }
-  
-  /* Reuse search bar styles */
-  .search-container {
-    /* ... */
-  }
-  
-  .search-bar {
-    /* ... */
-  }
-  
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Align logo to the left and other items to the right */
+  background-color: #FFF;
+  padding: 0.5rem 1rem;
+}
+
+.logo {
+  height: 120px; /* Bigger logo as requested */
+  margin-left: left; /* Push the logo to the left */
+}
+
+/* Styles for the navbar links */
+.navbar {
+  margin-left: auto;
+}
+
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar ul li {
+  margin-left: 20px; /* Spacing between nav items */
+}
+
+.navbar ul li:last-child {
+  margin-right: 0; /* No margin for the last item */
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: black; /* Black font color for nav links */
+  font-size: 16px;
+  padding: 0.5rem 1rem; /* Padding for nav links */
+}
+
+
+.portal-header-container {
+  text-align: center; /* Center the portal header text */
+  margin: 20px 0;
+}
+
+.recruiting-portal-header {
+  font-size: 24px;
+  color: white; /* White text for the header */
+}
