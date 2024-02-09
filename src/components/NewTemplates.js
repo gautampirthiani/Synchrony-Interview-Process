@@ -1,11 +1,9 @@
 // NewTemplates.js
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import logoImage from './synchrony-logo-1.png'; 
 import './NewTemplates.css'; 
-import Navbar from '../Navbar';
+import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 
 function NewTemplates() {
@@ -14,10 +12,10 @@ function NewTemplates() {
     const [selectedPosition, setSelectedPosition] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // State hook for managing question and answer pairs
-    const [additionalInputs, setAdditionalInputs] = useState(
-        Array(5).fill({ input1: '', input2: '' })
-    );
+    // State hook for managing question and answer pairs and score box
+    const [additionalInputs, setAdditionalInputs] = useState([
+        { question: '', answer: '', score: '' }
+      ]);
 
     // Handler for input change
     const handleAdditionalInputChange = (index, key, value) => {
@@ -25,18 +23,56 @@ function NewTemplates() {
             inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
         );
     };
+    
     // Submit handler that prevents default form submission
-    const handleSubmit = (event) => {
-        event.preventDefault(); 
-        if (window.confirm('Submit?')) {
-            console.log('Submitted Inputs:', additionalInputs);
-        } else {
-            console.log('Submit Fail');
-        }
-    };
+    // const handleSubmit = (event) => {
+    //     event.preventDefault(); 
+    //     if (window.confirm('Submit?')) {
+    //         console.log('Submitted Inputs:', additionalInputs);
+    //     } else {
+    //         console.log('Submit Fail');
+    //     }
+    // };
+
+// //connecting aws lambda
+
+const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (window.confirm('Submit?')) {
+      // Format the inputs to the structure expected by the Lambda function
+      const payload = {
+        questions: additionalInputs.map(({ question, answer, score }) => ({
+          Question: question,
+          Answer: answer,
+          Score: score
+        }))
+      };
+
+      try {
+        const response = await axios.post(
+          "https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/add_to_template",
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        console.log('Response from Lambda:', response.data);
+        // Handle post-success logic here, like clearing the form
+        setAdditionalInputs([{ question: '', answer: '', score: '' }]); // Resetting the form
+      } catch (error) {
+        console.error('Error submitting to Lambda:', error);
+      }
+    }
+  };
+
+  
+
+
     // Function to add a new pair Q&A
     const addInputPair = () => {
-        setAdditionalInputs([...additionalInputs, { input1: '', input2: '' }]);
+        setAdditionalInputs([...additionalInputs, { question: '', answer: '' , score: ''}]);
       };
       // Function to Remove a new pair Q&A
       const removeInputPair = (index) => {
@@ -92,7 +128,7 @@ function NewTemplates() {
             <div className="portal-header-container">
                 <h1 className="recruiting-portal-header">New Templates</h1>
             </div>
-            <button onClick={addInputPair}>Add Question & Answer</button>
+            <button id = "add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
 
             <button id="save-new-templates-btn" onClick={handleSubmit}>Submit</button>
 
@@ -103,18 +139,25 @@ function NewTemplates() {
                     <input
                         type="text"
                         placeholder="Question"
-                        value={input.input1}
-                        onChange={(e) => handleAdditionalInputChange(index, 'input1', e.target.value)}
+                        value={input.question}
+                        onChange={(e) => handleAdditionalInputChange(index, 'question', e.target.value)}
                         className="additional-input"
                     />
                     <input
                         type="text"
                         placeholder="Answer"
-                        value={input.input2}
-                        onChange={(e) => handleAdditionalInputChange(index, 'input2', e.target.value)}
+                        value={input.answer}
+                        onChange={(e) => handleAdditionalInputChange(index, 'answer', e.target.value)}
                         className="additional-input"
                     />
-                    <button onClick={() => removeInputPair(index)}>Delete</button>
+                    <input
+                        type="text"
+                        placeholder="Score"
+                        value={input.score}
+                        onChange={(e) => handleAdditionalInputChange(index, 'score', e.target.value)}
+                        className="score-input" 
+                    />
+                    <button id = "delete-btn"onClick={() => removeInputPair(index)}>Delete</button>
                 </div>
             ))}
 
