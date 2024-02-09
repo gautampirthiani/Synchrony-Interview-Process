@@ -10,6 +10,7 @@ import InterviewDetails from './components/InterviewDetails';
 import PositionTemplate from './components/PositionTemplate';
 import NewTemplates from './components/Dashboard/NewTemplates';
 import DataAnalysis from './components/Dashboard/DataAnalysis';
+import Templates from './components/templates';
 
 import './App.css';
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/position-details/:JobID" element={<PositionTemplate />} />
         <Route path="/dashboard/new-templates" element = {<NewTemplates />} />
         <Route path="/dashboard/data-analysis" element = {<DataAnalysis />} />
+        <Route path="/dashboard/templates/:JobID" element={<Templates />} />
       </Routes>
     </Router>
   );
