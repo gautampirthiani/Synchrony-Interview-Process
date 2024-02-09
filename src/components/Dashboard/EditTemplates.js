@@ -37,9 +37,9 @@ function EditTemplates() {
   );
 
   // Handle clicking on a position item
-  const handlePositionClick = (jobId) => {
+  const handlePositionClick = (JobID) => {
     // Navigate to new page using job ID
-    navigate(`/dashboard/templates/${jobId}`);
+    navigate(`/dashboard/templates/${JobID}`);
   };
 
   return (

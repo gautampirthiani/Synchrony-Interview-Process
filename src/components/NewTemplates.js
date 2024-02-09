@@ -1,11 +1,9 @@
 // NewTemplates.js
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import logoImage from './synchrony-logo-1.png'; 
 import './NewTemplates.css'; 
-import Navbar from '../Navbar';
+import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 
 function NewTemplates() {
@@ -15,9 +13,9 @@ function NewTemplates() {
     const [searchTerm, setSearchTerm] = useState('');
 
     // State hook for managing question and answer pairs and score box
-    const [additionalInputs, setAdditionalInputs] = useState(
-        Array(5).fill({ Questions: '', answer: '' , score: ''})
-    );
+    const [additionalInputs, setAdditionalInputs] = useState([
+        { question: '', answer: '', score: '' }
+      ]);
 
     // Handler for input change
     const handleAdditionalInputChange = (index, key, value) => {
@@ -39,18 +37,37 @@ function NewTemplates() {
 // //connecting aws lambda
 
 const handleSubmit = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     if (window.confirm('Submit?')) {
-        try {
-            const response = await axios.post("https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Add_Questions", additionalInputs);
-            console.log('Response from Lambda:', response.data);
-        } catch (error) {
-            console.error('Error submitting to Lambda:', error);
-        }
-    } else {
-        console.log('Submit Cancelled');    
+      // Format the inputs to the structure expected by the Lambda function
+      const payload = {
+        questions: additionalInputs.map(({ question, answer, score }) => ({
+          Question: question,
+          Answer: answer,
+          Score: score
+        }))
+      };
+
+      try {
+        const response = await axios.post(
+          "https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/add_to_template",
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        console.log('Response from Lambda:', response.data);
+        // Handle post-success logic here, like clearing the form
+        setAdditionalInputs([{ question: '', answer: '', score: '' }]); // Resetting the form
+      } catch (error) {
+        console.error('Error submitting to Lambda:', error);
+      }
     }
-};
+  };
+
+  
 
 
     // Function to add a new pair Q&A

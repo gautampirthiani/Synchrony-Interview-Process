@@ -10,11 +10,12 @@ function InterviewDetails() {
   useEffect(() => {
     // Here is your Lambda function URL
     const url = `https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/openInterview`;
-    
+    console.log(interviewID);
     axios.get(url, {
       params: { InterviewID: interviewID }
     })
     .then(response => {
+      console.log(interviewID); // Log the response data to the console
       console.log(response.data); // Log the response data to the console
       setDetails(response.data);
     })
