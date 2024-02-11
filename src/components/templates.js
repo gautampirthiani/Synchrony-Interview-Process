@@ -18,7 +18,7 @@ function Templates() {
     const fetchTemplates = async () => {
       try {
         console.log('Job ID:', JobID);
-        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template`);
+        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
         setTemplates(response.data);
       } catch (error) {
         console.error('Error fetching templates:', error);
@@ -29,7 +29,7 @@ function Templates() {
   }, [JobID]);
 
   const handleTemplateClick = (templateId) => {
-    navigate(`/dashboard/New-templates/${JobID}/${templateId}`);
+    navigate(`/dashboard/Update-templates/${JobID}/${templateId}`);
   };
   
   const handleCreateNewClick = () => {
