@@ -80,7 +80,7 @@ function DataAnalysis() {
         <div className="right-column">
           <div className="stats-container">
             <div className="stat-box">Average candidacy length: 2 weeks</div>
-            <div className="stat-box">Total open positions: 4</div>
+            <div className="stat-box">Total open positions: {totalOpenPositions}</div>
             <div className="stat-box">Total interviews: 33</div>
             {/* More stat boxes as needed */}
           </div>
