@@ -26,7 +26,7 @@ function DataAnalysis() {
       .then(data => {
         // Assuming the JSON object has a property 'Count'
         setTotalOpenPositions(data.Count);
-        console.log(data.Count);
+        console.log('FETCHED: ', data.Count);
       })
       .catch(error => {
         console.error('Error fetching total open positions:', error);
