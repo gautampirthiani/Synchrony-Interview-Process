@@ -8,9 +8,10 @@ import NewInterview from './components/Dashboard/NewInterview';
 import EditTemplates from './components/Dashboard/EditTemplates';
 import InterviewDetails from './components/InterviewDetails';
 import PositionTemplate from './components/PositionTemplate';
-import NewTemplates from './components/Dashboard/NewTemplates';
 import DataAnalysis from './components/Dashboard/DataAnalysis';
+import NewTemplates from './components/NewTemplates';
 import Templates from './components/templates';
+import UpdateTemplates from './components/UpdateTemplates';
 
 import './App.css';
 
@@ -27,6 +28,8 @@ function App() {
         <Route path="/dashboard/new-templates" element = {<NewTemplates />} />
         <Route path="/dashboard/data-analysis" element = {<DataAnalysis />} />
         <Route path="/dashboard/templates/:JobID" element={<Templates />} />
+        <Route path="/dashboard/Update-templates/:JobID/:templateID" element={<UpdateTemplates />} /> 
+        <Route path="/dashboard/New-templates/:jobId" element={<NewTemplates />} />
       </Routes>
     </Router>
   );

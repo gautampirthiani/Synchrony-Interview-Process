@@ -5,6 +5,9 @@
     background-color: #002244; /* Consistent with other pages */
     color: white;
     min-height: 100vh;
+    width: 100%; /* Ensure container takes full width */
+    margin: 0; /* Reset any default margin */
+    padding: 0; /* Reset any default padding */
   }
   
   /* Reuse header and logo styles */

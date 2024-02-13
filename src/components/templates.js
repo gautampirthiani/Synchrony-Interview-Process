@@ -5,18 +5,20 @@ import logoImage from './synchrony-logo-1.png';
 import Navbar from './Navbar'; // Assuming you have a Navbar component
 import './templates.css';
 import { FiArrowLeft } from 'react-icons/fi'; // Importing a left arrow icon from react-icons
-
+//https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template/${JobID}
 
 function Templates() {
   const [templates, setTemplates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const { jobId } = useParams();
+  const { JobID } = useParams();
+  console.log(JobID);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template`);
+        console.log('Job ID:', JobID);
+        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
         setTemplates(response.data);
       } catch (error) {
         console.error('Error fetching templates:', error);
@@ -24,10 +26,14 @@ function Templates() {
     };
 
     fetchTemplates();
-  }, [jobId]);
+  }, [JobID]);
 
   const handleTemplateClick = (templateId) => {
-    navigate(`/dashboard/templates/${jobId}/${templateId}`);
+    navigate(`/dashboard/Update-templates/${JobID}/${templateId}`);
+  };
+  
+  const handleCreateNewClick = () => {
+    navigate(`/dashboard/New-templates/${JobID}`); // Use the correct path to your NewTemplates route
   };
 
   const handleSearch = (event) => {
@@ -46,9 +52,9 @@ function Templates() {
           <img src={logoImage} alt="Synchrony Logo" className="logo" />
         </Link>
         <Navbar />
-        </div>
+      </div>
       <div className="back-button-container">
-      <Link to="/dashboard/edit-templates" className="back-button">
+        <Link to="/dashboard/edit-templates" className="back-button">
           <FiArrowLeft /> Back
         </Link>
       </div>
@@ -64,6 +70,10 @@ function Templates() {
           className="search-bar"
         />
       </div>
+      {/* Add this button outside of the search-container but within the portal-header-container */}
+      <button onClick={handleCreateNewClick} className="create-new-templates-btn">
+        Create New Templates
+      </button>
       <div className="templates-list">
         {filteredTemplates.map((template, index) => (
           <div key={index} onClick={() => handleTemplateClick(template["Template ID"])} className="template-item">
