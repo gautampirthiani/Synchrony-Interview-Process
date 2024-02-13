@@ -1,5 +1,6 @@
 // src/components/Dashboard/DataAnalyis.js
-import React from "react";
+//import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logoImage from './synchrony-logo-1.png'
 import './DataAnalysis.css'
@@ -9,6 +10,29 @@ import Navbar from "../Navbar";
 
 
 function DataAnalysis() {
+
+  // State to store total open positions
+  const [totalOpenPositions, setTotalOpenPositions] = useState(0);
+
+  // Fetch total open positions from API
+  useEffect(() => {
+    fetch('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_totalJobs1')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // This already parses the JSON response
+      })
+      .then(data => {
+        // Assuming the JSON object has a property 'Count'
+        setTotalOpenPositions(data.Count);
+        console.log(data.Count);
+      })
+      .catch(error => {
+        console.error('Error fetching total open positions:', error);
+      });
+  }, []); // Empty dependency array means this effect runs only once after the initial render
+
   return(
     <div className="data-analysis-container">
       <div className="header">
@@ -55,7 +79,7 @@ function DataAnalysis() {
         </div>
         <div className="right-column">
           <div className="stats-container">
-            <div className="stat-box">Average candidacy length: 3 weeks</div>
+            <div className="stat-box">Average candidacy length: 2 weeks</div>
             <div className="stat-box">Total open positions: 4</div>
             <div className="stat-box">Total interviews: 33</div>
             {/* More stat boxes as needed */}
