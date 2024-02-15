@@ -16,5 +16,23 @@
         "synchronyinterviewprb33e3b29": {}
       }
     }
+  },
+  "synchrony": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-synchronyinterviewpr-synchrony-171524-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335583129:role/amplify-synchronyinterviewpr-synchrony-171524-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335583129:role/amplify-synchronyinterviewpr-synchrony-171524-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-synchronyinterviewpr-synchrony-171524-deployment",
+      "UnauthRoleName": "amplify-synchronyinterviewpr-synchrony-171524-unauthRole",
+      "StackName": "amplify-synchronyinterviewpr-synchrony-171524",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335583129:stack/amplify-synchronyinterviewpr-synchrony-171524/b80c98a0-cc4f-11ee-b702-0ee654b0df97",
+      "AmplifyAppId": "d3bktdfic7uuax"
+    },
+    "categories": {
+      "auth": {
+        "synchronyinterviewprb33e3b29": {}
+      }
+    }
   }
 }
