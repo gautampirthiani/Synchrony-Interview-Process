@@ -1,4 +1,5 @@
 node_modules/
+.DS_Store
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
