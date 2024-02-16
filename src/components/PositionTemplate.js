@@ -1,38 +1,85 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './PositionTemplate.css'; // Make sure the CSS file is located correctly in your project
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import logoImage from './synchrony-logo-1.png';
+import Navbar from './Navbar'; // Assuming you have a Navbar component
+import './PositionTemplate.css';
+import { FiArrowLeft } from 'react-icons/fi'; // Importing a left arrow icon from react-icons
 
 function PositionTemplate() {
-  const { positionId } = useParams(); // This should match the route parameter
-  const [positionDetails, setPositionDetails] = useState(null);
+  const [templates, setTemplates] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { JobID } = useParams();
+  console.log(JobID);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const url = `https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/openInterview`;
+    const fetchTemplates = async () => {
+      try {
+        console.log('Job ID:', JobID);
+        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
+        setTemplates(response.data);
+      } catch (error) {
+        console.error('Error fetching templates:', error);
+      }
+    };
 
-    axios.get(url, {
-      params: { PositionID: positionId }
-    })
-    .then(response => {
-      console.log(response.data); // Logging the response data to the console
-      setPositionDetails(response.data);
-    })
-    .catch(error => {
-      console.error('Error fetching position details:', error);
-    });
-  }, [positionId]); // Dependency array ensures the effect runs when positionId changes
+    fetchTemplates();
+  }, [JobID]);
 
-  if (!positionDetails) {
-    return <div>Loading...</div>; // Display a loading message or a spinner
-  }
+  const handleTemplateClick = (templateId) => {
+    navigate(`/dashboard/conduct-interview/${JobID}/${templateId}`);
+  };
+  
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
-  // Assuming that the position details data includes keys like 'jobId', 'jobTitle', etc.
+  const filteredTemplates = templates.filter(template => 
+    template["Template ID"].toString().includes(searchTerm) || 
+    template["Job ID"].toString().includes(searchTerm)
+  );
+
   return (
-    <div className="interview-details-container">
-      <h1>Interview Details</h1>
-      <p>{}</p>
+    <div className="templates-container">
+      <div className="header">
+        <Link to="/">
+          <img src={logoImage} alt="Synchrony Logo" className="logo" />
+        </Link>
+        <Navbar />
+      </div>
+      <div className="back-button-container">
+        <Link to="/dashboard/edit-templates" className="back-button">
+          <FiArrowLeft /> Back
+        </Link>
+      </div>
+      <div className="portal-header-container">
+        <h1 className="recruiting-portal-header">Templates</h1>
+      </div>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search by template ID or job ID"
+          value={searchTerm}
+          onChange={handleSearch}
+          className="search-bar"
+        />
+      </div>
+      {/* Add this button outside of the search-container but within the portal-header-container */}
+     
+      <div className="templates-list">
+        {filteredTemplates.map((template, index) => (
+          <div key={index} onClick={() => handleTemplateClick(template["Template ID"])} className="template-item">
+            <div className="template-detail">
+              <strong>Job ID:</strong> {template["Job ID"]}
+            </div>
+            <div className="template-detail">
+              <strong>Template ID:</strong> {template["Template ID"]}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
-
 export default PositionTemplate;

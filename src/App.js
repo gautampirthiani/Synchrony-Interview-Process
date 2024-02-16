@@ -12,6 +12,7 @@ import DataAnalysis from './components/Dashboard/DataAnalysis';
 import NewTemplates from './components/NewTemplates';
 import Templates from './components/templates';
 import UpdateTemplates from './components/UpdateTemplates';
+import ConductInterview from './components/ConductInterview';
 
 import './App.css';
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/dashboard/data-analysis" element = {<DataAnalysis />} />
         <Route path="/dashboard/templates/:JobID" element={<Templates />} />
         <Route path="/dashboard/Update-templates/:JobID/:templateID" element={<UpdateTemplates />} /> 
+        <Route path="/dashboard/conduct-interview/:JobID/:templateId" element={<ConductInterview />} />
         <Route path="/dashboard/New-templates/:jobId" element={<NewTemplates />} />
       </Routes>
     </Router>
