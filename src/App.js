@@ -12,6 +12,8 @@ import PositionTemplate from './components/PositionTemplate';
 import DataAnalysis from './components/Dashboard/DataAnalysis';
 import NewTemplates from './components/NewTemplates';
 import Templates from './components/templates';
+import AddUser from './components/Dashboard/AddUser';
+
 
 import './App.css';
 
@@ -36,6 +38,7 @@ function App() {
             <Route path="/dashboard/templates/:JobID" element={<Templates />} />
             <Route path="/dashboard/New-templates/:JobID/:templateID" element={<NewTemplates />} />
             <Route path="/dashboard/New-templates/:JobID" element={<NewTemplates />} />
+            <Route path="/dashboard/AddUser" element={<AddUser />} /> 
           </Routes>
         </Router>
       )}
