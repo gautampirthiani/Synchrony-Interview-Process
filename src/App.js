@@ -29,8 +29,8 @@ function App() {
         <Route path="/dashboard/new-templates" element = {<NewTemplates />} />
         <Route path="/dashboard/data-analysis" element = {<DataAnalysis />} />
         <Route path="/dashboard/templates/:JobID" element={<Templates />} />
-        <Route path="/dashboard/Update-templates/:JobID/:templateID" element={<UpdateTemplates />} /> 
-        <Route path="/dashboard/conduct-interview/:JobID/:templateId" element={<ConductInterview />} />
+        <Route path="/dashboard/Update-templates/:jobId/:templateId" element={<UpdateTemplates />} /> 
+        <Route path="/dashboard/conduct-interview/:jobId/:templateId" element={<ConductInterview />} />
         <Route path="/dashboard/New-templates/:jobId" element={<NewTemplates />} />
       </Routes>
     </Router>

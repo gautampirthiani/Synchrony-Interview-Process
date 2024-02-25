@@ -1,16 +1,21 @@
 /* UpdateTemplates.css */
 
-/* Reuse new-templates-container styles */
-.update-templates-container {
-    /* No changes needed if it's the same layout */
+.update-templates {
+    font-family: 'Arial', sans-serif;
+    background-color: #002244;
+    color: white;
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
 }
 
-/* Reuse header styles */
+/* Reuse header and logo styles */
 .header {
     /* ... */
 }
 
-/* Reuse logo styles */
 .logo {
     /* ... */
 }
@@ -25,55 +30,126 @@
     /* ... */
 }
 
-/* Reuse recruiting portal header styles */
 .recruiting-portal-header {
-    /* If there's any specific change for UpdateTemplates, add here */
+    /* ... */
 }
 
-/* Reuse button styles */
-#add-question-answer-btn, #save-new-templates-btn {
-    /* No changes needed if buttons are the same */
+/* Reuse search bar styles */
+.search-container {
+    /* ... */
 }
 
-/* Specific style for the delete button if needed */
+.search-bar {
+    /* ... */
+}
+
+
+#job-template-info p {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1; /* 可选的，如果你还想减小行间距 */
+}
+
+
+
+
+#add-question-answer-btn {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+#save-new-templates-btn {
+    display: inline-block;
+    float: right;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
 #delete-btn {
     color: red;
-    /* Add any additional styles specific for the UpdateTemplates here */
+
 }
 
-/* Reuse additional inputs container styles */
+
+
+/* 附加输入框的容器 */
 .additional-inputs-container {
-    /* ... */
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 2rem;
+    padding: 0;
 }
 
-/* Reuse additional input styles */
-.additional-input, .score-input {
-    /* ... */
+/* 修改后的附加输入框样式 */
+.additional-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-/* Reuse first and last child styles if needed */
+/* 第一个附加输入框，占2/3宽度 */
 .additional-input:first-child {
-    /* ... */
+    flex-grow: 2;
+    flex-basis: 0;
+    margin-right: 10px;
 }
 
+/* 第二个附加输入框，占1/3宽度 */
 .additional-input:last-child {
-    /* ... */
+    flex-grow: 1;
+    flex-basis: 0;
+    margin-left: 10px;
 }
 
 .score-input {
-    /* ... */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
-/* If there are new elements in UpdateTemplates, add their styles here */
-/* For example, if there's a new status message element, style it as needed */
-.status-message {
-    padding: 8px;
-    margin-top: 10px;
-    font-weight: bold;
-    color: green; /* or red if it's an error message */
+/* Styles for the positions and templates lists */
+.positions-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
 }
 
-/* If UpdateTemplates has any additional unique elements, style them here */
-.unique-element-class {
-    /* Unique styles for new elements */
+.position-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.position-item:hover {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+.templates-container {
+    margin: 1rem;
+    padding: 0.5rem;
 }
