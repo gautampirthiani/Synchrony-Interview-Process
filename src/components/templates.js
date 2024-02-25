@@ -17,9 +17,13 @@ function Templates() {
     const fetchTemplates = async () => {
       try {
         const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
-        setTemplates(response.data);
-        // Determine and set the default template if it exists
-        const defaultTemplate = response.data.find(t => t.default);
+        const templatesData = response.data;
+        setTemplates(templatesData);
+        // Find the template marked as default
+        const defaultTemplate = templatesData.find(template => template.default === true);
+        console.log('defaultTemplate:', defaultTemplate);
+        console.log('templatesData:', templatesData);
+
         if (defaultTemplate) {
           setDefaultTemplateId(defaultTemplate['Template ID']);
         }
@@ -27,9 +31,10 @@ function Templates() {
         console.error('Error fetching templates:', error);
       }
     };
-
+  
     fetchTemplates();
   }, [JobID]);
+  
 
   const handleTemplateClick = (templateId) => {
     navigate(`/dashboard/Update-templates/${JobID}/${templateId}`);
@@ -43,7 +48,9 @@ function Templates() {
     setSearchTerm(event.target.value);
   };
 
-  const toggleDefaultTemplate = async (templateId) => {
+  const toggleDefaultTemplate = async (event, templateId) => {
+    // Prevent the click from bubbling up to the parent div
+    event.stopPropagation();
     try {
       await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Default_Template', {
         jobId: JobID,
@@ -54,6 +61,7 @@ function Templates() {
       console.error('Error toggling default template:', error);
     }
   };
+  
 
   const filteredTemplates = templates.filter(template =>
     template["Template ID"].toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -102,12 +110,13 @@ function Templates() {
               <div className="template-detail"><strong>Template ID:</strong> {template["Template ID"]}</div>
               <div className="template-detail"><strong>Created On:</strong> {template["Created On"] || 'Not Available'}</div>
             </div>
-            <button
+              <button
               className={`toggle-default ${defaultTemplateId === template["Template ID"] ? 'active' : ''}`}
-              onClick={() => toggleDefaultTemplate(template["Template ID"])}
+              onClick={(event) => toggleDefaultTemplate(event, template["Template ID"])}
             >
               {defaultTemplateId === template["Template ID"] ? 'Remove Default' : 'Set Default'}
             </button>
+
           </div>
         ))}
       </div>
