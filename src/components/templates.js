@@ -49,17 +49,40 @@ function Templates() {
   };
 
   const toggleDefaultTemplate = async (event, templateId) => {
-    // Prevent the click from bubbling up to the parent div
-    event.stopPropagation();
-    try {
-      await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Default_Template', {
-        jobId: JobID,
-        templateId: templateId
-      });
-      setDefaultTemplateId(prev => prev === templateId ? null : templateId);
-    } catch (error) {
-      console.error('Error toggling default template:', error);
+    event.stopPropagation(); // Prevent the click from bubbling up to the parent div
+  
+    // If a default template is already set and it's not the one being clicked, alert the user and stop.
+    if (defaultTemplateId && defaultTemplateId !== templateId) {
+      alert('Please remove the existing default template before setting a new one.');
+      return;
     }
+  
+    // If the clicked template is already the default, remove it as default.
+    if (defaultTemplateId === templateId) {
+      try {
+        await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Default_Template', {
+          jobId: JobID,
+          templateId: templateId
+        });
+        setDefaultTemplateId(null);
+      } catch (error) {
+        console.error('Error removing default template:', error);
+      }
+    } else {
+      // No default template is set, or the clicked template was not the default, so set it as default.
+      try {
+        await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Default_Template', {
+          jobId: JobID,
+          templateId: templateId
+        });
+        setDefaultTemplateId(templateId);
+      } catch (error) {
+        console.error('Error setting default template:', error);
+      }
+    }
+  
+    // Fetch the updated list of templates to reflect the change in UI.
+    
   };
   
 
