@@ -6,11 +6,27 @@ import { getCurrentUser } from '@aws-amplify/auth';
 
 const HomePage = () => {
   const [username, setUsername] = useState('');
+  const [secretMessage, setSecretMessage] = useState('');
 
   useEffect(() => {
     getCurrentUser()
       .then(user => {
         setUsername(user.username);
+        fetch('https://le6xxlisoj.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: user.username }),
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.body) {
+              const responseBody = JSON.parse(data.body);
+              setSecretMessage(responseBody.secret_message);
+            }
+          })
+          .catch(error => console.error('Error:', error));
       })
       .catch(err => console.log(err));
   }, []);
@@ -20,26 +36,18 @@ const HomePage = () => {
       <div className="logo-container">
         <img src={logoimage} alt="Company Logo" className="logo-image" />
       </div>
-
       <div className="navbar">
         <span className="navbar-logo">Recruiting Portal</span>
         <Navbar />
       </div>
-
       <h1 className="homepage-heading">Welcome, {username}!</h1>
-
+      <div className="welcome-message">
+        {secretMessage && <h2 className="homepage-heading">{secretMessage}</h2>}
+      </div>
       <h2 className="homepage-heading">Synchrony Interviews</h2>
-
       <footer className="footer">
         <div className="footer-content">
-          <div className="footer-section">
-            <h4 className="footer-heading">Get in Touch</h4>
-            <p className="footer-contact-item">+1 (234) 567-890</p>
-            <p className="footer-contact-item">contact@synchrony.com</p>
-            <p className="footer-contact-item">123 Synchrony Blvd, Finance City</p>
-          </div>
         </div>
-
         <div className="footer-bottom-text">
           &copy; 2023 Synchrony. All Rights Reserved.
         </div>

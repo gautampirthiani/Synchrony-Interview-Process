@@ -14,7 +14,6 @@ import NewTemplates from './components/NewTemplates';
 import Templates from './components/templates';
 import AddUser from './components/Dashboard/AddUser';
 
-
 import './App.css';
 
 function App() {
@@ -22,9 +21,9 @@ function App() {
     <Authenticator>
       {({ signOut, user }) => (
         <Router>
-          <div>
-            {/* Example sign-out button, you can place it wherever it makes sense in your UI */}
-            <button onClick={signOut} style={{ position: 'fixed', top: 0, right: 0 }}>Sign Out</button>
+          <div className="top-bar">
+            <span className="welcome-message">Welcome, {user?.username}</span>
+            <button onClick={signOut} className="sign-out-button">Sign Out</button>
           </div>
           <Routes>
             <Route path="/" element={<HomePage />} />
