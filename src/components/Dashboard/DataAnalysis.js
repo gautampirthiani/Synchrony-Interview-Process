@@ -94,10 +94,11 @@ function DataAnalysis() {
             </div>
             <div className="filter-option">
               <select className="selection-box">
-                {usernames.map((user, index) => (
-                  <option key={index} value={user.name}>{user.name}</option>
+                {usernames.map((username, index) => (
+                  <option key={index} value={username}>{username}</option>
                 ))}
               </select>
+
             </div>
           </div>
           {/* Add more content here if needed */}
