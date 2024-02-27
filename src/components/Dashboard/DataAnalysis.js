@@ -14,6 +14,9 @@ function DataAnalysis() {
   // State to store total open positions
   const [totalOpenPositions, setTotalOpenPositions] = useState(0);
 
+  // State to store a list of usernames from the dynamoDB table Users
+  const [usernames, setUsernames] = useState([]);
+
   // Fetch total open positions from API
   useEffect(() => {
     fetch('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_totalJobs1')
@@ -33,7 +36,28 @@ function DataAnalysis() {
       });
   }, []); // Empty dependency array means this effect runs only once after the initial render
 
-  return(
+  // Fetch usernames from API
+  useEffect(() => {
+    fetch('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_getUsernames2')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // This already parses the JSON response
+      })
+      .then(data => {
+        setUsernames(data.usernames); // Assuming the Lambda returns an object with a usernames array
+        // old way of doing things below
+        // Assuming the JSON object has a property 'Items'
+        //setUsernames(data.Items.map(item => item.username.S));
+      })
+      .catch(error => {
+        console.error('Error fetching usernames:', error);
+      });
+  }, []); // Empty dependency array means this effect runs only once after the initial render
+
+
+  return (
     <div className="data-analysis-container">
       <div className="header">
         <Link to="/">
@@ -42,7 +66,7 @@ function DataAnalysis() {
         <Navbar />
       </div>
       <div className="data-analysis-header-container">
-        <h1 className="data-analysis-header">Data Analysis Dashboard</h1>
+        <h1 className="data-analysis-header">Data Analytics Dashboard</h1>
       </div>
       <div className="content-container">
         <div className="left-column">
@@ -54,7 +78,7 @@ function DataAnalysis() {
             />
           </div>
           <div className="filter-section">
-            <h3>Filters</h3>
+            <h3>Filter</h3>
             <div className="filter-option">
               <label>
                 <input type="radio" name="filter" value="option1" /> Option 1
@@ -70,8 +94,9 @@ function DataAnalysis() {
             </div>
             <div className="filter-option">
               <select className="selection-box">
-                <option value="select1">Select 1</option>
-                <option value="select2">Select 2</option>
+                {usernames.map((user, index) => (
+                  <option key={index} value={user.name}>{user.name}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -95,12 +120,18 @@ function DataAnalysis() {
 }
 
 
+//////////////////////////////////////// old code
+//  <select className="selection-box">
+//                <option value="select1">Select 1</option>
+//                <option value="select2">Select 2</option>
+//  </select>
+////////////////////////////////////////
 
 
 
 function DataAnalysis_old1() {
 
-  return(
+  return (
     <div className="data-analysis-container">
       <div className="header">
         <Link to="/">
