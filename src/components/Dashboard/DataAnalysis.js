@@ -93,6 +93,7 @@ function DataAnalysis() {
               <input type="range" min="1" max="100" className="slider" />
             </div>
             <div className="filter-option">
+              <h4>Username</h4>
               <select className="selection-box">
                 {usernames.map((username, index) => (
                   <option key={index} value={username}>{username}</option>
