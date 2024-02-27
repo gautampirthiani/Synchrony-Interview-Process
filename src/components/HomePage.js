@@ -6,24 +6,24 @@ import { getCurrentUser } from '@aws-amplify/auth';
 
 const HomePage = () => {
   const [username, setUsername] = useState('');
-  const [secretMessage, setSecretMessage] = useState('');
+  const [department, setDepartment] = useState('');
 
   useEffect(() => {
     getCurrentUser()
       .then(user => {
-        setUsername(user.username);
-        fetch('https://le6xxlisoj.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
+        setUsername(user.username); 
+        fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
           method: 'POST',
           headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: user.username }),
+          body: JSON.stringify({ username: user.username }), 
         })
           .then(response => response.json())
           .then(data => {
-            if (data.body) {
-              const responseBody = JSON.parse(data.body);
-              setSecretMessage(responseBody.secret_message);
+            if (data && data.department) {
+              setDepartment(data.department);
             }
           })
           .catch(error => console.error('Error:', error));
@@ -42,7 +42,7 @@ const HomePage = () => {
       </div>
       <h1 className="homepage-heading">Welcome, {username}!</h1>
       <div className="welcome-message">
-        {secretMessage && <h2 className="homepage-heading">{secretMessage}</h2>}
+        {department && <h2 className="homepage-heading">Department: {department}</h2>}
       </div>
       <h2 className="homepage-heading">Synchrony Interviews</h2>
       <footer className="footer">

@@ -1,43 +1,57 @@
 import React, { useState } from 'react';
-import './AddUserForm.css'; 
-import logo from '/Users/damianmiskow/Desktop/VSCode/Synchrony-Interview-Process/src/components/synchrony-logo-1.png'; 
+import './AddUserForm.css';
+// Adjust the import path as needed for your logo
+import logo from '/Users/damianmiskow/Desktop/VSCode/Synchrony-Interview-Process/src/components/synchrony-logo-1.png';
 
 function AddUserForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [department, setDepartment] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
+    setMessage('');
 
-    const apiEndpoint = 'https://le6xxlisoj.execute-api.us-east-1.amazonaws.com/dev/Synchrony';
-    const userData = {
-      "username": username,
-      "password": password,
-      "email": email
-    };
-
-    fetch(apiEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    })
-    .then(response => response.json().then(data => ({status: response.status, body: data})))
-    .then(({status, body}) => {
-      if(status === 200) {
-        console.log('Success:', body);
-        alert("User Successfully Created");
-      } else {
-        console.error('Error:', body.message);
-        alert(`ERROR: ${body.message}`);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert("ERROR: An error occurred while trying to create the user.");
+    const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
+    // Construct userData in the specific order
+    const userData = JSON.stringify({
+      username: username,
+      password: password,
+      email: email,
+      department: department,
     });
+
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: userData, // Use the ordered userData
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const body = await response.json();
+      console.log('Success:', body);
+      setMessage("User Successfully Created");
+      // Optionally reset form fields here
+      setUsername('');
+      setPassword('');
+      setEmail('');
+      setDepartment('');
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage(`ERROR: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -79,7 +93,25 @@ function AddUserForm() {
             className="form-input"
           />
         </div>
-        <button type="submit" className="form-button">Submit</button>
+        <div className="form-group">
+          <label htmlFor="department" className="form-label">Department:</label>
+          <select
+            id="department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            required
+            className="form-input"
+          >
+            <option value="">Select a Department</option>
+            <option value="Cybersecurity">Cybersecurity</option>
+            <option value="Software Development">Software Development</option>
+            {/* Add more options as needed */}
+          </select>
+        </div>
+        <button type="submit" className="form-button" disabled={isLoading}>
+          {isLoading ? 'Creating...' : 'Submit'}
+        </button>
+        {message && <div className={message.startsWith('ERROR') ? 'error-message' : 'success-message'}>{message}</div>}
       </form>
     </div>
   );
