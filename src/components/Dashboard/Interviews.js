@@ -37,14 +37,16 @@ function Interviews() {
 
   useEffect(() => {
     const results = interviews.filter(interview => {
-      const interviewer = interview.Interviewer ? interview.Interviewer.toLowerCase() : '';
-      const name = interview.Name ? interview.Name.toLowerCase() : '';
-      // Assuming you have a Date property in your interview objects.
-      const date = interview.Date ? interview.Date.toLowerCase() : '';
+      const interviewer = interview.interviewer ? interview.interviewer.toLowerCase() : '';
+      const interviewee = interview.interviewee ? interview.interviewee.toLowerCase() : '';
+      const jobID = interview.jobID ? interview.jobID.toLowerCase() : '';
+      // Format 'Interviewed On' for easier searching, assuming it is a string.
+      const interviewedOn = interview.interviewedOn ? interview.interviewedOn.toLowerCase() : '';
   
       return interviewer.includes(searchTerm.toLowerCase()) ||
-             name.includes(searchTerm.toLowerCase()) ||
-             date.includes(searchTerm.toLowerCase());
+             interviewee.includes(searchTerm.toLowerCase()) ||
+             jobID.includes(searchTerm.toLowerCase()) ||
+             interviewedOn.includes(searchTerm.toLowerCase());
     });
     setFilteredInterviews(results);
   }, [searchTerm, interviews]);
