@@ -144,8 +144,15 @@
   }
   
   /* 
-  
-  
-  /* If there are any other specific styles from the NewInterview.css that you want to include,
-     you can add them here. Make sure that class names match the JSX structure of your Templates component. */
-  
+
+  /* ConductInterview.css */
+
+  .candidate-name-input {
+    width : 15%;
+    margin-left: 2px;
+    font-size: medium;
+    height: 40px;
+    position: relative;
+    top: -70px; /* Adjust this value to move the element up */
+    margin-bottom: -100px; /* Optional: to remove the space that the element would have occupied */
+  }

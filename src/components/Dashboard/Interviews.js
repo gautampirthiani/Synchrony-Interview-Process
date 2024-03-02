@@ -18,12 +18,20 @@ function Interviews() {
     const fetchInterviews = async () => {
       try {
         const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/InterviewsAccess');
-        setInterviews(data);
+        const interviewsData = data.map(item => ({
+          interviewID: item['Interview ID'],
+          interviewer: item.Interviewer || 'N/A',
+          interviewee: item.Name, // Assuming 'Name' is the interviewee's name
+          jobID: item['Job ID'],
+          interviewedOn: item['Interviewed On'],
+          // Add other attributes you need
+        }));
+        setInterviews(interviewsData);
       } catch (error) {
         console.error('Error fetching interviews:', error);
       }
     };
-
+  
     fetchInterviews();
   }, []);
 
@@ -75,11 +83,13 @@ function Interviews() {
       <div className="interviews-list">
         {filteredInterviews.map((interview) => (
           // The entire interview item is now clickable
-          <div key={interview.InterviewID} className="interview-item" onClick={() => handleInterviewItemClick(interview.InterviewID)}>
-            <p>Interview ID: {interview.InterviewID}</p>
-            <p>Interviewer: {interview.Interviewer || 'N/A'}</p>
-            <p>Name: {interview.Name}</p>
-          </div>
+          <div key={interview.interviewID} className="interview-item" onClick={() => handleInterviewItemClick(interview.interviewID)}>
+      
+      <p>Interviewer: {interview.interviewer}</p>
+      <p>Interviewee: {interview.interviewee}</p>
+      <p>Job ID: {interview.jobID}</p>
+      <p>Interviewed On: {interview.interviewedOn}</p>
+    </div>
         ))}
       </div>
     </div>

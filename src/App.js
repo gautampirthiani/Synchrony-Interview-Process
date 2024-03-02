@@ -7,7 +7,6 @@ import Interviews from './components/Dashboard/Interviews';
 import NewInterview from './components/Dashboard/NewInterview';
 import EditTemplates from './components/Dashboard/EditTemplates';
 import InterviewDetails from './components/InterviewDetails';
-import PositionTemplate from './components/PositionTemplate';
 import DataAnalysis from './components/Dashboard/DataAnalysis';
 import NewTemplates from './components/NewTemplates';
 import Templates from './components/templates';
@@ -25,12 +24,11 @@ function App() {
         <Route path="/dashboard/New-interview" element={<NewInterview />} />
         <Route path="/dashboard/edit-templates" element={<EditTemplates />} />
         <Route path="/interview-details/:interviewID" element={<InterviewDetails />} />
-        <Route path="/position-details/:JobID" element={<PositionTemplate />} />
+        <Route path="/new-interview/conduct-interview/:jobId" element={<ConductInterview />} />
         <Route path="/dashboard/new-templates" element = {<NewTemplates />} />
         <Route path="/dashboard/data-analysis" element = {<DataAnalysis />} />
         <Route path="/dashboard/templates/:JobID" element={<Templates />} />
         <Route path="/dashboard/Update-templates/:jobId/:templateId" element={<UpdateTemplates />} /> 
-        <Route path="/dashboard/conduct-interview/:jobId/:templateId" element={<ConductInterview />} />
         <Route path="/dashboard/New-templates/:jobId" element={<NewTemplates />} />
       </Routes>
     </Router>
