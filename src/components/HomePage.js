@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import logoimage from './synchrony-logo-1.png';
+import logoimage from '/Users/damianmiskow/Desktop/VSCode/Synchrony-Interview-Process/src/components/Synch_logo.png';
 import './HomePage.css';
 import Navbar from './Navbar';
 import { getCurrentUser } from '@aws-amplify/auth';

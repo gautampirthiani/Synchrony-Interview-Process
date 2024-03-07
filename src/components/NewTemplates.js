@@ -1,7 +1,7 @@
 // NewTemplates.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import logoImage from './synchrony-logo-1.png'; 
+import logoImage from '/Users/damianmiskow/Desktop/VSCode/Synchrony-Interview-Process/src/components/Synch_logo.png'; 
 import './NewTemplates.css'; 
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';

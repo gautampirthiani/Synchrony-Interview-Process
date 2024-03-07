@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import logoImage from './synchrony-logo-1.png';
+import logoImage from '/Users/damianmiskow/Desktop/VSCode/Synchrony-Interview-Process/src/components/Synch_logo.png';
 import Navbar from './Navbar'; // Assuming you have a Navbar component
 import './templates.css';
 import { FiArrowLeft } from 'react-icons/fi'; // Importing a left arrow icon from react-icons
