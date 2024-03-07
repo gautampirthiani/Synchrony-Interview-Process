@@ -7,20 +7,30 @@ function AddUserForm() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [department, setDepartment] = useState('');
+  const [customDepartment, setCustomDepartment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+
+  const handleDepartmentChange = (e) => {
+    const { value } = e.target;
+    setDepartment(value);
+    if (value === 'add-new') {
+      setCustomDepartment('');
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     setMessage('');
 
+    const effectiveDepartment = department === 'add-new' ? customDepartment : department;
     const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
     const userData = JSON.stringify({
       username: username,
       password: password,
       email: email,
-      department: department,
+      department: effectiveDepartment,
     });
 
     try {
@@ -29,7 +39,7 @@ function AddUserForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: userData, 
+        body: userData,
       });
 
       if (!response.ok) {
@@ -37,14 +47,13 @@ function AddUserForm() {
       }
 
       const body = await response.json();
-      console.log('Success:', body);
       setMessage("User Successfully Created");
       setUsername('');
       setPassword('');
       setEmail('');
       setDepartment('');
+      setCustomDepartment('');
     } catch (error) {
-      console.error('Error:', error);
       setMessage(`ERROR: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -95,14 +104,25 @@ function AddUserForm() {
           <select
             id="department"
             value={department}
-            onChange={(e) => setDepartment(e.target.value)}
+            onChange={handleDepartmentChange}
             required
             className="form-input"
           >
             <option value="">Select a Department</option>
             <option value="Cybersecurity">Cybersecurity</option>
             <option value="Software Development">Software Development</option>
+            <option value="add-new">Add New Department</option>
           </select>
+          {department === 'add-new' && (
+            <input
+              type="text"
+              placeholder="Enter new department"
+              value={customDepartment}
+              onChange={(e) => setCustomDepartment(e.target.value)}
+              required={department === 'add-new'}
+              className="form-input"
+            />
+          )}
         </div>
         <button type="submit" className="form-button" disabled={isLoading}>
           {isLoading ? 'Creating...' : 'Submit'}
