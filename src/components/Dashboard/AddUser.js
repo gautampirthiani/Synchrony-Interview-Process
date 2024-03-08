@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AddUserForm.css';
 import logo from '/Users/damianmiskow/Desktop/VSCode/Synchrony-Interview-Process/src/components/Synch_logo.png';
 
@@ -6,10 +6,34 @@ function AddUserForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [departments, setDepartments] = useState([]);
   const [department, setDepartment] = useState('');
   const [customDepartment, setCustomDepartment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    async function fetchDepartments() {
+      const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList';
+      try {
+        const response = await fetch(apiEndpoint, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setDepartments(data);
+      } catch (error) {
+        console.error('Error fetching departments:', error);
+      }
+    }
+
+    fetchDepartments();
+  }, []);
 
   const handleDepartmentChange = (e) => {
     const { value } = e.target;
@@ -109,8 +133,11 @@ function AddUserForm() {
             className="form-input"
           >
             <option value="">Select a Department</option>
-            <option value="Cybersecurity">Cybersecurity</option>
-            <option value="Software Development">Software Development</option>
+            {departments.map((dept, index) => (
+              <option key={index} value={dept}>
+                {dept}
+              </option>
+            ))}
             <option value="add-new">Add New Department</option>
           </select>
           {department === 'add-new' && (
