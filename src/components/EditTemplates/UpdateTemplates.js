@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import logoImage from './synchrony-logo-1.png';
+import logoImage from '../synchrony-logo-1.png';
 import './UpdateTemplates.css';
-import Navbar from './Navbar';
+import Navbar from '../Navbar';
 
 function UpdateTemplates() {
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);

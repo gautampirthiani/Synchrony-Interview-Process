@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import logoImage from './synchrony-logo-1.png';
+import logoImage from '../synchrony-logo-1.png';
 import './JobInterviews.css';
-import Navbar from './Navbar';
+import Navbar from '../Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
@@ -36,7 +36,8 @@ function Interviews() {
     };
   
     fetchInterviews();
-  }, []);
+
+  }, [jobId, jobPosition]);
 
   useEffect(() => {
     const results = interviews.filter(interview => {

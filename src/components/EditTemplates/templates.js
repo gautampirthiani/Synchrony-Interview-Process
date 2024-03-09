@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import logoImage from './synchrony-logo-1.png';
-import Navbar from './Navbar';
+import logoImage from '../synchrony-logo-1.png';
+import Navbar from '../Navbar';
 import './templates.css';
 import { FiArrowLeft } from 'react-icons/fi';
 

@@ -6,13 +6,13 @@ import HomePage from './components/HomePage';
 import Interviews from './components/Dashboard/Interviews';
 import NewInterview from './components/Dashboard/NewInterview';
 import EditTemplates from './components/Dashboard/EditTemplates';
-import InterviewDetails from './components/InterviewDetails';
+import InterviewDetails from './components/Interviews/InterviewDetails';
 import DataAnalysis from './components/Dashboard/DataAnalysis';
-import NewTemplates from './components/NewTemplates';
-import Templates from './components/templates';
-import UpdateTemplates from './components/UpdateTemplates';
-import ConductInterview from './components/ConductInterview';
-import JobInterviews from './components/JobInterviews';
+import NewTemplates from './components/EditTemplates/NewTemplates';
+import Templates from './components/EditTemplates/templates';
+import UpdateTemplates from './components/EditTemplates/UpdateTemplates';
+import ConductInterview from './components/NewInterview/ConductInterview';
+import JobInterviews from './components/Interviews/JobInterviews';
 
 import './App.css';
 

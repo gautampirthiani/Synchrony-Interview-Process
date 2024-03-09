@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import logoImage from './synchrony-logo-1.png';
+import logoImage from '../synchrony-logo-1.png';
 import './ConductInterview.css';
-import Navbar from './Navbar';
+import Navbar from '../Navbar';
 import { useNavigate } from 'react-router-dom';
 
 function ConductInterview() {
