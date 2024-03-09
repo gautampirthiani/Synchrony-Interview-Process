@@ -12,6 +12,7 @@ import NewTemplates from './components/NewTemplates';
 import Templates from './components/templates';
 import UpdateTemplates from './components/UpdateTemplates';
 import ConductInterview from './components/ConductInterview';
+import JobInterviews from './components/JobInterviews';
 
 import './App.css';
 
@@ -23,13 +24,14 @@ function App() {
         <Route path="/dashboard/interviews" element={<Interviews />} />
         <Route path="/dashboard/New-interview" element={<NewInterview />} />
         <Route path="/dashboard/edit-templates" element={<EditTemplates />} />
-        <Route path="/interview-details/:interviewID" element={<InterviewDetails />} />
+        <Route path="/interview-details/:interviewId" element={<InterviewDetails />} />
         <Route path="/new-interview/conduct-interview/:jobId" element={<ConductInterview />} />
         <Route path="/dashboard/new-templates" element = {<NewTemplates />} />
         <Route path="/dashboard/data-analysis" element = {<DataAnalysis />} />
         <Route path="/dashboard/templates/:JobID" element={<Templates />} />
-        <Route path="/dashboard/Update-templates/:jobId/:templateId" element={<UpdateTemplates />} /> 
-        <Route path="/dashboard/New-templates/:jobId" element={<NewTemplates />} />
+        <Route path="/dashboard/update-templates/:jobId/:templateId" element={<UpdateTemplates />} /> 
+        <Route path="/dashboard/new-templates/:jobId" element={<NewTemplates />} />
+        <Route path="/interviews/job-interviews/:jobId/:jobPosition" element={<JobInterviews />} />
       </Routes>
     </Router>
   );

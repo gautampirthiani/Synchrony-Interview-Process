@@ -37,11 +37,11 @@ function Templates() {
   
 
   const handleTemplateClick = (templateId) => {
-    navigate(`/dashboard/Update-templates/${JobID}/${templateId}`);
+    navigate(`/dashboard/update-templates/${JobID}/${templateId}`);
   };
 
   const handleCreateNewClick = () => {
-    navigate(`/dashboard/New-templates/${JobID}`);
+    navigate(`/dashboard/new-templates/${JobID}`);
   };
 
   const handleSearch = (event) => {
