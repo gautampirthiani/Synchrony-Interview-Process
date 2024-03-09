@@ -1,0 +1,21 @@
+.interview-item {
+    position: relative;
+    /* 其他样式保持不变 */
+  }
+  
+  #jobinterview-delete {
+    position: absolute;
+    right: 20px; 
+    top: 50%; /* 可以调整这个值让按钮在垂直方向上居中 */
+    transform: translateY(-50%); /* 这将确保按钮在其父容器的垂直中心 */
+    padding: 8px 15px; 
+    border: 1px solid darken(#d9534f, 10%);
+    border-radius: 4px; 
+    color: rgb(0, 0, 0);
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 14px; 
+    cursor: pointer; 
+    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+  }
+  

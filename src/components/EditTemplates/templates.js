@@ -133,12 +133,15 @@ function Templates() {
               <div className="template-detail"><strong>Template ID:</strong> {template["Template ID"]}</div>
               <div className="template-detail"><strong>Created On:</strong> {template["Created On"] || 'Not Available'}</div>
             </div>
+            <div className="button-container">
+              <button className="delete-button">Delete</button>
               <button
-              className={`toggle-default ${defaultTemplateId === template["Template ID"] ? 'active' : ''}`}
-              onClick={(event) => toggleDefaultTemplate(event, template["Template ID"])}
-            >
-              {defaultTemplateId === template["Template ID"] ? 'Remove Default' : 'Set Default'}
-            </button>
+                className={`toggle-default ${defaultTemplateId === template["Template ID"] ? 'active' : ''}`}
+                onClick={(event) => toggleDefaultTemplate(event, template["Template ID"])}
+              >
+                {defaultTemplateId === template["Template ID"] ? 'Remove Default' : 'Set Default'}
+              </button>
+            </div>
 
           </div>
         ))}

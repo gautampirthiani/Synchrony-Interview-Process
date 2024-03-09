@@ -57,9 +57,7 @@
 }
 
 .position-item {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
+  position: relative;
 }
 
 .position-item:hover {
@@ -140,3 +138,18 @@
 .modal #modal_button:hover {
   background-color: #004494;
 }
+
+#edittemplate_delete{
+  position: absolute;
+  right: 30px; 
+  padding: 8px 15px; 
+  border: 1px solid darken(#d9534f, 10%); 
+  border-radius: 4px; 
+  color: rgb(0, 0, 0); 
+  font-weight: bold; 
+  text-transform: uppercase; 
+  font-size: 14px; 
+  cursor: pointer; 
+  box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+}
+

@@ -147,6 +147,7 @@ function EditTemplates() {
             <div className="position-detail">
               <strong>Job Position:</strong> {position['Job Position']}
             </div>
+            <button id = "edittemplate_delete">Delete</button>
           </div>
         ))}
       </div>

@@ -12,7 +12,7 @@ function Interviews() {
   const [interviews, setInterviews] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredInterviews, setFilteredInterviews] = useState([]);
-  const {jobId, jobPosition} = useParams();
+  const { jobId, jobPosition } = useParams();
 
   useEffect(() => {
     const fetchInterviews = async () => {
@@ -34,7 +34,7 @@ function Interviews() {
         console.error('Error fetching interviews:', error);
       }
     };
-  
+
     fetchInterviews();
 
   }, [jobId, jobPosition]);
@@ -46,15 +46,15 @@ function Interviews() {
       const jobID = interview.jobID ? interview.jobID.toLowerCase() : '';
       // Format 'Interviewed On' for easier searching, assuming it is a string.
       const interviewedOn = interview.interviewedOn ? interview.interviewedOn.toLowerCase() : '';
-  
+
       return interviewer.includes(searchTerm.toLowerCase()) ||
-             interviewee.includes(searchTerm.toLowerCase()) ||
-             jobID.includes(searchTerm.toLowerCase()) ||
-             interviewedOn.includes(searchTerm.toLowerCase());
+        interviewee.includes(searchTerm.toLowerCase()) ||
+        jobID.includes(searchTerm.toLowerCase()) ||
+        interviewedOn.includes(searchTerm.toLowerCase());
     });
     setFilteredInterviews(results);
   }, [searchTerm, interviews]);
-  
+
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -75,7 +75,7 @@ function Interviews() {
         <Navbar />
       </div>
       <div className="portal-header-container">
-      <h1 className="recruiting-portal-header">Interviews for Job: {jobPosition}</h1>
+        <h1 className="recruiting-portal-header">Interviews for Job: {jobPosition}</h1>
       </div>
       <div className="search-container">
         <input
@@ -90,12 +90,13 @@ function Interviews() {
         {filteredInterviews.map((interview) => (
           // The entire interview item is now clickable
           <div key={interview.interviewID} className="interview-item" onClick={() => handleInterviewItemClick(interview.interviewID)}>
-      
-      <p>Interviewer: {interview.interviewer}</p>
-      <p>Interviewee: {interview.interviewee}</p>
-      <p>Interviewed On: {interview.interviewedOn}</p>
-        <p>Job Position: {interview.jobPosition}</p>
-    </div>
+
+            <p>Interviewer: {interview.interviewer}</p>
+            <p>Interviewee: {interview.interviewee}</p>
+            <p>Interviewed On: {interview.interviewedOn}</p>
+            <p>Job Position: {interview.jobPosition}</p>
+            <button id = "jobinterview-delete">Delete</button>
+          </div>
         ))}
       </div>
     </div>
