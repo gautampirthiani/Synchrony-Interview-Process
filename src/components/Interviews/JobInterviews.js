@@ -115,7 +115,7 @@ function Interviews() {
             <p>interviewID: {interview.interviewID}</p>
             <button id="jobinterview-delete" onClick={(e) => {
               handleDelete(interview.interviewID, e);
-            }}>Delete</button>
+            }}></button>
           </div>
         ))}
       </div>

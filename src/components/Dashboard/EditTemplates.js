@@ -169,7 +169,7 @@ function EditTemplates() {
             <div className="position-detail">
               <strong>Job Position:</strong> {position['Job Position']}
             </div>
-            <button id="edittemplate_delete" onClick={(e) => handleDelete(position['Job ID'], e)}>Delete</button>
+            <button id="edittemplate_delete" onClick={(e) => handleDelete(position['Job ID'], e)}></button>
           </div>
         ))}
       </div>

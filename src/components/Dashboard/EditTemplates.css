@@ -87,10 +87,10 @@
   text-align: center;
 }
 .modal h1 {
-  color: black; /* 或者是你想要的任何颜色 */
+  color: black; 
 }
 .modal h2 {
-  color: black; /* 或者是你想要的任何颜色 */
+  color: black; 
 }
 
 .modal-content {
@@ -147,15 +147,19 @@
 
 #edittemplate_delete{
   position: absolute;
-  right: 30px; 
-  padding: 8px 15px; 
-  border: 1px solid darken(#d9534f, 10%); 
-  border-radius: 4px; 
-  color: rgb(0, 0, 0); 
-  font-weight: bold; 
-  text-transform: uppercase; 
-  font-size: 14px; 
-  cursor: pointer; 
-  box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px;
+  border: none; 
+  background: none; 
+  color: rgb(176, 14, 14); 
+  font-weight: bold;
+  font-size: 24px; 
+  cursor: pointer;
 }
 
+#edittemplate_delete::before {
+  content: "\1F5D1"; 
+  margin-right: 0; 
+}
