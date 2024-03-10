@@ -66,6 +66,25 @@ function Interviews() {
     navigate(`/interview-details/${interviewID}`);
   };
 
+  // handle delete [TODO API needed]
+  const handleDelete = async (interviewID, event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (window.confirm('Delete?')) {
+
+      console.log(interviewID); 
+
+      try {
+        const response = await axios.post(`apixxxx?interviewId=${interviewID}`);
+        console.log(response.data); 
+        alert('Delete success');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+
   return (
     <div className="interviews-container">
       <div className="header">
@@ -95,7 +114,10 @@ function Interviews() {
             <p>Interviewee: {interview.interviewee}</p>
             <p>Interviewed On: {interview.interviewedOn}</p>
             <p>Job Position: {interview.jobPosition}</p>
-            <button id = "jobinterview-delete">Delete</button>
+            <p>interviewID: {interview.interviewID}</p>
+            <button id="jobinterview-delete" onClick={(e) => {
+              handleDelete(interview.interviewID, e);
+            }}>Delete</button>
           </div>
         ))}
       </div>

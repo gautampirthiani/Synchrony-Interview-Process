@@ -45,27 +45,24 @@ function InterviewDetails() {
       } catch (error) {
       }
     };
-    //Update
+
+    //Update [TODO API needed]
     const handleUpdate = async (event) => {
       event.preventDefault();
       if (window.confirm('Update?')) {
         const data = {
-          jobId,
           interviewId,
           questions: additionalInputs.map(({ question, answer, score }) => ({
-            Question: question,
+            QuestionText: question,
             Answer: answer,
             Score: score
           }))
         };
         try {
-          //print sending data in console 
-          // console.log(data);
-          // Add API api for updating here
-          const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Update_Questions?jobId=${jobId}&templateId=${interviewId}`, data);
+          console.log(data.questions);
+          const response = await axios.post(`apixxxx?interviewId=${data.interviewId}`, data.questions);
           // console.log(response);
           alert('Updated successfully!');
-          // fetchdata();
         } catch (error) {
           console.error('Error fetching data:', error);
         }
