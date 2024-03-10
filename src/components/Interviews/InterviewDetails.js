@@ -20,7 +20,7 @@ function InterviewDetails() {
 
   function updateAdditionalInputsFromMultiple(items) {
     const newItems = items.map(item => ({
-      question: item.QuestionText,
+      question: item.Question,
       answer: item.Answer,
       score: item.Score
     }));
@@ -53,14 +53,14 @@ function InterviewDetails() {
         const data = {
           interviewId,
           questions: additionalInputs.map(({ question, answer, score }) => ({
-            QuestionText: question,
+            Question: question,
             Answer: answer,
             Score: score
           }))
         };
         try {
-          console.log(data.questions);
-          const response = await axios.post(`apixxxx?interviewId=${data.interviewId}`, data.questions);
+          console.log(data.interviewid);
+          const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/update_interview?interviewId=${data.interviewId}`, data);
           // console.log(response);
           alert('Updated successfully!');
         } catch (error) {

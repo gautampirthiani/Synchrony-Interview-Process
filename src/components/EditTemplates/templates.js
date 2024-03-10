@@ -12,29 +12,25 @@ function Templates() {
   const [searchTerm, setSearchTerm] = useState('');
   const { JobID } = useParams();
   const navigate = useNavigate();
+  
+  const fetchTemplates = async () => {
+    try {
+      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
+      const templatesData = response.data;
+      setTemplates(templatesData);
+      const defaultTemplate = templatesData.find(template => template.default === true);
+      if (defaultTemplate) {
+        setDefaultTemplateId(defaultTemplate['Template ID']);
+      }
+    } catch (error) {
+      console.error('Error fetching templates:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchTemplates = async () => {
-      try {
-        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
-        const templatesData = response.data;
-        setTemplates(templatesData);
-        // Find the template marked as default
-        const defaultTemplate = templatesData.find(template => template.default === true);
-        console.log('defaultTemplate:', defaultTemplate);
-        console.log('templatesData:', templatesData);
-
-        if (defaultTemplate) {
-          setDefaultTemplateId(defaultTemplate['Template ID']);
-        }
-      } catch (error) {
-        console.error('Error fetching templates:', error);
-      }
-    };
-
     fetchTemplates();
   }, [JobID]);
-
+  fetchTemplates();
 
   const handleTemplateClick = (templateId) => {
     navigate(`/dashboard/update-templates/${JobID}/${templateId}`);
@@ -99,8 +95,10 @@ function Templates() {
     if (window.confirm('Are you sure you want to delete this template?')) {
       try {
         console.log(jobid, templateId);
-        const response = await axios.post(`apixxxx?jobID=${jobid}&templateID=${templateId}`);
+        const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/delete_templates?jobId=${jobid}&templateId=${templateId}`);
+        console.log(response);
         console.log(`Deleted successfully.`);
+        fetchTemplates();
       } catch (error) {
         console.error('Error deleting template:', error);
       }

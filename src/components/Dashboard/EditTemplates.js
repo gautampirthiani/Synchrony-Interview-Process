@@ -53,7 +53,8 @@ function EditTemplates() {
       setFormData({ jobId: '', jobPosition: '' });
       fetchPositions();
       const response = await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', formData);
-      // console.log('Response from Lambda:', response.data); 
+      // console.log('Response from Lambda:', response.data);
+      fetchPositions(); 
       alert('Job position created successfully!');
     } catch (error) {
       // console.error('Error creating job position:', error);
@@ -127,9 +128,10 @@ function EditTemplates() {
       console.log(JobID);
 
       try {
-        const response = await axios.post(`apixxxx?jobID=${JobID}`);
+        const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/delete_job_position?jobId=${JobID}`);
         // console.log(response.data);
         alert('Delete success');
+        fetchPositions(); 
       } catch (error) {
         console.error(error);
         alert('Failed to delete');

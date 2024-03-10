@@ -14,31 +14,28 @@ function Interviews() {
   const [filteredInterviews, setFilteredInterviews] = useState([]);
   const { jobId, jobPosition } = useParams();
 
+  const fetchInterviews = async () => {
+    try {
+      console.log('Fetching interviews for job ID:', jobId);
+      console.log('Fetching interviews for job Position:', jobPosition);
+      const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Interviews_Based_On_JobId?jobId=${jobId}`);
+      const interviewsData = data.map(item => ({
+        interviewID: item['Interview ID'],
+        interviewer: item.Interviewer || 'N/A',
+        interviewee: item.Name, // Assuming 'Name' is the interviewee's name
+        jobPosition: jobPosition,
+        jobID: item['Job ID'],
+        interviewedOn: item['Interviewed On'],
+        // Add other attributes you need
+      }));
+      setInterviews(interviewsData);
+    } catch (error) {
+      console.error('Error fetching interviews:', error);
+    }
+  };
   useEffect(() => {
-    const fetchInterviews = async () => {
-      try {
-        console.log('Fetching interviews for job ID:', jobId);
-        console.log('Fetching interviews for job Position:', jobPosition);
-        const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Interviews_Based_On_JobId?jobId=${jobId}`);
-        const interviewsData = data.map(item => ({
-          interviewID: item['Interview ID'],
-          interviewer: item.Interviewer || 'N/A',
-          interviewee: item.Name, // Assuming 'Name' is the interviewee's name
-          jobPosition: jobPosition,
-          jobID: item['Job ID'],
-          interviewedOn: item['Interviewed On'],
-          // Add other attributes you need
-        }));
-        setInterviews(interviewsData);
-      } catch (error) {
-        console.error('Error fetching interviews:', error);
-      }
-    };
-
     fetchInterviews();
-
-  }, [jobId, jobPosition]);
-
+  }, [jobId, jobPosition]); 
   useEffect(() => {
     const results = interviews.filter(interview => {
       const interviewer = interview.interviewer ? interview.interviewer.toLowerCase() : '';
@@ -72,12 +69,13 @@ function Interviews() {
     event.stopPropagation();
     if (window.confirm('Delete?')) {
 
-      console.log(interviewID); 
+      console.log(interviewID);
 
       try {
-        const response = await axios.post(`apixxxx?interviewId=${interviewID}`);
-        console.log(response.data); 
+        const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Delete_interviews?interviewID=${interviewID}`);
+        console.log(response.data);
         alert('Delete success');
+        fetchInterviews();
       } catch (error) {
         console.error(error);
       }

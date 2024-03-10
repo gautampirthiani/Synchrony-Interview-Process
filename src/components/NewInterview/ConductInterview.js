@@ -12,7 +12,7 @@ function ConductInterview() {
   const [templateId, setTemplateId] = useState(null); // New state variable for storing templateId
   const { jobId } = useParams();
   const navigate = useNavigate();
-  console.log(jobId);
+  // console.log(jobId);
 
   function updateAdditionalInputsFromMultiple(items, fetchedTemplateId) {
     const newItems = items.map(item => ({
@@ -54,7 +54,7 @@ function ConductInterview() {
       }));
 
       try {
-        console.log(questionsPayload);
+        // console.log(questionsPayload);
         // Send the jobId as a query parameter and the rest of the body as JSON
         const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
           Name: candidateName,

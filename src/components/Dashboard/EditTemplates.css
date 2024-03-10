@@ -86,6 +86,12 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
+.modal h1 {
+  color: black; /* 或者是你想要的任何颜色 */
+}
+.modal h2 {
+  color: black; /* 或者是你想要的任何颜色 */
+}
 
 .modal-content {
   margin: auto;
