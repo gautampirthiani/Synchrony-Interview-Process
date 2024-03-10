@@ -20,7 +20,7 @@ function InterviewDetails() {
 
   function updateAdditionalInputsFromMultiple(items) {
     const newItems = items.map(item => ({
-      question: item.Question,
+      question: item.QuestionText,
       answer: item.Answer,
       score: item.Score
     }));
@@ -53,7 +53,7 @@ function InterviewDetails() {
         const data = {
           interviewId,
           questions: additionalInputs.map(({ question, answer, score }) => ({
-            Question: question,
+            QuestionText: question,
             Answer: answer,
             Score: score
           }))
