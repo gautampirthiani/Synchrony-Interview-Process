@@ -46,6 +46,7 @@ function InterviewDetails() {
       }
     };
 
+    const navigate = useNavigate();
     //Update [TODO API needed]
     const handleUpdate = async (event) => {
       event.preventDefault();
@@ -63,6 +64,7 @@ function InterviewDetails() {
           const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/update_interview?interviewId=${data.interviewId}`, data);
           // console.log(response);
           alert('Updated successfully!');
+          navigate(-1); 
         } catch (error) {
           console.error('Error fetching data:', error);
         }
