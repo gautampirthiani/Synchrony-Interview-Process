@@ -101,7 +101,21 @@ function DataAnalysis() {
   // Fetch the number of interviews for the selected job
   const fetchInterviewCountForSelectedJob = (jobID) => {
     setInterviewsForSelectedJob(-5);
-  }
+    fetch('put the URL here')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // This already parses the JSON response
+      })
+      .then(data => {
+        console.log('FETCHED interview count for selected job:', data.interviewCount);
+        setInterviewsForSelectedJob(data.interviewCount);
+      })
+      .catch(error => {
+        console.error('Error fetching interview count for selected job:', error);
+      });
+  };
 
 
   return (
