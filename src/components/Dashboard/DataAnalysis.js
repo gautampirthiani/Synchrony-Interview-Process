@@ -17,6 +17,9 @@ function DataAnalysis() {
   // State to store a list of usernames from the dynamoDB table Users
   const [usernames, setUsernames] = useState([]);
 
+  // State to store a list of tuples of jobName and jobID called job_data
+  const [jobData, setJobData] = useState([]);
+
   // Fetch total open positions from API
   useEffect(() => {
     fetch('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_totalJobs1')
@@ -56,6 +59,25 @@ function DataAnalysis() {
       });
   }, []); // Empty dependency array means this effect runs only once after the initial render
 
+
+  // Fetch job_data from API, this is a list of tuples of jobName and jobID
+  useEffect(() => {
+    fetch('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_getJobPositions1')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // This already parses the JSON response
+      })
+      .then(data => {        
+        console.log('FETCHED job_data :    ', data.job_data);
+        //setJobData(data.Items.map(item => [item.jobName.S, item.jobID.S]));
+        setJobData(data.job_data);
+      })
+      .catch(error => {
+        console.error('Error fetching job_data:', error);
+      });
+  }, []);
 
   // Function to apply filters
   const applyFilters = () => {
