@@ -101,7 +101,7 @@ function DataAnalysis() {
   // Fetch the number of interviews for the selected job
   const fetchInterviewCountForSelectedJob = (jobID) => {
     setInterviewsForSelectedJob(-5);
-    fetch('put the URL here')
+    fetch(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_getInterviewCountForJobID1?jobID=${jobID}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
