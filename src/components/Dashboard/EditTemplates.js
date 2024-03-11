@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import logoImage from './synchrony-logo-1.png'; // Ensure this is the correct path to your logo
+import logoImage from './synchrony-logo-1.png'; 
 import './EditTemplates.css';
-import Navbar from '../Navbar'; // Ensure this is the correct path to your Navbar component
+import Navbar from '../Navbar'; 
 import { Link, useNavigate } from 'react-router-dom';
 
 function EditTemplates() {

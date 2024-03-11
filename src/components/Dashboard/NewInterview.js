@@ -41,7 +41,7 @@ function NewInterview() {
   };
 
   const handlePositionClick = (jobId) => {
-    navigate(`/position-details/${jobId}`);
+    navigate(`/new-interview/conduct-interview/${jobId}`);
   };
 
   return (

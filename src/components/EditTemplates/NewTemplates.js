@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import logoImage from './synchrony-logo-1.png';
+import logoImage from '../synchrony-logo-1.png';
 import './NewTemplates.css';
-import Navbar from './Navbar';
+import Navbar from '../Navbar';
+import { useNavigate } from 'react-router-dom';
 
 function NewTemplates() {
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const { jobId } = useParams();
+  const navigate = useNavigate();
 
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
@@ -46,6 +48,7 @@ function NewTemplates() {
         );
         console.log('Response from Lambda:', response.data);
         setAdditionalInputs([{ question: '', answer: '', score: '' }]);
+        navigate(`/dashboard/templates/${jobId}`);
       } catch (error) {
         console.error('Error submitting to Lambda:', error);
       }

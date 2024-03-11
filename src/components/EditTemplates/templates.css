@@ -142,7 +142,39 @@
   right: 20px; /* Adjust as per your layout */
   top: 225px; /* Adjust this to align with the search bar */
 }
+.template-item {
+  position: relative; /* Set the position to relative to contain the absolute corner */
+  /* Your other styles */
+}
 
+.template-default-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  /* Your other styles for size, etc. */
+}
+
+/* Ensure the triangle icon fits within the corner area */
+.template-default-corner svg {
+  width: 20px; /* Example size, adjust as needed */
+  height: 20px; /* Example size, adjust as needed */
+}
+
+.template-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.toggle-default {
+  padding: 5px 15px;
+  border: none;
+  background-color: rgb(3, 3, 3);
+  color: white;
+  cursor: pointer
+}
 /* 
 
 
