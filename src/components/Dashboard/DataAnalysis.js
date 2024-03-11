@@ -20,6 +20,9 @@ function DataAnalysis() {
   // State to store a list of tuples of jobName and jobID called job_data
   const [jobData, setJobData] = useState([]);
 
+  // State to store the selected job position
+  const [selectedJob, setSelectedJob] = useState('');
+
   // Fetch total open positions from API
   useEffect(() => {
     fetch('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_totalJobs1')
@@ -84,6 +87,15 @@ function DataAnalysis() {
     // Add code to apply filters here
   }
 
+  // Function to handle job change
+  const handleJobChange = (event) => {
+    setSelectedJob(event.target.value);
+  };
+  useEffect(() => {   //and the test/confirmation
+    console.log('Selected job set as:', selectedJob);
+  }, [selectedJob]);
+
+
   return (
     <div className="data-analysis-container">
       <div className="header">
@@ -119,6 +131,7 @@ function DataAnalysis() {
             <div className="filter-option">
               <input type="range" min="1" max="100" className="slider" />
             </div>
+
             <div className="filter-option">
               <h4>Username</h4>
               <select className="selection-box">
@@ -126,8 +139,18 @@ function DataAnalysis() {
                   <option key={index} value={username}>{username}</option>
                 ))}
               </select>
-
             </div>
+
+            <div className="filter-option">
+              <h4>Job Position</h4>
+              <select className="selection-box" value={selectedJob} onChange={handleJobChange}>
+                <option value="">Select a job</option>
+                {jobData.map((job, index) => (
+                  <option key={index} value={job.jobID}>{job.jobName}</option>
+                ))}
+              </select>
+            </div>
+
           </div>
           {/* Add more content here if needed */}
           <button className="apply-button" onClick={applyFilters}>Apply Filters</button>
