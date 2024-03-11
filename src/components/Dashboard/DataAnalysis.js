@@ -24,6 +24,9 @@ function DataAnalysis() {
   const [selectedJob, setSelectedJob] = useState('');
   const [interviewsForSelectedJob, setInterviewsForSelectedJob] = useState(0);
 
+  // State to flash interviewCount
+  const [flashInterviewCount, setFlashInterviewCount] = useState(false);
+
   // Fetch total open positions from API
   useEffect(() => {
     fetch('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_totalJobs1')
@@ -93,6 +96,12 @@ function DataAnalysis() {
     setSelectedJob(event.target.value);
     // fetch the number of interviews for the selected job
     fetchInterviewCountForSelectedJob(event.target.value);
+    // flash the interview count box
+    setFlashInterviewCount(true);
+    // Reset the flashing effect after 1 second (adjust as needed)
+    setTimeout(() => {
+      setFlashInterviewCount(false);
+    }, 1000); // 1000 millisec
   };
   useEffect(() => {   //and the test/confirmation
     console.log('Selected job set as:', selectedJob);
@@ -100,7 +109,7 @@ function DataAnalysis() {
 
   // Fetch the number of interviews for the selected job
   const fetchInterviewCountForSelectedJob = (jobID) => {
-    setInterviewsForSelectedJob(-5);
+    //setInterviewsForSelectedJob(-5);
     fetch(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_getInterviewCountForJobID1?jobID=${jobID}`)
       .then(response => {
         if (!response.ok) {
@@ -115,7 +124,7 @@ function DataAnalysis() {
       .catch(error => {
         console.error('Error fetching interview count for selected job:', error);
       });
-  };
+  };  // interview count based on selecting job working!
 
 
   return (
@@ -181,7 +190,9 @@ function DataAnalysis() {
           <div className="stats-container">
             <div className="stat-box">Average candidacy length: 2 weeks</div>
             <div className="stat-box">Total open positions: {totalOpenPositions}</div>
-            <div className="stat-box">Total interviews for selected job: {interviewsForSelectedJob}</div>
+            {/* <div className="stat-box">Total interviews for selected job: {interviewsForSelectedJob}</div> */}
+            {/* <div className={flashInterviewCount ? 'flash' : ''}>Total interviews for selected job: {interviewsForSelectedJob}</div> */}
+            <div className={`stat-box ${flashInterviewCount ? 'flash-interview-count' : ''}`}>Total interviews for selected job: {interviewsForSelectedJob}</div>
             {/* More stat boxes as needed */}
           </div>
           <div className="graph-container">

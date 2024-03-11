@@ -178,3 +178,17 @@
   background-color: #0051cc; /* Darker shade for hover effect */
 }
 
+
+.flash-interview-count {
+  animation: flash-animation 1s infinite alternate; /* Define the flashing animation */
+}
+
+@keyframes flash-animation {
+  from {
+    background-color: #007bff; /* Initial color */
+  }
+  to {
+    background-color: #80bfff; /* Brighter color */
+  }
+}
+
