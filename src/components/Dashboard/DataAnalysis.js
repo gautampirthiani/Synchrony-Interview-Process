@@ -57,6 +57,11 @@ function DataAnalysis() {
   }, []); // Empty dependency array means this effect runs only once after the initial render
 
 
+  // Function to apply filters
+  const applyFilters = () => {
+    // Add code to apply filters here
+  }
+
   return (
     <div className="data-analysis-container">
       <div className="header">
@@ -103,6 +108,7 @@ function DataAnalysis() {
             </div>
           </div>
           {/* Add more content here if needed */}
+          <button className="apply-button" onClick={applyFilters}>Apply Filters</button>
         </div>
         <div className="right-column">
           <div className="stats-container">
