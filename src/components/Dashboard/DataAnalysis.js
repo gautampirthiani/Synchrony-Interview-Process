@@ -20,8 +20,9 @@ function DataAnalysis() {
   // State to store a list of tuples of jobName and jobID called job_data
   const [jobData, setJobData] = useState([]);
 
-  // State to store the selected job position
+  // State to store the selected job position, and the number of interviews for that job
   const [selectedJob, setSelectedJob] = useState('');
+  const [interviewsForSelectedJob, setInterviewsForSelectedJob] = useState(0);
 
   // Fetch total open positions from API
   useEffect(() => {
@@ -90,10 +91,17 @@ function DataAnalysis() {
   // Function to handle job change
   const handleJobChange = (event) => {
     setSelectedJob(event.target.value);
+    // fetch the number of interviews for the selected job
+    fetchInterviewCountForSelectedJob(event.target.value);
   };
   useEffect(() => {   //and the test/confirmation
     console.log('Selected job set as:', selectedJob);
   }, [selectedJob]);
+
+  // Fetch the number of interviews for the selected job
+  const fetchInterviewCountForSelectedJob = (jobID) => {
+    setInterviewsForSelectedJob(-5);
+  }
 
 
   return (
@@ -159,7 +167,7 @@ function DataAnalysis() {
           <div className="stats-container">
             <div className="stat-box">Average candidacy length: 2 weeks</div>
             <div className="stat-box">Total open positions: {totalOpenPositions}</div>
-            <div className="stat-box">Total interviews: 33</div>
+            <div className="stat-box">Total interviews for selected job: {interviewsForSelectedJob}</div>
             {/* More stat boxes as needed */}
           </div>
           <div className="graph-container">
