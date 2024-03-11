@@ -67,14 +67,14 @@ function Interviews() {
   const handleDelete = async (interviewID, event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (window.confirm('Delete?')) {
+    if (window.confirm('Are you sure you want to delete this interview?')) {
 
       console.log(interviewID);
 
       try {
         const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Delete_interviews?interviewID=${interviewID}`);
         console.log(response.data);
-        alert('Delete success');
+        alert('Interview deleted successfully');
         fetchInterviews();
       } catch (error) {
         console.error(error);
