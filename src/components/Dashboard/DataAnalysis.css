@@ -159,3 +159,36 @@
 
 }
 
+
+/* Apply Button */
+
+.apply-button {
+  padding: 10px 20px;
+  background-color: #0066ff; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem; /* Space above button */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.apply-button:hover {
+  background-color: #0051cc; /* Darker shade for hover effect */
+}
+
+
+.flash-interview-count {
+  animation: flash-animation 1s infinite alternate; /* Define the flashing animation */
+}
+
+@keyframes flash-animation {
+  from {
+    background-color: #007bff; /* Initial color */
+  }
+  to {
+    background-color: #80bfff; /* Brighter color */
+  }
+}
+
