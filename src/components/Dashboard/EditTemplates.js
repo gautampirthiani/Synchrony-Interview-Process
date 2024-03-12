@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import logoImage from './synchrony-logo-1.png'; 
+import logoImage from './synchrony-logo-1.png';
 import './EditTemplates.css';
-import Navbar from '../Navbar'; 
+import Navbar from '../Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 
 function EditTemplates() {
@@ -18,12 +18,13 @@ function EditTemplates() {
   const fetchPositions = async () => {
     try {
       const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
+      // console.log(data)
       setPositions(data);
     } catch (error) {
       console.error('Error fetching positions:', error);
     }
   };
-  
+
   useEffect(() => {
     fetchPositions();
   }, []);
@@ -52,14 +53,15 @@ function EditTemplates() {
       setFormData({ jobId: '', jobPosition: '' });
       fetchPositions();
       const response = await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', formData);
-      // console.log('Response from Lambda:', response.data); 
+      // console.log('Response from Lambda:', response.data);
+      fetchPositions(); 
       alert('Job position created successfully!');
     } catch (error) {
       // console.error('Error creating job position:', error);
       alert('Failed to create job position.');
     }
   };
-  
+
 
   // Modal component for creating a new job position with ID.
   function Modal({ isOpen, onClose, onSubmit }) {
@@ -117,6 +119,26 @@ function EditTemplates() {
     setShowModal(true);
   };
 
+  // handle delete [TODO API needed]
+  const handleDelete = async (JobID, event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (window.confirm('Delete?')) {
+
+      console.log(JobID);
+
+      try {
+        const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/delete_job_position?jobId=${JobID}`);
+        // console.log(response.data);
+        alert('Delete success');
+        fetchPositions(); 
+      } catch (error) {
+        console.error(error);
+        alert('Failed to delete');
+      }
+    }
+  };
+
   return (
     <div className="new-interview-container">
       <div className="header">
@@ -147,6 +169,7 @@ function EditTemplates() {
             <div className="position-detail">
               <strong>Job Position:</strong> {position['Job Position']}
             </div>
+            <button id="edittemplate_delete" onClick={(e) => handleDelete(position['Job ID'], e)}></button>
           </div>
         ))}
       </div>

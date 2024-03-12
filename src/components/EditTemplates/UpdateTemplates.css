@@ -51,7 +51,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    line-height: 1.1; /* 可选的，如果你还想减小行间距 */
+    line-height: 1.1; 
 }
 
 

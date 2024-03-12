@@ -41,15 +41,7 @@
   /* ... */
 }
 
-#interview-details-job-template-info p {
-  margin-top: 0;
-  margin-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.1; /* 可选的，如果你还想减小行间距 */
-}
+
 
 #interview-details-add-question-answer-btn {
   display: inline-block;
@@ -186,5 +178,17 @@
 .question-inputs-container textarea {
   min-height: 50px; /* Set a minimum height */
   overflow: auto; /* Ensures the scrollbar appears if the text overflows */
+}
+
+#update-interview-info p {
+  margin-top: 0;
+  margin-bottom: 0;
+  display: flex;
+  align-items: left;
+  line-height: 1.1; 
+}
+
+#update-interview-info{
+  margin-bottom: 1rem;
 }
 

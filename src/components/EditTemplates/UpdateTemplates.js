@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate} from 'react-router-dom';
 import logoImage from '../synchrony-logo-1.png';
 import './UpdateTemplates.css';
 import Navbar from '../Navbar';
@@ -41,6 +41,7 @@ function UpdateTemplates() {
     }
   };
 
+  const navigate = useNavigate();
   //Update
   const handleUpdate = async (event) => {
       event.preventDefault();
@@ -61,6 +62,7 @@ function UpdateTemplates() {
           const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Update_Questions?jobId=${jobId}&templateId=${templateId}`, data);
           // console.log(response);
           alert('Updated successfully!');
+          navigate(-1); // 使用navigate回到上一页
           // fetchdata();
         } catch (error) {
           console.error('Error fetching data:', error);
