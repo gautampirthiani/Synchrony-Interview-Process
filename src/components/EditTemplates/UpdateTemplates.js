@@ -4,8 +4,10 @@ import { useParams, Link, useNavigate} from 'react-router-dom';
 import logoImage from '../synchrony-logo-1.png';
 import './UpdateTemplates.css';
 import Navbar from '../Navbar';
+import Loader from '../Loader';
 
 function UpdateTemplates() {
+  const [loading, setLoading] = useState(false);
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const { jobId, templateId } = useParams();
 
@@ -22,22 +24,15 @@ function UpdateTemplates() {
   //Fetch
   const fetchdata = async () => {
     try {
-      //local test data
-      // const testData = [
-      //   { question: 'What is React?', answer: 'A JavaScript library for building user interfaces', score: '5' },
-      //   { question: 'What is useState?', answer: 'A Hook that lets you add React state to function components', score: '4' },
-      //   { question: 'What is useEffect?', answer: 'A Hook that lets you perform side effects in function components', score: '5' }
-      // ];
-      // setAdditionalInputs(testData);
-      // console.log(testData);
-      //?jobId=${jobId}&templateId=${templateId}
-      // add fetch API here
+      setLoading(true);
       const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Template?jobId=${jobId}&templateId=${templateId}`);
       //console.log(response.data.Questions);
-      
       updateAdditionalInputsFromMultiple(response.data.Questions);
     } catch (error) {
       // console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -98,6 +93,7 @@ function UpdateTemplates() {
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Update Templates</h1>
       </div>
+      {loading && <Loader />}
       <div id="job-template-info">
         <p>Job ID: {jobId}</p>
         <p>Template ID: {templateId}</p>

@@ -4,11 +4,13 @@ import axios from 'axios';
 import logoImage from '../synchrony-logo-1.png';
 import './JobInterviews.css';
 import Navbar from '../Navbar';
+import Loader from '../Loader';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 
 function Interviews() {
+  const [loading, setLoading] = useState(false);
   const [interviews, setInterviews] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredInterviews, setFilteredInterviews] = useState([]);
@@ -18,6 +20,7 @@ function Interviews() {
     try {
       console.log('Fetching interviews for job ID:', jobId);
       console.log('Fetching interviews for job Position:', jobPosition);
+      setLoading(true);
       const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Interviews_Based_On_JobId?jobId=${jobId}`);
       const interviewsData = data.map(item => ({
         interviewID: item['Interview ID'],
@@ -31,6 +34,8 @@ function Interviews() {
       setInterviews(interviewsData);
     } catch (error) {
       console.error('Error fetching interviews:', error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -103,6 +108,7 @@ function Interviews() {
           className="search-bar"
         />
       </div>
+      {loading && <Loader />}
       <div className="interviews-list">
         {filteredInterviews.map((interview) => (
           // The entire interview item is now clickable
@@ -112,7 +118,6 @@ function Interviews() {
             <p>Interviewee: {interview.interviewee}</p>
             <p>Interviewed On: {interview.interviewedOn}</p>
             <p>Job Position: {interview.jobPosition}</p>
-            <p>interviewID: {interview.interviewID}</p>
             <button id="jobinterview-delete" onClick={(e) => {
               handleDelete(interview.interviewID, e);
             }}></button>

@@ -4,9 +4,11 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import logoImage from '../synchrony-logo-1.png';
 import Navbar from '../Navbar';
 import './templates.css';
+import Loader from '../Loader';
 import { FiArrowLeft } from 'react-icons/fi';
 
 function Templates() {
+  const [loading, setLoading] = useState(false);
   const [defaultTemplateId, setDefaultTemplateId] = useState(null);
   const [templates, setTemplates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,6 +17,7 @@ function Templates() {
   
   const fetchTemplates = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
       const templatesData = response.data;
       setTemplates(templatesData);
@@ -25,12 +28,14 @@ function Templates() {
     } catch (error) {
       console.error('Error fetching templates:', error);
     }
+    finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchTemplates();
   }, [JobID]);
-  fetchTemplates();
 
   const handleTemplateClick = (templateId) => {
     navigate(`/dashboard/update-templates/${JobID}/${templateId}`);
@@ -132,6 +137,7 @@ function Templates() {
           Create New Templates
         </button>
       </div>
+      {loading && <Loader />}
       <div className="templates-list">
         {filteredTemplates.map((template) => (
           <div

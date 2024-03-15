@@ -5,9 +5,11 @@ import axios from 'axios';
 import logoImage from './synchrony-logo-1.png';
 import './EditTemplates.css';
 import Navbar from '../Navbar';
+import Loader from '../Loader';
 import { Link, useNavigate } from 'react-router-dom';
 
 function EditTemplates() {
+  const [loading, setLoading] = useState(false);
   const [positions, setPositions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -17,11 +19,15 @@ function EditTemplates() {
 
   const fetchPositions = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
       // console.log(data)
       setPositions(data);
     } catch (error) {
       console.error('Error fetching positions:', error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -160,6 +166,8 @@ function EditTemplates() {
           className="search-bar"
         />
       </div>
+      {loading && <Loader />}
+      {/* Display the list of positions */}
       <div className="position-list">
         {filteredPositions.map((position) => (
           <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'])} className="position-item">

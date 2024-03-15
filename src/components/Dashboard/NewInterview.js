@@ -4,8 +4,10 @@ import logoImage from './synchrony-logo-1.png';
 import './NewInterview.css';
 import Navbar from '../Navbar';
 import { Link, useNavigate } from 'react-router-dom';
+import Loader from '../Loader';
 
 function NewInterview() {
+  const [loading, setLoading] = useState(false);
   const [positions, setPositions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPositions, setFilteredPositions] = useState([]);
@@ -15,11 +17,15 @@ function NewInterview() {
   useEffect(() => {
     const fetchPositions = async () => {
       try {
+        setLoading(true);
         const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access`);
         setPositions(data);
         setFilteredPositions(data); // Initially show all positions
       } catch (error) {
         console.error('Error fetching positions:', error);
+      }
+      finally {
+        setLoading(false);
       }
     };
     fetchPositions();
@@ -64,6 +70,8 @@ function NewInterview() {
           className="search-bar"
         />
       </div>
+      {loading && <Loader />}
+      {/* Display the list of positions */}
       <div className="position-list">
         {filteredPositions.map((position) => (
           <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'])} className="position-item">

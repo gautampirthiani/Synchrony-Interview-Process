@@ -4,8 +4,10 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import logoImage from '../synchrony-logo-1.png';
 import './InterviewDetails.css';
 import Navbar from '../Navbar';
+import Loader from '../Loader';
 
 function InterviewDetails() {
+  const [loading, setLoading] = useState(false);
   const {jobId,interviewId} = useParams();
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const [interviewDetails, setInterviewDetails] = useState({
@@ -32,6 +34,7 @@ function InterviewDetails() {
     //Fetch
     const fetchdata = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Interview?interviewId=${interviewId}`);
         console.log(response.data);
         setInterviewDetails({
@@ -43,6 +46,10 @@ function InterviewDetails() {
         });
         updateAdditionalInputsFromMultiple(response.data.Questions);
       } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+      finally {
+        setLoading(false);
       }
     };
 
@@ -98,6 +105,7 @@ function InterviewDetails() {
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Update Interview</h1>
       </div>
+      {loading && <Loader />}
       <div id="update-interview-info" >
         {/* <p>Interview ID: {interviewDetails.interviewID}</p> */}
         <p>Interviewer: {interviewDetails.interviewer}</p>
