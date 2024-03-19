@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import logoImage from '/Users/damianmiskow/Desktop/Merge/Synchrony-Interview-Process/src/components/Synch_logo.png';
+import logoImage from './Synch_logo.png';
 import './JobInterviews.css';
 import Navbar from '../Navbar';
 import Loader from '../Loader';

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './AddUserForm.css';
-import logo from '/Users/damianmiskow/Desktop/Merge/Synchrony-Interview-Process/src/components/Synch_logo.png';
+import logo from './synchrony-logo-1.png';
+
 
 function AddUserForm() {
   const [username, setUsername] = useState('');
