@@ -1,39 +1,58 @@
-/* HomePage.js */
-
-import React from 'react'
-import logoimage from './synchrony-logo-1.png';
+import React, { useEffect, useState } from 'react';
+import logoimage from '/Users/damianmiskow/Desktop/Merge/Synchrony-Interview-Process/src/components/Synch_logo.png';
 import './HomePage.css';
 import Navbar from './Navbar';
+import { getCurrentUser } from '@aws-amplify/auth';
 
 const HomePage = () => {
+  const [username, setUsername] = useState('');
+  const [department, setDepartment] = useState('');
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(user => {
+        setUsername(user.username); 
+        fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: user.username }), 
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data && data.department) {
+              setDepartment(data.department);
+            }
+          })
+          .catch(error => console.error('Error:', error));
+      })
+      .catch(err => console.log(err));
+  }, []);
+
   return (
-      <div className="homepage-container">
-        <div className="logo-container">
-          <img src={logoimage} alt="Company Logo" className="logo-image" />
-        </div>
-
-        <div className="navbar">
-          <span className="navbar-logo">Recruiting Portal</span>
-          <Navbar />
-        </div>
-
-        <h1 className="homepage-heading">Synchrony Interviews</h1>
-
-        <footer className="footer">
-          <div className="footer-content">
-            <div className="footer-section">
-              <h4 className="footer-heading">Get in Touch</h4>
-              <p className="footer-contact-item">+1 (234) 567-890</p>
-              <p className="footer-contact-item">contact@synchrony.com</p>
-              <p className="footer-contact-item">123 Synchrony Blvd, Finance City</p>
-            </div>
-          </div>
-
-          <div className="footer-bottom-text">
-            &copy; 2023 Synchrony. All Rights Reserved.
-          </div>
-        </footer>
+    <div className="homepage-container">
+      <div className="logo-container">
+        <img src={logoimage} alt="Company Logo" className="logo-image" />
       </div>
+      <div className="navbar">
+        <span className="navbar-logo">Recruiting Portal</span>
+        <Navbar />
+      </div>
+      <h1 className="homepage-heading">Welcome, {username}!</h1>
+      <div className="welcome-message">
+        {department && <h2 className="homepage-heading">Department: {department}</h2>}
+      </div>
+      <h2 className="homepage-heading">Synchrony Interviews</h2>
+      <footer className="footer">
+        <div className="footer-content">
+        </div>
+        <div className="footer-bottom-text">
+          &copy; 2023 Synchrony. All Rights Reserved.
+        </div>
+      </footer>
+    </div>
   );
 };
 
