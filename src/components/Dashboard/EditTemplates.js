@@ -1,75 +1,61 @@
-// EditTemplates.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import logoImage from './synchrony-logo-1.png';
+import { getCurrentUser } from '@aws-amplify/auth';
+import logoImage from './synchrony-logo-1.png'; 
 import './EditTemplates.css';
-import Navbar from '../Navbar';
-import Loader from '../Loader';
+import Navbar from '../Navbar'; 
 import { Link, useNavigate } from 'react-router-dom';
 
 function EditTemplates() {
-  const [loading, setLoading] = useState(false);
   const [positions, setPositions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ jobId: '', jobPosition: '' });
+  const [username, setUsername] = useState('');
 
   const navigate = useNavigate();
 
   const fetchPositions = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
-      // console.log(data)
-      setPositions(data);
-    } catch (error) {
-      console.error('Error fetching positions:', error);
-    }
-    finally {
-      setLoading(false);
-    }
+    const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
+    setPositions(data);
   };
 
   useEffect(() => {
     fetchPositions();
+    const fetchCurrentUser = async () => {
+      const currentUser = await getCurrentUser();
+      setUsername(currentUser.username);
+    };
+
+    fetchCurrentUser();
   }, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filter positions based on search term
   const filteredPositions = positions.filter(position =>
     position['Job Position'].toLowerCase().includes(searchTerm.toLowerCase()) ||
     position['Job ID'].toString().includes(searchTerm)
   );
 
-  // Handle clicking on a position item
   const handlePositionClick = (JobID) => {
-    // Navigate to new page using job ID
     navigate(`/dashboard/templates/${JobID}`);
   };
 
-  // handles the submission of job position form data to a server.
   const handleSubmit = async (formData) => {
-    // console.log('Submitting form data:', formData);
-    try {
-      setShowModal(false);
-      setFormData({ jobId: '', jobPosition: '' });
-      fetchPositions();
-      const response = await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', formData);
-      // console.log('Response from Lambda:', response.data);
-      fetchPositions(); 
-      alert('Job position created successfully!');
-    } catch (error) {
-      // console.error('Error creating job position:', error);
-      alert('Failed to create job position.');
-    }
+    const extendedFormData = {
+      ...formData,
+      username,
+    };
+
+    setShowModal(false);
+    setFormData({ jobId: '', jobPosition: '' });
+    fetchPositions();
+    const response = await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', extendedFormData);
+    alert('Job position created successfully!');
   };
 
-
-  // Modal component for creating a new job position with ID.
   function Modal({ isOpen, onClose, onSubmit }) {
     const [localFormData, setLocalFormData] = useState({ jobId: '', jobPosition: '' });
 
@@ -83,24 +69,19 @@ function EditTemplates() {
       }));
     };
 
-    // Handles the submission of the modal's form
     const modal_handleSubmit = () => {
       const isConfirmed = window.confirm('Submit?');
       if (isConfirmed) {
         onSubmit(localFormData);
         setLocalFormData({ jobId: '', jobPosition: '' });
-      } else {
-        console.log('Submission cancelled.');
       }
     };
 
-    // job id&position inputs and the submit button.
     return (
       <div className="modal">
         <div className="modal-content">
           <span className="close" onClick={onClose}>&times;</span>
           <h1>New Job Position</h1>
-          <h2>Enter Job Details</h2>
           <input
             type="text"
             placeholder="Job ID"
@@ -120,29 +101,9 @@ function EditTemplates() {
       </div>
     );
   }
-  // setting Modal open state to true.
+
   const handleOpenModal = () => {
     setShowModal(true);
-  };
-
-  // handle delete [TODO API needed]
-  const handleDelete = async (JobID, event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (window.confirm('Delete?')) {
-
-      console.log(JobID);
-
-      try {
-        const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/delete_job_position?jobId=${JobID}`);
-        // console.log(response.data);
-        alert('Delete success');
-        fetchPositions(); 
-      } catch (error) {
-        console.error(error);
-        alert('Failed to delete');
-      }
-    }
   };
 
   return (
@@ -166,20 +127,21 @@ function EditTemplates() {
           className="search-bar"
         />
       </div>
-      {loading && <Loader />}
-      {/* Display the list of positions */}
       <div className="position-list">
-        {filteredPositions.map((position) => (
-          <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'])} className="position-item">
-            <div className="position-detail">
-              <strong>Job ID:</strong> {position['Job ID']}
-            </div>
-            <div className="position-detail">
-              <strong>Job Position:</strong> {position['Job Position']}
-            </div>
-            <button id="edittemplate_delete" onClick={(e) => handleDelete(position['Job ID'], e)}></button>
-          </div>
-        ))}
+          {filteredPositions.map((position) => (
+      <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'])} className="position-item">
+        <div className="position-detail">
+          <strong>Job ID:</strong> {position['Job ID']}
+        </div>
+        <div className="position-detail">
+          <strong>Job Position:</strong> {position['Job Position']}
+        </div>
+        <div className="position-detail">
+          <strong>Added by:</strong> {position['Username']}
+        </div>
+      </div>
+    ))}
+
       </div>
       <Modal
         isOpen={showModal}
