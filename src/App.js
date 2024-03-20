@@ -14,6 +14,8 @@ import Templates from './components/EditTemplates/templates';
 import UpdateTemplates from './components/EditTemplates/UpdateTemplates';
 import ConductInterview from './components/NewInterview/ConductInterview';
 import JobInterviews from './components/Interviews/JobInterviews';
+import AddUser from './components/AddUser';
+
 
 import './App.css';
 
@@ -40,6 +42,7 @@ function App() {
               <Route path="/dashboard/update-templates/:jobId/:templateId" element={<UpdateTemplates />} />
               <Route path="/dashboard/new-templates/:jobId" element={<NewTemplates />} />
               <Route path="/interviews/job-interviews/:jobId/:jobPosition" element={<JobInterviews />} />
+              <Route path="/add-user" element={<AddUser />} />
             </Routes>
           </div>
         </Router>
