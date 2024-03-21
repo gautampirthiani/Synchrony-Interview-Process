@@ -54,7 +54,9 @@ function EditTemplates() {
 
   const filteredPositions = positions.filter(position =>
     position['Job Position'].toLowerCase().includes(searchTerm.toLowerCase()) ||
-    position['Job ID'].toString().includes(searchTerm)
+    position['Job ID'].toString().includes(searchTerm) ||
+    (position['Department'] && position['Department'].toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (position['Username'] && position['Username'].toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handlePositionClick = (JobID) => {
@@ -151,7 +153,7 @@ function EditTemplates() {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search by job ID or position"
+          placeholder="Search by job ID, position, department, or username"
           value={searchTerm}
           onChange={handleSearch}
           className="search-bar"
