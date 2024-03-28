@@ -50,6 +50,30 @@ function AddUserForm() {
     setSelectedDepartments(newDepartments);
   };
 
+  const createNewDepartment = async () => {
+    if (customDepartment) {
+      try {
+        const response = await fetch('YOUR_CREATE_DEPARTMENT_API_ENDPOINT', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ departmentName: customDepartment }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Assuming successful creation, add the new department to the list of departments
+        setDepartments([...departments, customDepartment]);
+        setCustomDepartment('');
+      } catch (error) {
+        console.error('Error creating department:', error);
+      }
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -152,16 +176,16 @@ function AddUserForm() {
             </div>
           ))}
           <button type="button" onClick={addDepartmentField} className="add-btn">Add Department</button>
-          {selectedDepartments.includes('add-new') && (
+          <div className="dynamic-department">
             <input
               type="text"
               placeholder="Enter new department"
               value={customDepartment}
               onChange={(e) => setCustomDepartment(e.target.value)}
-              required={selectedDepartments.includes('add-new')}
               className="form-input"
             />
-          )}
+            <button type="button" onClick={createNewDepartment} className="add-btn">Create New Department</button>
+          </div>
         </div>
         <button type="submit" className="form-button" disabled={isLoading}>
           {isLoading ? 'Creating...' : 'Submit'}

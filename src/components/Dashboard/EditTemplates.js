@@ -47,7 +47,7 @@ function EditTemplates() {
           setUserDepartments(data.departments);
         }
       } catch (error) {
-        console.error('Error fetching department:', error);
+        console.error('Error fetching departments:', error);
       }
     };
 
