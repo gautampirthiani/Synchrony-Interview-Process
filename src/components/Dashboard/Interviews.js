@@ -59,9 +59,14 @@ function Interviews() {
     const results = positions.filter(position => {
       const jobID = position['Job ID'].toString().toLowerCase();
       const jobPosition = position['Job Position'].toLowerCase();
+      const departmentLower = position['Departments']?.map(dept => dept.toLowerCase()) || [];
+      const usernameLower = position['Username']?.toLowerCase() || '';
       const searchTermLower = searchTerm.toLowerCase();
 
-      return jobID.includes(searchTermLower) || jobPosition.includes(searchTermLower);
+      return jobID.includes(searchTermLower) ||
+             jobPosition.includes(searchTermLower) ||
+             departmentLower.some(dept => dept.includes(searchTermLower)) ||
+             usernameLower.includes(searchTermLower);
     }).filter(position =>
       position['Departments']?.some(dept => userDepartments.includes(dept))
     );
@@ -90,7 +95,7 @@ function Interviews() {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search by job ID or position"
+          placeholder="Search by job ID, position, department, or username"
           value={searchTerm}
           onChange={handleSearch}
           className="search-bar"
