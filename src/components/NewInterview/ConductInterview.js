@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import logoImage from '../synchrony-logo-1.png';
 import './ConductInterview.css';
-import Navbar from '../Navbar';
-import { useNavigate } from 'react-router-dom';
 import Loader from '../Loader';
 
 function ConductInterview() {
   const [loading, setLoading] = useState(false);
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const [candidateName, setCandidateName] = useState('');
-  const [templateId, setTemplateId] = useState(null); // New state variable for storing templateId
+  const [templateId, setTemplateId] = useState(null);
   const { jobId } = useParams();
   const navigate = useNavigate();
-  // console.log(jobId);
 
   function updateAdditionalInputsFromMultiple(items, fetchedTemplateId) {
     const newItems = items.map(item => ({
@@ -23,15 +20,14 @@ function ConductInterview() {
       score: item.Score
     }));
     setAdditionalInputs(newItems);
-    setTemplateId(fetchedTemplateId); // Update state with fetched templateId
+    setTemplateId(fetchedTemplateId);
   }
 
   const fetchdata = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/New-Interview?jobId=${jobId}`);
-      // Parsing the fetched data and extract the templateId
-      const fetchedTemplateId = response.data['Template ID']; // Access the Template ID from the response
+      const fetchedTemplateId = response.data['Template ID'];
       const questions = response.data.Questions || [];
       updateAdditionalInputsFromMultiple(questions, fetchedTemplateId);
     } catch (error) {
@@ -42,13 +38,11 @@ function ConductInterview() {
     }
   };
   
-  // Call fetchdata when jobId changes or when the component mounts
   useEffect(() => {
     if (jobId) {
       fetchdata();
     }
   }, [jobId]);
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -60,8 +54,6 @@ function ConductInterview() {
       }));
 
       try {
-        // console.log(questionsPayload);
-        // Send the jobId as a query parameter and the rest of the body as JSON
         const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
           Name: candidateName,
           Questions: questionsPayload
@@ -94,7 +86,6 @@ function ConductInterview() {
         <Link to="/">
           <img src={logoImage} alt="Synchrony Logo" className="logo" />
         </Link>
-        <Navbar />
       </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">New Interview</h1>
@@ -102,13 +93,13 @@ function ConductInterview() {
       {loading && <Loader />}
       <div id="job-template-info">
         <p>Job ID: {jobId}</p>
-        {templateId && <p>Template ID: {templateId}</p>} {/* Conditionally render templateId if available */}
+        {templateId && <p>Template ID: {templateId}</p>}
         <input
           type="text"
           placeholder="Candidate Name"
           value={candidateName}
           onChange={(e) => setCandidateName(e.target.value)}
-          className="candidate-name-input" // This line applies the class to your input field
+          className="candidate-name-input"
         />
       </div>
       <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>

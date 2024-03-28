@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getCurrentUser } from '@aws-amplify/auth'; // Import getCurrentUser
-import logoImage from './synchrony-logo-1.png';
+import { getCurrentUser } from '@aws-amplify/auth';
 import './Interviews.css';
-import Navbar from '../Navbar';
 import Loader from '../Loader';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -83,12 +81,6 @@ function Interviews() {
 
   return (
     <div className="interviews-container">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Interviews</h1>
       </div>

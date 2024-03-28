@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import logoimage from './synchrony-logo-1.png';
 import './HomePage.css';
-import Navbar from './Navbar';
 import { getCurrentUser } from '@aws-amplify/auth';
 
 const HomePage = () => {
@@ -33,13 +31,6 @@ const HomePage = () => {
 
   return (
     <div className="homepage-container">
-      <div className="logo-container">
-        <img src={logoimage} alt="Company Logo" className="logo-image" />
-      </div>
-      <div className="navbar">
-        <span className="navbar-logo">Recruiting Portal</span>
-        <Navbar />
-      </div>
       <h1 className="homepage-heading">Welcome, {username}!</h1>
       {departments.length > 0 && (
         <div className="welcome-message">

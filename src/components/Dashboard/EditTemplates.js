@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getCurrentUser } from '@aws-amplify/auth';
-import logoImage from './synchrony-logo-1.png';
 import './EditTemplates.css';
-import Navbar from '../Navbar';
-import Loader from '../Loader';
+import Loader from '../Loader'; // Import Loader component
 import { Link, useNavigate } from 'react-router-dom';
 
 function EditTemplates() {
@@ -167,10 +165,6 @@ function EditTemplates() {
 
   return (
     <div className="edit-templates-container">
-      <div className="header">
-        <Link to="/"><img src={logoImage} alt="Synchrony Logo" className="logo" /></Link>
-        <Navbar />
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Edit Templates</h1>
       </div>
@@ -184,7 +178,7 @@ function EditTemplates() {
           className="search-bar"
         />
       </div>
-      {loading && <Loader />}
+      {loading && <Loader />} {/* Loader component */}
       <div className="position-list">
         {filteredPositions.map((position) => (
           <div key={position['Job ID']} className="position-item" onClick={() => handlePositionClick(position['Job ID'])}>

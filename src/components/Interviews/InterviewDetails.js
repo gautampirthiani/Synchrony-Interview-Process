@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import logoImage from '../synchrony-logo-1.png';
 import './InterviewDetails.css';
-import Navbar from '../Navbar';
 import Loader from '../Loader';
 
 function InterviewDetails() {
@@ -18,8 +16,6 @@ function InterviewDetails() {
     name: ''
   });
 
-  
-
   function updateAdditionalInputsFromMultiple(items) {
     const newItems = items.map(item => ({
       question: item.QuestionText,
@@ -29,85 +25,76 @@ function InterviewDetails() {
     setAdditionalInputs(newItems);
   }
 
+  //Fetch
+  const fetchdata = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Interview?interviewId=${interviewId}`);
+      console.log(response.data);
+      setInterviewDetails({
+        interviewID: response.data["Interview ID"],
+        interviewedOn: response.data["Interviewed On"],
+        interviewer: response.data.Interviewer,
+        jobID: response.data["Job ID"],
+        name: response.data.Name
+      });
+      updateAdditionalInputsFromMultiple(response.data.Questions);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
 
-
-    //Fetch
-    const fetchdata = async () => {
+  const navigate = useNavigate();
+  //Update [TODO API needed]
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+    if (window.confirm('Update?')) {
+      const data = {
+        interviewId,
+        questions: additionalInputs.map(({ question, answer, score }) => ({
+          QuestionText: question,
+          Answer: answer,
+          Score: score
+        }))
+      };
       try {
-        setLoading(true);
-        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Interview?interviewId=${interviewId}`);
-        console.log(response.data);
-        setInterviewDetails({
-          interviewID: response.data["Interview ID"],
-          interviewedOn: response.data["Interviewed On"],
-          interviewer: response.data.Interviewer,
-          jobID: response.data["Job ID"],
-          name: response.data.Name
-        });
-        updateAdditionalInputsFromMultiple(response.data.Questions);
+        console.log(data.interviewid);
+        const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/update_interview?interviewId=${data.interviewId}`, data);
+        // console.log(response);
+        alert('Updated successfully!');
+        navigate(-1); 
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-      finally {
-        setLoading(false);
-      }
-    };
 
-    const navigate = useNavigate();
-    //Update [TODO API needed]
-    const handleUpdate = async (event) => {
-      event.preventDefault();
-      if (window.confirm('Update?')) {
-        const data = {
-          interviewId,
-          questions: additionalInputs.map(({ question, answer, score }) => ({
-            QuestionText: question,
-            Answer: answer,
-            Score: score
-          }))
-        };
-        try {
-          console.log(data.interviewid);
-          const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/update_interview?interviewId=${data.interviewId}`, data);
-          // console.log(response);
-          alert('Updated successfully!');
-          navigate(-1); 
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-
-      }
-    };
-    useEffect(() => {
-      fetchdata();
-    }, []);
-    
-    const handleAdditionalInputChange = (index, key, value) => {
-      setAdditionalInputs(inputs =>
-        inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
-      );
-    };
-    const addInputPair = () => {
-      setAdditionalInputs([...additionalInputs, { question: '', answer: '', score: '' }]);
-    };
-    const removeInputPair = (index) => {
-      setAdditionalInputs(inputs => inputs.filter((_, i) => i !== index));
-    };
+    }
+  };
+  useEffect(() => {
+    fetchdata();
+  }, []);
+  
+  const handleAdditionalInputChange = (index, key, value) => {
+    setAdditionalInputs(inputs =>
+      inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
+    );
+  };
+  const addInputPair = () => {
+    setAdditionalInputs([...additionalInputs, { question: '', answer: '', score: '' }]);
+  };
+  const removeInputPair = (index) => {
+    setAdditionalInputs(inputs => inputs.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="interview-details">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Update Interview</h1>
       </div>
       {loading && <Loader />}
       <div id="update-interview-info" >
-        {/* <p>Interview ID: {interviewDetails.interviewID}</p> */}
         <p>Interviewer: {interviewDetails.interviewer}</p>
         <p>Job ID: {interviewDetails.jobID}</p>
         <p>Interviewed On: {interviewDetails.interviewedOn}</p>
