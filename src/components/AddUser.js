@@ -7,7 +7,7 @@ function AddUserForm() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [departments, setDepartments] = useState([]);
-  const [department, setDepartment] = useState('');
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [customDepartment, setCustomDepartment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -35,12 +35,19 @@ function AddUserForm() {
     fetchDepartments();
   }, []);
 
-  const handleDepartmentChange = (e) => {
-    const { value } = e.target;
-    setDepartment(value);
-    if (value === 'add-new') {
-      setCustomDepartment('');
-    }
+  const handleDepartmentChange = (index) => (e) => {
+    const newDepartments = [...selectedDepartments];
+    newDepartments[index] = e.target.value;
+    setSelectedDepartments(newDepartments);
+  };
+
+  const addDepartmentField = () => {
+    setSelectedDepartments([...selectedDepartments, '']);
+  };
+
+  const removeDepartmentField = (index) => () => {
+    const newDepartments = selectedDepartments.filter((_, i) => i !== index);
+    setSelectedDepartments(newDepartments);
   };
 
   const handleSubmit = async (event) => {
@@ -48,13 +55,15 @@ function AddUserForm() {
     setIsLoading(true);
     setMessage('');
 
-    const effectiveDepartment = department === 'add-new' ? customDepartment : department;
+    const effectiveDepartments = [...selectedDepartments];
+    if (customDepartment) effectiveDepartments.push(customDepartment);
+
     const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
     const userData = JSON.stringify({
       username: username,
       password: password,
       email: email,
-      department: effectiveDepartment,
+      department: effectiveDepartments,
     });
 
     try {
@@ -70,12 +79,11 @@ function AddUserForm() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const body = await response.json();
       setMessage("User Successfully Created");
       setUsername('');
       setPassword('');
       setEmail('');
-      setDepartment('');
+      setSelectedDepartments([]);
       setCustomDepartment('');
     } catch (error) {
       setMessage(`ERROR: ${error.message}`);
@@ -124,29 +132,33 @@ function AddUserForm() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="department" className="form-label">Department:</label>
-          <select
-            id="department"
-            value={department}
-            onChange={handleDepartmentChange}
-            required
-            className="form-input"
-          >
-            <option value="">Select a Department</option>
-            {departments.map((dept, index) => (
-              <option key={index} value={dept}>
-                {dept}
-              </option>
-            ))}
-            <option value="add-new">Add New Department</option>
-          </select>
-          {department === 'add-new' && (
+          <label className="form-label">Departments:</label>
+          {selectedDepartments.map((department, index) => (
+            <div key={index} className="dynamic-department">
+              <select
+                value={department}
+                onChange={handleDepartmentChange(index)}
+                required
+                className="form-input"
+              >
+                <option value="">Select a Department</option>
+                {departments.map((dept, i) => (
+                  <option key={i} value={dept}>
+                    {dept}
+                  </option>
+                ))}
+              </select>
+              <button type="button" onClick={removeDepartmentField(index)} className="remove-btn">Remove</button>
+            </div>
+          ))}
+          <button type="button" onClick={addDepartmentField} className="add-btn">Add Department</button>
+          {selectedDepartments.includes('add-new') && (
             <input
               type="text"
               placeholder="Enter new department"
               value={customDepartment}
               onChange={(e) => setCustomDepartment(e.target.value)}
-              required={department === 'add-new'}
+              required={selectedDepartments.includes('add-new')}
               className="form-input"
             />
           )}

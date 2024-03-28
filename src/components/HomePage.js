@@ -1,5 +1,3 @@
-/* HomePage.js */
-
 import React, { useEffect, useState } from 'react';
 import logoimage from './synchrony-logo-1.png';
 import './HomePage.css';
@@ -8,7 +6,7 @@ import { getCurrentUser } from '@aws-amplify/auth';
 
 const HomePage = () => {
   const [username, setUsername] = useState('');
-  const [department, setDepartment] = useState('');
+  const [departments, setDepartments] = useState([]);
 
   useEffect(() => {
     getCurrentUser()
@@ -22,13 +20,13 @@ const HomePage = () => {
           },
           body: JSON.stringify({ username: user.username }), 
         })
-          .then(response => response.json())
-          .then(data => {
-            if (data && data.department) {
-              setDepartment(data.department);
-            }
-          })
-          .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.departments) {
+            setDepartments(data.departments);
+          }
+        })
+        .catch(error => console.error('Error:', error));
       })
       .catch(err => console.log(err));
   }, []);
@@ -43,13 +41,19 @@ const HomePage = () => {
         <Navbar />
       </div>
       <h1 className="homepage-heading">Welcome, {username}!</h1>
-      <div className="welcome-message">
-        {department && <h2 className="homepage-heading">Department: {department}</h2>}
-      </div>
+      {departments.length > 0 && (
+        <div className="welcome-message">
+          <h2 className="homepage-heading">Departments:</h2>
+          <ul className="departments-list">
+            {departments.map((dept, index) => (
+              <li key={index}>{dept}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <h2 className="homepage-heading">Synchrony Interviews</h2>
       <footer className="footer">
-        <div className="footer-content">
-        </div>
+        <div className="footer-content"></div>
         <div className="footer-bottom-text">
           &copy; 2023 Synchrony. All Rights Reserved.
         </div>

@@ -18,13 +18,12 @@ function Interviews() {
     const fetchPositions = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access`);
+        const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
         setPositions(data);
-        setFilteredPositions(data); // Initially show all positions
+        setFilteredPositions(data); 
       } catch (error) {
         console.error('Error fetching positions:', error);
-      }
-      finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -33,14 +32,14 @@ function Interviews() {
 
   useEffect(() => {
     const results = positions.filter(position => {
-      const jobID = position['Job ID'].toString().toLowerCase(); // Convert Job ID to string and lowercase
+      const jobID = position['Job ID'].toString().toLowerCase(); 
       const jobPosition = position['Job Position'].toLowerCase();
       const searchTermLower = searchTerm.toLowerCase();
 
       return jobID.includes(searchTermLower) || jobPosition.includes(searchTermLower);
     });
     setFilteredPositions(results);
-  }, [searchTerm, positions]); // Run the effect on searchTerm or positions change
+  }, [searchTerm, positions]); 
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -51,7 +50,7 @@ function Interviews() {
   };
 
   return (
-    <div className="new-interview-container">
+    <div className="interviews-container">
       <div className="header">
         <Link to="/">
           <img src={logoImage} alt="Synchrony Logo" className="logo" />
@@ -80,6 +79,12 @@ function Interviews() {
             </div>
             <div className="position-detail">
               <strong>Job Position:</strong> {position['Job Position']}
+            </div>
+            <div className="position-detail">
+              <strong>Added by:</strong> {position['Username'] || 'N/A'}
+            </div>
+            <div className="position-detail">
+              <strong>Departments:</strong> {position['Departments'] ? position['Departments'].join(', ') : 'N/A'}
             </div>
           </div>
         ))}

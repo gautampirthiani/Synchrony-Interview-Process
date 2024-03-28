@@ -18,29 +18,34 @@ function NewInterview() {
     const fetchPositions = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access`);
+        const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
         setPositions(data);
         setFilteredPositions(data); // Initially show all positions
       } catch (error) {
         console.error('Error fetching positions:', error);
-      }
-      finally {
+      } finally {
         setLoading(false);
       }
     };
+
     fetchPositions();
   }, []);
 
   useEffect(() => {
     const results = positions.filter(position => {
-      const jobID = position['Job ID'].toString().toLowerCase(); // Convert Job ID to string and lowercase
+      const jobID = position['Job ID'].toString().toLowerCase();
       const jobPosition = position['Job Position'].toLowerCase();
+      const department = position['Departments'] ? position['Departments'].join(',').toLowerCase() : '';
+      const username = position['Username'] ? position['Username'].toLowerCase() : '';
       const searchTermLower = searchTerm.toLowerCase();
 
-      return jobID.includes(searchTermLower) || jobPosition.includes(searchTermLower);
+      return jobID.includes(searchTermLower) ||
+             jobPosition.includes(searchTermLower) ||
+             department.includes(searchTermLower) ||
+             username.includes(searchTermLower);
     });
     setFilteredPositions(results);
-  }, [searchTerm, positions]); // Run the effect on searchTerm or positions change
+  }, [searchTerm, positions]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -64,14 +69,13 @@ function NewInterview() {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search by job ID or position"
+          placeholder="Search by job ID, position, department, or username"
           value={searchTerm}
           onChange={handleSearch}
           className="search-bar"
         />
       </div>
       {loading && <Loader />}
-      {/* Display the list of positions */}
       <div className="position-list">
         {filteredPositions.map((position) => (
           <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'])} className="position-item">
@@ -80,6 +84,12 @@ function NewInterview() {
             </div>
             <div className="position-detail">
               <strong>Job Position:</strong> {position['Job Position']}
+            </div>
+            <div className="position-detail">
+              <strong>Department:</strong> {position['Departments'] && position['Departments'].length > 0 ? position['Departments'].join(', ') : 'N/A'}
+            </div>
+            <div className="position-detail">
+              <strong>Added by:</strong> {position['Username'] || 'N/A'}
             </div>
           </div>
         ))}
