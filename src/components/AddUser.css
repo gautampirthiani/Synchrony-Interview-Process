@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100vh;
   background-color: #e6e7e8;
   font-family: Arial, sans-serif;
+  padding-top: 5px;
 }
 
 .logo-container {
@@ -27,6 +28,10 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+}
+
+.dynamic-department {
+  margin-bottom: 20px; 
 }
 
 .form-group {
@@ -64,33 +69,38 @@
 
 .add-btn,
 .remove-btn {
-padding: 8px 16px;
-font-size: 14px;
-border: none;
-border-radius: 3px;
-cursor: pointer;
-margin-left: 5px;
-background-color: #007bff;
-color: #fff;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-left: 5px;
+  background-color: #007bff;
+  color: #fff;
 }
 
 .add-btn:hover,
 .remove-btn:hover {
-background-color: #0056b3;
+  background-color: #0056b3;
+}
+
+/* Add bottom margin to the 'Add Department' button */
+.add-btn {
+  margin-bottom: 20px; /* Adjust the space between the buttons */
 }
 
 .add-department-container {
-display: flex;
-align-items: center;
-margin-top: 10px;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .add-department-container .form-input {
-margin-right: 10px;
-width: auto;
-flex-grow: 1;
+  margin-right: 10px;
+  width: auto;
+  flex-grow: 1;
 }
 
 .add-department-container .add-btn {
-flex-shrink: 0;
+  flex-shrink: 0;
 }
