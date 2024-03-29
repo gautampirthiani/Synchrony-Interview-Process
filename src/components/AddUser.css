@@ -3,10 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #e6e7e8;
   font-family: Arial, sans-serif;
-  padding-top: 5px;
+  padding-top: 20px;
 }
 
 .logo-container {
@@ -28,10 +28,18 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 .dynamic-department {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .form-group {
@@ -61,6 +69,9 @@
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form-button:hover {
@@ -84,23 +95,59 @@
   background-color: #0056b3;
 }
 
-/* Add bottom margin to the 'Add Department' button */
 .add-btn {
-  margin-bottom: 20px; /* Adjust the space between the buttons */
+  margin-bottom: 20px;
 }
 
-.add-department-container {
+.table-container {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px; /* Adjust margin-top as needed */
 }
 
-.add-department-container .form-input {
-  margin-right: 10px;
-  width: auto;
-  flex-grow: 1;
+.user-table,
+.department-table {
+  width: 100%;
+  max-width: 1000px; /* Adjust the maximum width as needed */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
-.add-department-container .add-btn {
-  flex-shrink: 0;
+.user-table h2,
+.department-table h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.user-table table,
+.department-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td,
+.department-table th,
+.department-table td {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 15px; /* Adjusted padding */
+  text-align: left;
+}
+
+.user-table th,
+.department-table th {
+  color: #0071e3;
+}
+
+.form-container,
+.table-container {
+  padding: 0 20px; /* Adjust padding as needed */
 }

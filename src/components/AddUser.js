@@ -11,10 +11,31 @@ function AddUserForm() {
   const [customDepartment, setCustomDepartment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [showCustomDepartmentField, setShowCustomDepartmentField] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [departmentList, setDepartmentList] = useState([]);
 
   useEffect(() => {
     async function fetchDepartments() {
       const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList';
+      const response = await fetch(apiEndpoint, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setDepartments(data);
+    }
+    fetchDepartments();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
       try {
         const response = await fetch(apiEndpoint, {
           method: 'GET',
@@ -26,13 +47,34 @@ function AddUserForm() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setDepartments(data);
+        setUsers(data);
       } catch (error) {
-        console.error('Error fetching departments:', error);
+        console.log(error.message);
       }
     }
+    fetchData();
+  }, []);
 
-    fetchDepartments();
+  useEffect(() => {
+    async function fetchDepartmentList() {
+      const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment';
+      try {
+        const response = await fetch(apiEndpoint, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setDepartmentList(data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    fetchDepartmentList();
   }, []);
 
   const handleDepartmentChange = (index) => (e) => {
@@ -50,70 +92,43 @@ function AddUserForm() {
     setSelectedDepartments(newDepartments);
   };
 
-  const createNewDepartment = async () => {
-    if (customDepartment) {
-      try {
-        const response = await fetch('YOUR_CREATE_DEPARTMENT_API_ENDPOINT', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ departmentName: customDepartment }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        // Assuming successful creation, add the new department to the list of departments
-        setDepartments([...departments, customDepartment]);
-        setCustomDepartment('');
-      } catch (error) {
-        console.error('Error creating department:', error);
-      }
-    }
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     setMessage('');
 
     const effectiveDepartments = [...selectedDepartments];
-    if (customDepartment) effectiveDepartments.push(customDepartment);
+    if (customDepartment) {
+      effectiveDepartments.push(customDepartment);
+      setCustomDepartment('');
+    }
 
     const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
     const userData = JSON.stringify({
-      username: username,
+      username: username.toLowerCase(),
       password: password,
       email: email,
       department: effectiveDepartments,
     });
 
-    try {
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: userData,
-      });
+    const response = await fetch(apiEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: userData,
+    });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      setMessage("User Successfully Created");
-      setUsername('');
-      setPassword('');
-      setEmail('');
-      setSelectedDepartments([]);
-      setCustomDepartment('');
-    } catch (error) {
-      setMessage(`ERROR: ${error.message}`);
-    } finally {
-      setIsLoading(false);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    setMessage("User Successfully Created");
+    setUsername('');
+    setPassword('');
+    setEmail('');
+    setSelectedDepartments([]);
+    setShowCustomDepartmentField(false);
+    setIsLoading(false);
   };
 
   return (
@@ -121,77 +136,128 @@ function AddUserForm() {
       <div className="logo-container">
         <img src={logo} alt="Synchrony Logo" className="logo" />
       </div>
-      <form onSubmit={handleSubmit} className="form-container">
-        <div className="form-group">
-          <label htmlFor="username" className="form-label">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            className="form-input"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password" className="form-label">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="form-input"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email" className="form-label">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="form-input"
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">Departments:</label>
-          {selectedDepartments.map((department, index) => (
-            <div key={index} className="dynamic-department">
-              <select
-                value={department}
-                onChange={handleDepartmentChange(index)}
+      <div className="content-container">
+        <div className="form-container">
+          <h2>Add Users</h2> {/* Added title */}
+          <form onSubmit={handleSubmit} className="form-container">
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">Username:</label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
                 className="form-input"
-              >
-                <option value="">Select a Department</option>
-                {departments.map((dept, i) => (
-                  <option key={i} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
-              <button type="button" onClick={removeDepartmentField(index)} className="remove-btn">Remove</button>
+              />
             </div>
-          ))}
-          <button type="button" onClick={addDepartmentField} className="add-btn">Add Department</button>
-          <div className="dynamic-department">
-            <input
-              type="text"
-              placeholder="Enter new department"
-              value={customDepartment}
-              onChange={(e) => setCustomDepartment(e.target.value)}
-              className="form-input"
-            />
-            <button type="button" onClick={createNewDepartment} className="add-btn">Create New Department</button>
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">Password:</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">Email:</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Departments:</label>
+              {selectedDepartments.map((department, index) => (
+                <div key={index} className="dynamic-department">
+                  <select
+                    value={department}
+                    onChange={handleDepartmentChange(index)}
+                    required
+                    className="form-input"
+                  >
+                    <option value="">Select a Department</option>
+                    {departments.map((dept, i) => (
+                      <option key={i} value={dept.department}>
+                        {dept.department}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="button" onClick={removeDepartmentField(index)} className="remove-btn">Remove</button>
+                </div>
+              ))}
+              <button type="button" onClick={addDepartmentField} className="add-btn">Add Department</button>
+              {showCustomDepartmentField && (
+                <div className="dynamic-department">
+                  <input
+                    type="text"
+                    placeholder="Enter new department"
+                    value={customDepartment}
+                    onChange={(e) => setCustomDepartment(e.target.value)}
+                    className="form-input"
+                  />
+                </div>
+              )}
+              <button type="button" onClick={() => setShowCustomDepartmentField(true)} className="add-btn">
+                Create New Department
+              </button>
+            </div>
+            <button type="submit" className="form-button" disabled={isLoading}>
+              {isLoading ? 'Creating...' : 'Submit'}
+            </button>
+            {message && <div className={message.startsWith('ERROR') ? 'error-message' : 'success-message'}>{message}</div>}
+          </form>
+        </div>
+        <div className="table-container">
+          <div className="user-table">
+            <h2>User Table</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Departments</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user, index) => (
+                  <tr key={index}>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                    <td>{user.department ? user.department.join(', ') : ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="department-table">
+            <h2>Department Table</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th>Users</th>
+                </tr>
+              </thead>
+              <tbody>
+                {departmentList.map((department, index) => (
+                  <tr key={index}>
+                    <td>{department.department}</td>
+                    <td>{department.users ? department.users.join(', ') : ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-        <button type="submit" className="form-button" disabled={isLoading}>
-          {isLoading ? 'Creating...' : 'Submit'}
-        </button>
-        {message && <div className={message.startsWith('ERROR') ? 'error-message' : 'success-message'}>{message}</div>}
-      </form>
+      </div>
     </div>
   );
 }
