@@ -18,17 +18,21 @@ function AddUserForm() {
   useEffect(() => {
     async function fetchDepartments() {
       const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList';
-      const response = await fetch(apiEndpoint, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      try {
+        const response = await fetch(apiEndpoint, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setDepartments(data);
+      } catch (error) {
+        console.log(error.message);
       }
-      const data = await response.json();
-      setDepartments(data);
     }
     fetchDepartments();
   }, []);
@@ -131,6 +135,14 @@ function AddUserForm() {
     setIsLoading(false);
   };
 
+  const handleDeleteUser = (index) => {
+    // Implement delete user functionality
+  };
+
+  const handleDeleteDepartment = (index) => {
+    // Implement delete department functionality
+  };
+
   return (
     <div className="body-container">
       <div className="logo-container">
@@ -138,7 +150,7 @@ function AddUserForm() {
       </div>
       <div className="content-container">
         <div className="form-container">
-          <h2>Add Users</h2> {/* Added title */}
+          <h2>Add Users</h2>
           <form onSubmit={handleSubmit} className="form-container">
             <div className="form-group">
               <label htmlFor="username" className="form-label">Username:</label>
@@ -185,8 +197,8 @@ function AddUserForm() {
                   >
                     <option value="">Select a Department</option>
                     {departments.map((dept, i) => (
-                      <option key={i} value={dept.department}>
-                        {dept.department}
+                      <option key={i} value={dept}>
+                        {dept}
                       </option>
                     ))}
                   </select>
@@ -224,6 +236,7 @@ function AddUserForm() {
                   <th>Username</th>
                   <th>Email</th>
                   <th>Departments</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -232,6 +245,7 @@ function AddUserForm() {
                     <td>{user.username}</td>
                     <td>{user.email}</td>
                     <td>{user.department ? user.department.join(', ') : ''}</td>
+                    <td><button className="delete-btn" onClick={() => handleDeleteUser(index)}>Delete</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -244,6 +258,7 @@ function AddUserForm() {
                 <tr>
                   <th>Department</th>
                   <th>Users</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -251,6 +266,7 @@ function AddUserForm() {
                   <tr key={index}>
                     <td>{department.department}</td>
                     <td>{department.users ? department.users.join(', ') : ''}</td>
+                    <td><button className="delete-btn" onClick={() => handleDeleteDepartment(index)}>Delete</button></td>
                   </tr>
                 ))}
               </tbody>

@@ -106,13 +106,15 @@
   align-items: center;
   width: 100%;
   max-width: 800px;
-  margin-top: 20px; /* Adjust margin-top as needed */
+  margin-top: 20px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: calc(100vh - 240px); /* Adjusted height to accommodate other elements */
 }
 
 .user-table,
 .department-table {
   width: 100%;
-  max-width: 1000px; /* Adjust the maximum width as needed */
+  max-width: 1000px;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -138,7 +140,7 @@
 .department-table th,
 .department-table td {
   border-bottom: 1px solid #ccc;
-  padding: 10px 15px; /* Adjusted padding */
+  padding: 10px 15px;
   text-align: left;
 }
 
@@ -147,7 +149,22 @@
   color: #0071e3;
 }
 
+.delete-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-left: 5px;
+  background-color: red;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background-color: darkred;
+}
+
 .form-container,
 .table-container {
-  padding: 0 20px; /* Adjust padding as needed */
+  padding: 0 20px;
 }
