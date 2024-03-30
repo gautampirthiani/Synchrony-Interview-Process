@@ -175,6 +175,12 @@
   color: white;
   cursor: pointer
 }
+
+.button-container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  gap: 10px; /* Optional: Adds space between buttons */
+}
 /* 
 
 

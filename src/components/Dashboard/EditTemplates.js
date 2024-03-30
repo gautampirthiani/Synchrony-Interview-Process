@@ -1,69 +1,87 @@
-// EditTemplates.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import logoImage from './synchrony-logo-1.png'; 
+import { getCurrentUser } from '@aws-amplify/auth';
+import logoImage from './synchrony-logo-1.png';
 import './EditTemplates.css';
-import Navbar from '../Navbar'; 
+import Navbar from '../Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 
 function EditTemplates() {
   const [positions, setPositions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ jobId: '', jobPosition: '' });
+  const [formData, setFormData] = useState({ jobId: '', jobPosition: '', department: '' });
+  const [username, setUsername] = useState('');
+  const [userDepartment, setUserDepartment] = useState('');
 
   const navigate = useNavigate();
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   const fetchPositions = async () => {
-    try {
-      const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
-      setPositions(data);
-    } catch (error) {
-      console.error('Error fetching positions:', error);
-    }
+    const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
+    setPositions(data);
   };
-  
+
   useEffect(() => {
     fetchPositions();
+    const fetchCurrentUser = async () => {
+      const currentUser = await getCurrentUser();
+      setUsername(currentUser.username);
+
+      try {
+        const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username: currentUser.username }),
+        });
+        const data = await response.json();
+        if (data && data.department) {
+          setUserDepartment(data.department);
+        }
+      } catch (error) {
+        console.error('Error fetching department:', error);
+      }
+    };
+
+    fetchCurrentUser();
   }, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filter positions based on search term
   const filteredPositions = positions.filter(position =>
     position['Job Position'].toLowerCase().includes(searchTerm.toLowerCase()) ||
-    position['Job ID'].toString().includes(searchTerm)
+    position['Job ID'].toString().includes(searchTerm) ||
+    (position['Department'] && position['Department'].toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (position['Username'] && position['Username'].toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  // Handle clicking on a position item
   const handlePositionClick = (JobID) => {
-    // Navigate to new page using job ID
     navigate(`/dashboard/templates/${JobID}`);
   };
 
-  // handles the submission of job position form data to a server.
   const handleSubmit = async (formData) => {
-    // console.log('Submitting form data:', formData);
-    try {
-      setShowModal(false);
-      setFormData({ jobId: '', jobPosition: '' });
-      fetchPositions();
-      const response = await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', formData);
-      // console.log('Response from Lambda:', response.data); 
-      alert('Job position created successfully!');
-    } catch (error) {
-      // console.error('Error creating job position:', error);
-      alert('Failed to create job position.');
-    }
-  };
-  
+    const extendedFormData = {
+      ...formData,
+      username,
+      department: userDepartment
+    };
 
-  // Modal component for creating a new job position with ID.
-  function Modal({ isOpen, onClose, onSubmit }) {
-    const [localFormData, setLocalFormData] = useState({ jobId: '', jobPosition: '' });
+    setShowModal(false);
+    setFormData({ jobId: '', jobPosition: '', department: '' });
+    fetchPositions();
+    await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', extendedFormData);
+    alert('Job position created successfully!');
+  };
+
+  function Modal({ isOpen, onClose, onSubmit, department }) {
+    const [localFormData, setLocalFormData] = useState({ jobId: '', jobPosition: '', department: department || '' });
 
     if (!isOpen) return null;
 
@@ -75,24 +93,19 @@ function EditTemplates() {
       }));
     };
 
-    // Handles the submission of the modal's form
     const modal_handleSubmit = () => {
       const isConfirmed = window.confirm('Submit?');
       if (isConfirmed) {
         onSubmit(localFormData);
-        setLocalFormData({ jobId: '', jobPosition: '' });
-      } else {
-        console.log('Submission cancelled.');
+        setLocalFormData({ jobId: '', jobPosition: '', department: '' });
       }
     };
 
-    // job id&position inputs and the submit button.
     return (
       <div className="modal">
         <div className="modal-content">
           <span className="close" onClick={onClose}>&times;</span>
           <h1>New Job Position</h1>
-          <h2>Enter Job Details</h2>
           <input
             type="text"
             placeholder="Job ID"
@@ -107,12 +120,21 @@ function EditTemplates() {
             value={localFormData.jobPosition}
             onChange={handleChange}
           />
+          <select
+            name="department"
+            value={localFormData.department}
+            onChange={handleChange}
+            className="modal-department-dropdown"
+          >
+            <option value="">Select Department</option>
+            <option value={department}>{department}</option>
+          </select>
           <button id="modal_button" onClick={modal_handleSubmit}>Submit</button>
         </div>
       </div>
     );
   }
-  // setting Modal open state to true.
+
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -128,11 +150,13 @@ function EditTemplates() {
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Edit Templates</h1>
       </div>
-      <button id="create-new-templates-btn" onClick={handleOpenModal}>Create New Job Position</button>
+      <button id="create-new-templates-btn" onClick={handleOpenModal}>
+        Create New Job Position
+      </button>
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search by job ID or position"
+          placeholder="Search by job ID, position, department, or username"
           value={searchTerm}
           onChange={handleSearch}
           className="search-bar"
@@ -147,6 +171,12 @@ function EditTemplates() {
             <div className="position-detail">
               <strong>Job Position:</strong> {position['Job Position']}
             </div>
+            <div className="position-detail">
+              <strong>Department:</strong> {position['Department']}
+            </div>
+            <div className="position-detail">
+              <strong>Added by:</strong> {position['Username']}
+            </div>
           </div>
         ))}
       </div>
@@ -154,6 +184,7 @@ function EditTemplates() {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onSubmit={handleSubmit}
+        department={userDepartment}
       />
     </div>
   );

@@ -5,14 +5,18 @@ import logoImage from '../synchrony-logo-1.png';
 import './ConductInterview.css';
 import Navbar from '../Navbar';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../Loader';
 
 function ConductInterview() {
+  const [loading, setLoading] = useState(false);
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const [candidateName, setCandidateName] = useState('');
   const [templateId, setTemplateId] = useState(null); // New state variable for storing templateId
   const { jobId } = useParams();
   const navigate = useNavigate();
-  console.log(jobId);
+  // console.log(jobId);
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
 
   function updateAdditionalInputsFromMultiple(items, fetchedTemplateId) {
     const newItems = items.map(item => ({
@@ -26,6 +30,7 @@ function ConductInterview() {
 
   const fetchdata = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/New-Interview?jobId=${jobId}`);
       // Parsing the fetched data and extract the templateId
       const fetchedTemplateId = response.data['Template ID']; // Access the Template ID from the response
@@ -33,6 +38,9 @@ function ConductInterview() {
       updateAdditionalInputsFromMultiple(questions, fetchedTemplateId);
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
     }
   };
   
@@ -54,7 +62,7 @@ function ConductInterview() {
       }));
 
       try {
-        console.log(questionsPayload);
+        // console.log(questionsPayload);
         // Send the jobId as a query parameter and the rest of the body as JSON
         const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
           Name: candidateName,
@@ -93,6 +101,7 @@ function ConductInterview() {
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">New Interview</h1>
       </div>
+      {loading && <Loader />}
       <div id="job-template-info">
         <p>Job ID: {jobId}</p>
         {templateId && <p>Template ID: {templateId}</p>} {/* Conditionally render templateId if available */}

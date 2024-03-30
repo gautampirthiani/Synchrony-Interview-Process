@@ -11,6 +11,7 @@ function NewTemplates() {
   const { jobId } = useParams();
   const navigate = useNavigate();
 
+
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
       inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
@@ -21,6 +22,8 @@ function NewTemplates() {
     const timestamp = new Date().toISOString().replace(/[^0-9]/g, "");
     return `${jobId}_${timestamp}`;
   };
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
 
   const handleSubmit = async (event) => {
     event.preventDefault();

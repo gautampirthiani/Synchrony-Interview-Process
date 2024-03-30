@@ -27,6 +27,9 @@ function DataAnalysis() {
   // State to flash interviewCount
   const [flashInterviewCount, setFlashInterviewCount] = useState(false);
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   // Fetch total open positions from API
   useEffect(() => {
     fetch('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_totalJobs1')

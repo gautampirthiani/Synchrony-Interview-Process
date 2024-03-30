@@ -4,58 +4,96 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import logoImage from '../synchrony-logo-1.png';
 import './InterviewDetails.css';
 import Navbar from '../Navbar';
+import Loader from '../Loader';
 
 function InterviewDetails() {
-  const [interview, setInterview] = useState({
-    "Interview ID": "",
-    "Interviewer": "",
-    "Job ID": "",
-    "Questions": [],
-    "Interviewed On": "",
-    "Name": ""
+  const [loading, setLoading] = useState(false);
+  const {jobId,interviewId} = useParams();
+  const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
+  const [interviewDetails, setInterviewDetails] = useState({
+    interviewID: '',
+    interviewedOn: '',
+    interviewer: 'N/A',
+    jobID: '',
+    name: ''
   });
-  const [loading, setLoading] = useState(true);
-  const { interviewId } = useParams();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
+  function updateAdditionalInputsFromMultiple(items) {
+    const newItems = items.map(item => ({
+      question: item.QuestionText,
+      answer: item.Answer,
+      score: item.Score
+    }));
+    setAdditionalInputs(newItems);
+  }
+
+
+
+    //Fetch
+    const fetchdata = async () => {
       try {
-        console.log('interviewId:', interviewId);
+        setLoading(true);
         const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Interview?interviewId=${interviewId}`);
-        setInterview(response.data);
-        setLoading(false);
+        console.log(response.data);
+        setInterviewDetails({
+          interviewID: response.data["Interview ID"],
+          interviewedOn: response.data["Interviewed On"],
+          interviewer: response.data.Interviewer,
+          jobID: response.data["Job ID"],
+          name: response.data.Name
+        });
+        updateAdditionalInputsFromMultiple(response.data.Questions);
       } catch (error) {
-        console.error('Error fetching interview data:', error);
+        console.error('Error fetching data:', error);
+      }
+      finally {
+        setLoading(false);
       }
     };
 
-    fetchData();
-  }, [interviewId]);
+    const navigate = useNavigate();
+    //Update [TODO API needed]
+    const handleUpdate = async (event) => {
+      event.preventDefault();
+      if (window.confirm('Update?')) {
+        const data = {
+          interviewId,
+          questions: additionalInputs.map(({ question, answer, score }) => ({
+            QuestionText: question,
+            Answer: answer,
+            Score: score
+          }))
+        };
+        try {
+          console.log(data.interviewid);
+          const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/update_interview?interviewId=${data.interviewId}`, data);
+          // console.log(response);
+          alert('Updated successfully!');
+          navigate(-1); 
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
 
-  const handleInputChange = (index, key, value) => {
-    const updatedQuestions = interview.Questions.map((question, i) =>
-      i === index ? { ...question, [key]: value } : question
-    );
-    setInterview({ ...interview, Questions: updatedQuestions });
-  };
-
-  const handleUpdate = async (event) => {
-    event.preventDefault();
-    if (window.confirm('Are you sure you want to update this interview?')) {
-      try {
-        await axios.put(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Update_Interview?interviewId=${interviewId}`, interview);
-        alert('Interview updated successfully!');
-        navigate('/dashboard');
-      } catch (error) {
-        console.error('Error updating interview:', error);
       }
-    }
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    };
+    useEffect(() => {
+      fetchdata();
+    }, []);
+    
+    const handleAdditionalInputChange = (index, key, value) => {
+      setAdditionalInputs(inputs =>
+        inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
+      );
+    };
+    const addInputPair = () => {
+      setAdditionalInputs([...additionalInputs, { question: '', answer: '', score: '' }]);
+    };
+    const removeInputPair = (index) => {
+      setAdditionalInputs(inputs => inputs.filter((_, i) => i !== index));
+    };
 
   return (
     <div className="interview-details">
@@ -68,30 +106,40 @@ function InterviewDetails() {
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Update Interview</h1>
       </div>
-      <div id="interview-info">
-        <p>Interviewer: {interview.Interviewer}</p>
-        <p>Job ID: {interview["Job ID"]}</p>
-        <p>Interviewed On: {interview["Interviewed On"]}</p>
-        <p>Candidate Name: {interview.Name}</p>
+      {loading && <Loader />}
+      <div id="update-interview-info" >
+        {/* <p>Interview ID: {interviewDetails.interviewID}</p> */}
+        <p>Interviewer: {interviewDetails.interviewer}</p>
+        <p>Job ID: {interviewDetails.jobID}</p>
+        <p>Interviewed On: {interviewDetails.interviewedOn}</p>
+        <p>Candidate Name: {interviewDetails.name}</p>
       </div>
-      <button onClick={handleUpdate}>Update Interview</button>
-      {interview.Questions.map((question, index) => (
-        <div key={index} className="question-inputs-container">
-          <textarea
+      <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
+      <button id="save-new-templates-btn" onClick={handleUpdate}>Update</button>
+      {additionalInputs.map((input, index) => (
+        <div key={index} className="additional-inputs-container">
+          <input
+            type="text"
             placeholder="Question"
-            value={question.QuestionText}
-            onChange={(e) => handleInputChange(index, 'QuestionText', e.target.value)}
+            value={input.question}
+            onChange={(e) => handleAdditionalInputChange(index, 'question', e.target.value)}
+            className="additional-input"
           />
-          <textarea
+          <input
+            type="text"
             placeholder="Answer"
-            value={question.Answer}
-            onChange={(e) => handleInputChange(index, 'Answer', e.target.value)}
+            value={input.answer}
+            onChange={(e) => handleAdditionalInputChange(index, 'answer', e.target.value)}
+            className="additional-input"
           />
-          <textarea
+          <input
+            type="text"
             placeholder="Score"
-            value={question.Score}
-            onChange={(e) => handleInputChange(index, 'Score', e.target.value)}
+            value={input.score}
+            onChange={(e) => handleAdditionalInputChange(index, 'score', e.target.value)}
+            className="score-input"
           />
+          <button id="delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
         </div>
       ))}
     </div>
