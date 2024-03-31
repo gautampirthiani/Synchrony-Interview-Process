@@ -20,24 +20,20 @@ function UpdateTemplates() {
   
   const autoGrow = (element) => {
     document.querySelectorAll('.additional-inputs-container').forEach(container => {
-    //  console.log(container)
       var first_input = container.getElementsByClassName('additional-input')[0];
-      let first_height=first_input.scrollHeight;
       var second_input = container.getElementsByClassName('second-input')[0];
-      let second_height= second_input.scrollHeight;
-      if (first_height > first_input.clientHeight) 
-      {
-        first_input.style.height = (first_height) + 'px';
-        second_input.style.height = (first_height) + 'px';
-        return;
-      }
-
-      if (second_height > second_input.clientHeight) 
-      {
-        first_input.style.height = (second_height) + 'px';
-        second_input.style.height = (second_height) + 'px';
-        return;
-      }
+  
+      // Reset the height to 'auto' before calculating the new height
+      // to allows the box to shrink if the content has been deleted
+      first_input.style.height = 'auto';
+      second_input.style.height = 'auto';
+  
+      let first_height = first_input.scrollHeight;
+      let second_height = second_input.scrollHeight;
+      
+      let greater_height = Math.max(first_height, second_height);
+      first_input.style.height = greater_height + 'px';
+      second_input.style.height = greater_height + 'px';
     });
   };
 
