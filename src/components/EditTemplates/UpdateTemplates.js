@@ -4,10 +4,8 @@ import { useParams, Link, useNavigate} from 'react-router-dom';
 import logoImage from '../synchrony-logo-1.png';
 import './UpdateTemplates.css';
 import Navbar from '../Navbar';
-import Loader from '../Loader';
 
 function UpdateTemplates() {
-  const [loading, setLoading] = useState(false);
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const { jobId, templateId } = useParams();
 
@@ -20,19 +18,55 @@ function UpdateTemplates() {
     setAdditionalInputs(newItems);
   }
   
+  const autoGrow = (element) => {
+    document.querySelectorAll('.additional-inputs-container').forEach(container => {
+    //  console.log(container)
+      var first_input = container.getElementsByClassName('additional-input')[0];
+      let first_height=first_input.scrollHeight;
+      var second_input = container.getElementsByClassName('second-input')[0];
+      let second_height= second_input.scrollHeight;
+      if (first_height > first_input.clientHeight) 
+      {
+        first_input.style.height = (first_height) + 'px';
+        second_input.style.height = (first_height) + 'px';
+        return;
+      }
+
+      if (second_height > second_input.clientHeight) 
+      {
+        first_input.style.height = (second_height) + 'px';
+        second_input.style.height = (second_height) + 'px';
+        return;
+      }
+    });
+  };
+
+  const handleAdditionalInputChange = (index, key, value) => {
+    setAdditionalInputs(inputs =>
+      inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
+      
+    );
+  };
 
   //Fetch
   const fetchdata = async () => {
     try {
-      setLoading(true);
+      //local test data
+      // const testData = [
+      //   { question: 'What is React?', answer: 'A JavaScript library for building user interfaces', score: '5' },
+      //   { question: 'What is useState?', answer: 'A Hook that lets you add React state to function components', score: '4' },
+      //   { question: 'What is useEffect?', answer: 'A Hook that lets you perform side effects in function components', score: '5' }
+      // ];
+      // setAdditionalInputs(testData);
+      // console.log(testData);
+      //?jobId=${jobId}&templateId=${templateId}
+      // add fetch API here
       const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Template?jobId=${jobId}&templateId=${templateId}`);
       //console.log(response.data.Questions);
+      
       updateAdditionalInputsFromMultiple(response.data.Questions);
     } catch (error) {
       // console.error('Error fetching data:', error);
-    }
-    finally {
-      setLoading(false);
     }
   };
 
@@ -70,11 +104,7 @@ function UpdateTemplates() {
     fetchdata();
   }, []);
 
-  const handleAdditionalInputChange = (index, key, value) => {
-    setAdditionalInputs(inputs =>
-      inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
-    );
-  };
+
   const addInputPair = () => {
     setAdditionalInputs([...additionalInputs, { question: '', answer: '', score: '' }]);
   };
@@ -93,7 +123,6 @@ function UpdateTemplates() {
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Update Templates</h1>
       </div>
-      {loading && <Loader />}
       <div id="job-template-info">
         <p>Job ID: {jobId}</p>
         <p>Template ID: {templateId}</p>
@@ -102,19 +131,23 @@ function UpdateTemplates() {
       <button id="save-new-templates-btn" onClick={handleUpdate}>Update</button>
       {additionalInputs.map((input, index) => (
         <div key={index} className="additional-inputs-container">
-          <input
-            type="text"
+          <textarea
             placeholder="Question"
             value={input.question}
-            onChange={(e) => handleAdditionalInputChange(index, 'question', e.target.value)}
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'question', e.target.value);
+              autoGrow(e.target);
+            }}
             className="additional-input"
           />
-          <input
-            type="text"
+          <textarea
             placeholder="Answer"
             value={input.answer}
-            onChange={(e) => handleAdditionalInputChange(index, 'answer', e.target.value)}
-            className="additional-input"
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'answer', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="second-input"
           />
           <input
             type="text"

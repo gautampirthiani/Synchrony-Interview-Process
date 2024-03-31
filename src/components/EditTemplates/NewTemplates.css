@@ -1,140 +1,164 @@
 /* NewTemplates.css */
 
 .new-templates-container {
-    font-family: 'Arial', sans-serif;
-    background-color: #002244; /* Consistent with other pages */
-    color: white;
-    min-height: 100vh;
-    width: 100%; /* Ensure container takes full width */
-    margin: 0; /* Reset any default margin */
-    padding: 0; /* Reset any default padding */
-  }
-  
-  /* Reuse header and logo styles */
-  .header {
-    /* ... */
-  }
-  
-  .logo {
-    /* ... */
-  }
-  
-  /* Reuse navbar styles */
-  .navbar {
-    /* ... */
-  }
-  
-  /* Reuse portal header styles */
-  .portal-header-container {
-    /* ... */
-  }
-  
-  .recruiting-portal-header {
-    /* ... */
-  }
-  
-  /* Reuse search bar styles */
-  .search-container {
-    /* ... */
-  }
-  
-  .search-bar {
-    /* ... */
-  }
-  
-  #add-question-answer-btn {
-    display: inline-block; 
-    margin-right: 8px; 
-    padding: 8px 16px;
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
-    text-align: center;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    vertical-align: middle; 
-  }
-  
-  #save-new-templates-btn {
-    display: inline-block; 
-    float: right; 
-    padding: 8px 16px;
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
-    text-align: center;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    vertical-align: middle; 
-  }
-
-  #delete-btn{
-    color: red;
-
-  }
-  
-  
-  
-  /* 附加输入框的容器 */
-  .additional-inputs-container {
-    display: flex;
-    justify-content: space-between; 
-    margin: 1rem 2rem; 
-    padding: 0; 
-  }
-  /* 修改后的附加输入框样式 */
-  .additional-input {
-    padding: 10px;
-    border: 1px solid #ddd; 
-    border-radius: 4px; 
-  }
-  
-  /* 第一个附加输入框，占2/3宽度 */
-  .additional-input:first-child {
-    flex-grow: 2; 
-    flex-basis: 0;
-    margin-right: 10px; 
-  }
-  
-  /* 第二个附加输入框，占1/3宽度 */
-  .additional-input:last-child {
-    flex-grow: 1; 
-    flex-basis: 0;
-    margin-left: 10px; 
-  }
-  .score-input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 10px; 
-    margin-left: 10px;
+  font-family: 'Arial', sans-serif;
+  background-color: #002244; /* Consistent with other pages */
+  color: white;
+  min-height: 100vh;
+  width: 100%; /* Ensure container takes full width */
+  margin: 0; /* Reset any default margin */
+  padding: 0; /* Reset any default padding */
 }
-  
-  /* Styles for the positions and templates lists */
-  .positions-container {
-    display: flex;
-    flex-direction: column;
-    max-height: 300px;
-    overflow-y: auto;
-    margin: 1rem;
-    padding: 0.5rem;
-    border-radius: 5px;
-  }
-  
-  .position-item {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-  }
-  
-  .position-item:hover {
-    background-color: #f2f2f2;
-    color: black;
-  }
-  
-  .templates-container {
-    margin: 1rem;
-    padding: 0.5rem;
-  }
 
-  
+/* Header styles */
+.header {
+  /* Define your header styles here */
+}
+
+.logo {
+  /* Define your logo styles here */
+}
+
+/* Navbar styles */
+.navbar {
+  /* Define your navbar styles here */
+}
+
+/* Portal header styles */
+.portal-header-container {
+  /* Define your portal header container styles here */
+}
+
+.recruiting-portal-header {
+  /* Define your recruiting portal header styles here */
+}
+
+/* Search container styles */
+.search-container {
+  /* Define your search container styles here */
+}
+
+.search-bar {
+  /* Define your search bar styles here */
+}
+
+/* Buttons styles */
+#add-question-answer-btn {
+  display: inline-block; 
+  margin-right: 8px; 
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: #000000;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  vertical-align: middle; 
+}
+
+#save-new-templates-btn {
+  display: inline-block; 
+  float: right; 
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: #000000;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  vertical-align: middle; 
+}
+
+#delete-btn {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: red;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+/* Additional inputs container */
+.additional-inputs-container {
+  display: flex;
+  justify-content: space-between; 
+  margin: 1rem 2rem; 
+  padding: 0; 
+}
+
+/* Adjusting additional inputs styles */
+.additional-input {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex-grow: 1;
+  flex-basis: 0;
+  resize: none; /* Disable resize */
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  margin-right: 10px; 
+  max-width: 66%;
+  height: auto;
+}
+
+.second-inputs-container {
+  display: flex;
+  justify-content: space-between; 
+  margin: 1rem 2rem; 
+  padding: 0; 
+}
+
+.second-input {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex-grow: 1;
+  flex-basis: 0;
+  resize: none; /* Disable resize */
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  margin-right: 10px; 
+  max-width: 66%;
+  height: auto;
+}
+
+/* Score input styles */
+.score-input {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px; 
+  margin-left: 10px;
+  width: 45px;
+}
+
+/* Positions and templates lists styles */
+.positions-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.position-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.position-item:hover {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+.templates-container {
+  margin: 1rem;
+  padding: 0.5rem;
+}
