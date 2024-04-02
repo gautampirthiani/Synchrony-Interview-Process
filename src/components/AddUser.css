@@ -105,21 +105,22 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px; 
   margin-top: 20px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  max-height: calc(100vh - 240px); /* Adjusted height to accommodate other elements */
+  overflow-y: auto;
+  max-height: calc(100vh - 240px);
 }
 
 .user-table,
 .department-table {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px; 
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  table-layout: fixed;
 }
 
 .user-table h2,
@@ -155,7 +156,6 @@
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  margin-left: 5px;
   background-color: red;
   color: #fff;
 }
@@ -167,4 +167,17 @@
 .form-container,
 .table-container {
   padding: 0 20px;
+}
+
+.user-table th:last-child,
+.department-table th:last-child,
+.user-table td:last-child,
+.department-table td:last-child {
+  text-align: right;
+}
+
+.user-table td:last-child .delete-btn,
+.department-table td:last-child .delete-btn {
+  margin-left: auto;
+  display: block;
 }

@@ -14,17 +14,13 @@ function AddUserForm() {
   const [showCustomDepartmentField, setShowCustomDepartmentField] = useState(false);
   const [users, setUsers] = useState([]);
   const [departmentList, setDepartmentList] = useState([]);
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     async function fetchDepartments() {
       const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList';
       try {
-        const response = await fetch(apiEndpoint, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-          },
-        });
+        const response = await fetch(apiEndpoint);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -41,12 +37,7 @@ function AddUserForm() {
     async function fetchData() {
       const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
       try {
-        const response = await fetch(apiEndpoint, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-          },
-        });
+        const response = await fetch(apiEndpoint);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -63,12 +54,7 @@ function AddUserForm() {
     async function fetchDepartmentList() {
       const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment';
       try {
-        const response = await fetch(apiEndpoint, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-          },
-        });
+        const response = await fetch(apiEndpoint);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -135,12 +121,58 @@ function AddUserForm() {
     setIsLoading(false);
   };
 
-  const handleDeleteUser = (index) => {
-    // Implement delete user functionality
+  const handleDeleteUser = async (usernameToDelete) => {
+    const deleteUserEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/DeleteUser';
+    try {
+      const response = await fetch(deleteUserEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: usernameToDelete }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedUsers = users.filter(user => user.username !== usernameToDelete);
+      setUsers(updatedUsers);
+      setNotification("User Deleted Successfully");
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
+    } catch (error) {
+      console.error('Error deleting user:', error.message);
+      setMessage("Error deleting user");
+    }
   };
 
-  const handleDeleteDepartment = (index) => {
-    // Implement delete department functionality
+  const handleDeleteDepartment = async (departmentNameToDelete) => {
+    const deleteDepartmentEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/DeleteDepartment';
+    try {
+      const response = await fetch(deleteDepartmentEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ department_name: departmentNameToDelete }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const updatedDepartments = departmentList.filter(department => department.department !== departmentNameToDelete);
+      setDepartmentList(updatedDepartments);
+      setNotification("Department Deleted Successfully");
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
+    } catch (error) {
+      console.error('Error deleting department:', error.message);
+      setMessage("Error deleting department");
+    }
   };
 
   return (
@@ -245,7 +277,7 @@ function AddUserForm() {
                     <td>{user.username}</td>
                     <td>{user.email}</td>
                     <td>{user.department ? user.department.join(', ') : ''}</td>
-                    <td><button className="delete-btn" onClick={() => handleDeleteUser(index)}>Delete</button></td>
+                    <td><button className="delete-btn" onClick={() => handleDeleteUser(user.username)}>Delete</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -266,7 +298,7 @@ function AddUserForm() {
                   <tr key={index}>
                     <td>{department.department}</td>
                     <td>{department.users ? department.users.join(', ') : ''}</td>
-                    <td><button className="delete-btn" onClick={() => handleDeleteDepartment(index)}>Delete</button></td>
+                    <td><button className="delete-btn" onClick={() => handleDeleteDepartment(department.department)}>Delete</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -274,6 +306,7 @@ function AddUserForm() {
           </div>
         </div>
       </div>
+      {notification && <div className="notification">{notification}</div>}
     </div>
   );
 }
