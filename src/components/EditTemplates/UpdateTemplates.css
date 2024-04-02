@@ -51,10 +51,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    line-height: 1.1; /* 可选的，如果你还想减小行间距 */
+    line-height: 1.1; 
 }
-
-
 
 
 #add-question-answer-btn {
@@ -84,47 +82,69 @@
 }
 
 #delete-btn {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
     color: red;
-
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
 }
-
-
-
-/* 附加输入框的容器 */
+  
+  /* Additional inputs container */
 .additional-inputs-container {
     display: flex;
-    justify-content: space-between;
-    margin: 1rem 2rem;
-    padding: 0;
+    justify-content: space-between; 
+    margin: 1rem 2rem; 
+    padding: 0; 
 }
-
-/* 修改后的附加输入框样式 */
+  
+  /* Adjusting additional inputs styles */
 .additional-input {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-}
-
-/* 第一个附加输入框，占2/3宽度 */
-.additional-input:first-child {
-    flex-grow: 2;
-    flex-basis: 0;
-    margin-right: 10px;
-}
-
-/* 第二个附加输入框，占1/3宽度 */
-.additional-input:last-child {
     flex-grow: 1;
     flex-basis: 0;
-    margin-left: 10px;
+    resize: none; /* Disable resize */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    margin-right: 10px; 
+    max-width: 66%;
+    height: auto;
+}
+  
+.second-inputs-container {
+    display: flex;
+    justify-content: space-between; 
+    margin: 1rem 2rem; 
+    padding: 0; 
+}
+  
+.second-input {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex-grow: 1;
+    flex-basis: 0;
+    resize: none; /* Disable resize */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    margin-right: 10px; 
+    max-width: 66%;
+    height: auto;
 }
 
 .score-input {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-right: 10px;
+    margin-right: 10px; 
     margin-left: 10px;
+    width: 45px;
 }
 
 /* Styles for the positions and templates lists */

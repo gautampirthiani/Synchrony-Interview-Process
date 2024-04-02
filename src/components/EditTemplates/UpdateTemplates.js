@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate} from 'react-router-dom';
 import logoImage from '../synchrony-logo-1.png';
 import './UpdateTemplates.css';
 import Navbar from '../Navbar';
@@ -18,6 +18,31 @@ function UpdateTemplates() {
     setAdditionalInputs(newItems);
   }
   
+  const autoGrow = (element) => {
+    document.querySelectorAll('.additional-inputs-container').forEach(container => {
+      var first_input = container.getElementsByClassName('additional-input')[0];
+      var second_input = container.getElementsByClassName('second-input')[0];
+  
+      // Reset the height to 'auto' before calculating the new height
+      // to allows the box to shrink if the content has been deleted
+      first_input.style.height = 'auto';
+      second_input.style.height = 'auto';
+  
+      let first_height = first_input.scrollHeight;
+      let second_height = second_input.scrollHeight;
+      
+      let greater_height = Math.max(first_height, second_height);
+      first_input.style.height = greater_height + 'px';
+      second_input.style.height = greater_height + 'px';
+    });
+  };
+
+  const handleAdditionalInputChange = (index, key, value) => {
+    setAdditionalInputs(inputs =>
+      inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
+      
+    );
+  };
 
   //Fetch
   const fetchdata = async () => {
@@ -41,6 +66,7 @@ function UpdateTemplates() {
     }
   };
 
+  const navigate = useNavigate();
   //Update
   const handleUpdate = async (event) => {
       event.preventDefault();
@@ -61,6 +87,7 @@ function UpdateTemplates() {
           const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Update_Questions?jobId=${jobId}&templateId=${templateId}`, data);
           // console.log(response);
           alert('Updated successfully!');
+          navigate(-1); // 使用navigate回到上一页
           // fetchdata();
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -73,11 +100,7 @@ function UpdateTemplates() {
     fetchdata();
   }, []);
 
-  const handleAdditionalInputChange = (index, key, value) => {
-    setAdditionalInputs(inputs =>
-      inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
-    );
-  };
+
   const addInputPair = () => {
     setAdditionalInputs([...additionalInputs, { question: '', answer: '', score: '' }]);
   };
@@ -104,19 +127,23 @@ function UpdateTemplates() {
       <button id="save-new-templates-btn" onClick={handleUpdate}>Update</button>
       {additionalInputs.map((input, index) => (
         <div key={index} className="additional-inputs-container">
-          <input
-            type="text"
+          <textarea
             placeholder="Question"
             value={input.question}
-            onChange={(e) => handleAdditionalInputChange(index, 'question', e.target.value)}
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'question', e.target.value);
+              autoGrow(e.target);
+            }}
             className="additional-input"
           />
-          <input
-            type="text"
+          <textarea
             placeholder="Answer"
             value={input.answer}
-            onChange={(e) => handleAdditionalInputChange(index, 'answer', e.target.value)}
-            className="additional-input"
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'answer', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="second-input"
           />
           <input
             type="text"

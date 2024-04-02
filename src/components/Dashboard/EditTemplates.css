@@ -57,9 +57,7 @@
 }
 
 .position-item {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
+  position: relative;
 }
 
 .position-item:hover {
@@ -87,6 +85,12 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+}
+.modal h1 {
+  color: black; 
+}
+.modal h2 {
+  color: black; 
 }
 
 .modal-content {
@@ -139,4 +143,31 @@
 
 .modal #modal_button:hover {
   background-color: #004494;
+}
+
+#edittemplate_delete {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px;
+  border: none;
+  background: url('../trash_can.svg') no-repeat center; 
+  background-size: contain; 
+  color: transparent; 
+  font-weight: bold;
+  font-size: 24px;
+  cursor: pointer;
+  width: 24px; 
+  height: 24px; 
+  outline: none; 
+  border-radius: 4px; 
+}
+
+#edittemplate_delete:hover {
+  opacity: 0.8;
+}
+
+#edittemplate_delete::before {
+  content: ''; 
 }

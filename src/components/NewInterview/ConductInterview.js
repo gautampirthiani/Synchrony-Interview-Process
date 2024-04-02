@@ -12,7 +12,26 @@ function ConductInterview() {
   const [templateId, setTemplateId] = useState(null); // New state variable for storing templateId
   const { jobId } = useParams();
   const navigate = useNavigate();
-  console.log(jobId);
+  // console.log(jobId);
+  
+  const autoGrow = (element) => {
+    document.querySelectorAll('.additional-inputs-container').forEach(container => {
+      var first_input = container.getElementsByClassName('additional-input')[0];
+      var second_input = container.getElementsByClassName('second-input')[0];
+  
+      // Reset the height to 'auto' before calculating the new height
+      // to allows the box to shrink if the content has been deleted
+      first_input.style.height = 'auto';
+      second_input.style.height = 'auto';
+  
+      let first_height = first_input.scrollHeight;
+      let second_height = second_input.scrollHeight;
+      
+      let greater_height = Math.max(first_height, second_height);
+      first_input.style.height = greater_height + 'px';
+      second_input.style.height = greater_height + 'px';
+    });
+  };
 
   function updateAdditionalInputsFromMultiple(items, fetchedTemplateId) {
     const newItems = items.map(item => ({
@@ -35,14 +54,14 @@ function ConductInterview() {
       console.error('Error fetching data:', error);
     }
   };
-  
+
   // Call fetchdata when jobId changes or when the component mounts
   useEffect(() => {
     if (jobId) {
       fetchdata();
     }
   }, [jobId]);
-  
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,9 +73,9 @@ function ConductInterview() {
       }));
 
       try {
-        console.log(questionsPayload);
+        // console.log(questionsPayload);
         // Send the jobId as a query parameter and the rest of the body as JSON
-        const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
+        await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
           Name: candidateName,
           Questions: questionsPayload
         });
@@ -67,9 +86,9 @@ function ConductInterview() {
         console.error('Error submitting new interview:', error);
       }
     }
-};
+  };
 
-  
+
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
       inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
@@ -108,19 +127,23 @@ function ConductInterview() {
       <button id="save-new-templates-btn" onClick={handleSubmit}>Submit</button>
       {additionalInputs.map((input, index) => (
         <div key={index} className="additional-inputs-container">
-          <input
-            type="text"
+          <textarea
             placeholder="Question"
             value={input.question}
-            onChange={(e) => handleAdditionalInputChange(index, 'question', e.target.value)}
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'question', e.target.value);
+              autoGrow(e.target);
+            }}
             className="additional-input"
           />
-          <input
-            type="text"
+          <textarea
             placeholder="Answer"
             value={input.answer}
-            onChange={(e) => handleAdditionalInputChange(index, 'answer', e.target.value)}
-            className="additional-input"
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'answer', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="second-input"
           />
           <input
             type="text"
@@ -129,7 +152,7 @@ function ConductInterview() {
             onChange={(e) => handleAdditionalInputChange(index, 'score', e.target.value)}
             className="score-input"
           />
-          <button id="delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
+          <button type="button" id="delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
         </div>
       ))}
     </div>

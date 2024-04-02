@@ -13,6 +13,7 @@ import Templates from './components/EditTemplates/templates';
 import UpdateTemplates from './components/EditTemplates/UpdateTemplates';
 import ConductInterview from './components/NewInterview/ConductInterview';
 import JobInterviews from './components/Interviews/JobInterviews';
+import AddUser from './components/AddUser';
 
 import './App.css';
 
