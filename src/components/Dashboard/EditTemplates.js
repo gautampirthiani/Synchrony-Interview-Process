@@ -55,12 +55,17 @@ function EditTemplates() {
   const handleSubmit = async (formData) => {
     // console.log('Submitting form data:', formData);
     try {
+      const jobExists = positions.some(position => position['Job ID'].toString() === formData.jobId);
+      if (jobExists) {
+        alert('This Job ID is already in use. Please use a different Job ID.');
+        return;
+      }
       setShowModal(false);
       setFormData({ jobId: '', jobPosition: '' });
       fetchPositions();
       const response = await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', formData);
       // console.log('Response from Lambda:', response.data);
-      fetchPositions(); 
+      fetchPositions();
       alert('Job position created successfully!');
     } catch (error) {
       // console.error('Error creating job position:', error);
@@ -137,7 +142,7 @@ function EditTemplates() {
         const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/delete_job_position?jobId=${JobID}`);
         // console.log(response.data);
         alert('Delete success');
-        fetchPositions(); 
+        fetchPositions();
       } catch (error) {
         console.error(error);
         alert('Failed to delete');
