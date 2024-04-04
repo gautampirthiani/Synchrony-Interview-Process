@@ -63,6 +63,7 @@ function NewInterview() {
       </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">New Interview</h1>
+      <button id="interview-result-btn" onClick={() => window.location.href='/interview-result'} >Interview Result</button>
       </div>
       <div className="search-container">
         <input

@@ -20,6 +20,7 @@ import { Amplify } from 'aws-amplify';
 import amplifyconfig from './amplifyconfiguration.json';
 import './App.css';
 import updatePlaceholder from './login_style.js';
+import InterviewResult from './components/NewInterview/InterviewResult';
 Amplify.configure(amplifyconfig);
 
 
@@ -64,6 +65,7 @@ function App() {
               <Route path="/dashboard/new-templates/:jobId" element={<NewTemplates />} />
               <Route path="/interviews/job-interviews/:jobId/:jobPosition" element={<JobInterviews />} />
               <Route path="/add-user" element={<AddUser />} />
+              <Route path="/interview-result" element={<InterviewResult />} />
             </Routes>
           </div>
         </Router>
