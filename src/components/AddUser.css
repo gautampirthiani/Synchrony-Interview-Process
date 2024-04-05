@@ -1,3 +1,5 @@
+/* AddUser.css */
+
 .body-container {
   display: flex;
   flex-direction: column;
@@ -152,16 +154,17 @@
 
 .delete-btn {
   padding: 8px 16px;
-  font-size: 14px;
+  font-size: 2px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  background-color: red;
-  color: #fff;
+  background: url('./trash_can.svg') no-repeat center;
+  background-size: contain;
+  color: transparent;
 }
 
 .delete-btn:hover {
-  background-color: darkred;
+  opacity: 0.8;
 }
 
 .form-container,

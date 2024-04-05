@@ -15,7 +15,6 @@ import ConductInterview from './components/NewInterview/ConductInterview';
 import JobInterviews from './components/Interviews/JobInterviews';
 import AddUser from './components/AddUser';
 import './App.css';
-// Replace './logo.svg' with the path to your actual logo image file
 import logo from './components/synchrony-logo-1.png';
 
 function App() {
@@ -32,7 +31,9 @@ function App() {
                 <li><Link to="/dashboard/new-interview">New Interview</Link></li>
                 <li><Link to="/dashboard/edit-templates">Edit Templates</Link></li>
                 <li><Link to="/dashboard/data-analysis">Data Analysis</Link></li>
-                <li><Link to="/add-user">Add User</Link></li>
+                {user?.username === 'admin' && (
+                  <li><Link to="/add-user">Manage Users</Link></li>
+                )}
               </ul>
               <span className="welcome-message">Welcome, {user?.username}</span>
               <button onClick={signOut} className="sign-out-button">Sign Out</button>
@@ -50,7 +51,9 @@ function App() {
               <Route path="/dashboard/update-templates/:jobId/:templateId" element={<UpdateTemplates />} />
               <Route path="/dashboard/new-templates/:jobId" element={<NewTemplates />} />
               <Route path="/interviews/job-interviews/:jobId/:jobPosition" element={<JobInterviews />} />
-              <Route path="/add-user" element={<AddUser />} />
+              {user?.username === 'admin' && (
+                <Route path="/add-user" element={<AddUser />} />
+              )}
             </Routes>
           </div>
         </Router>

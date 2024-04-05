@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { getCurrentUser } from '@aws-amplify/auth';
 import './AddUser.css';
 import logo from './synchrony-logo-1.png';
+import Loader from './Loader';
 
 function AddUserForm() {
   const [username, setUsername] = useState('');
@@ -15,57 +17,67 @@ function AddUserForm() {
   const [users, setUsers] = useState([]);
   const [departmentList, setDepartmentList] = useState([]);
   const [notification, setNotification] = useState('');
+  const [loadingData, setLoadingData] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    async function fetchDepartments() {
-      const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList';
-      try {
-        const response = await fetch(apiEndpoint);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setDepartments(data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
+    getCurrentUser().then(user => {
+      setCurrentUser(user);
+      fetchInitialData();
+    }).catch(error => {
+      console.log('Error fetching user:', error);
+      setCurrentUser(null);
+    });
+  }, []);
+
+  const fetchInitialData = async () => {
     fetchDepartments();
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
-      try {
-        const response = await fetch(apiEndpoint);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchDepartmentList() {
-      const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment';
-      try {
-        const response = await fetch(apiEndpoint);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setDepartmentList(data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
     fetchDepartmentList();
-  }, []);
+  };
+
+  const fetchDepartments = async () => {
+    const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList';
+    try {
+      const response = await fetch(apiEndpoint);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setDepartments(data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const fetchData = async () => {
+    const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
+    try {
+      const response = await fetch(apiEndpoint);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setUsers(data);
+      setLoadingData(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const fetchDepartmentList = async () => {
+    const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment';
+    try {
+      const response = await fetch(apiEndpoint);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setDepartmentList(data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const handleDepartmentChange = (index) => (e) => {
     const newDepartments = [...selectedDepartments];
@@ -175,137 +187,145 @@ function AddUserForm() {
     }
   };
 
+  if (currentUser?.username?.toLowerCase() !== 'admin') {
+    return <div className="body-container">You do not have access to this page.</div>;
+  }
+
   return (
     <div className="body-container">
       <div className="logo-container">
         <img src={logo} alt="Synchrony Logo" className="logo" />
       </div>
-      <div className="content-container">
-        <div className="form-container">
-          <h2>Add Users</h2>
-          <form onSubmit={handleSubmit} className="form-container">
-            <div className="form-group">
-              <label htmlFor="username" className="form-label">Username:</label>
-              <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                className="form-input"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password" className="form-label">Password:</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="form-input"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email" className="form-label">Email:</label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="form-input"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Departments:</label>
-              {selectedDepartments.map((department, index) => (
-                <div key={index} className="dynamic-department">
-                  <select
-                    value={department}
-                    onChange={handleDepartmentChange(index)}
-                    required
-                    className="form-input"
-                  >
-                    <option value="">Select a Department</option>
-                    {departments.map((dept, i) => (
-                      <option key={i} value={dept}>
-                        {dept}
-                      </option>
-                    ))}
-                  </select>
-                  <button type="button" onClick={removeDepartmentField(index)} className="remove-btn">Remove</button>
-                </div>
-              ))}
-              <button type="button" onClick={addDepartmentField} className="add-btn">Add Department</button>
-              {showCustomDepartmentField && (
-                <div className="dynamic-department">
-                  <input
-                    type="text"
-                    placeholder="Enter new department"
-                    value={customDepartment}
-                    onChange={(e) => setCustomDepartment(e.target.value)}
-                    className="form-input"
-                  />
-                </div>
-              )}
-              <button type="button" onClick={() => setShowCustomDepartmentField(true)} className="add-btn">
-                Create New Department
+      {loadingData ? (
+        <Loader />
+      ) : (
+        <div className="content-container">
+          <div className="form-container">
+            <h2>Add Users</h2>
+            <form onSubmit={handleSubmit} className="form-container">
+              <div className="form-group">
+                <label htmlFor="username" className="form-label">Username:</label>
+                <input
+                  type="text"
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  className="form-input"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password" className="form-label">Password:</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="form-input"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email" className="form-label">Email:</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="form-input"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Departments:</label>
+                {selectedDepartments.map((department, index) => (
+                  <div key={index} className="dynamic-department">
+                    <select
+                      value={department}
+                      onChange={handleDepartmentChange(index)}
+                      required
+                      className="form-input"
+                    >
+                      <option value="">Select a Department</option>
+                      {departments.map((dept, i) => (
+                        <option key={i} value={dept}>
+                          {dept}
+                        </option>
+                      ))}
+                    </select>
+                    <button type="button" onClick={removeDepartmentField(index)} className="remove-btn">Remove</button>
+                  </div>
+                ))}
+                <button type="button" onClick={addDepartmentField} className="add-btn">Add Department</button>
+                {showCustomDepartmentField && (
+                  <div className="dynamic-department">
+                    <input
+                      type="text"
+                      placeholder="Enter new department"
+                      value={customDepartment}
+                      onChange={(e) => setCustomDepartment(e.target.value)}
+                      className="form-input"
+                    />
+                  </div>
+                )}
+                <button type="button" onClick={() => setShowCustomDepartmentField(true)} className="add-btn">
+                  Create New Department
+                </button>
+              </div>
+              <button type="submit" className="form-button" disabled={isLoading}>
+                {isLoading ? 'Creating...' : 'Submit'}
               </button>
+              {message && <div className={message.startsWith('ERROR') ? 'error-message' : 'success-message'}>{message}</div>}
+            </form>
+          </div>
+          <div className="table-container">
+            <div className="user-table">
+              <h2>User Table</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Departments</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr key={index}>
+                      <td>{user.username}</td>
+                      <td>{user.email}</td>
+                      <td>{user.department ? user.department.join(', ') : ''}</td>
+                      <td><button className="delete-btn" onClick={() => handleDeleteUser(user.username)}>Delete</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <button type="submit" className="form-button" disabled={isLoading}>
-              {isLoading ? 'Creating...' : 'Submit'}
-            </button>
-            {message && <div className={message.startsWith('ERROR') ? 'error-message' : 'success-message'}>{message}</div>}
-          </form>
-        </div>
-        <div className="table-container">
-          <div className="user-table">
-            <h2>User Table</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Departments</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user, index) => (
-                  <tr key={index}>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
-                    <td>{user.department ? user.department.join(', ') : ''}</td>
-                    <td><button className="delete-btn" onClick={() => handleDeleteUser(user.username)}>Delete</button></td>
+            <div className="department-table">
+              <h2>Department Table</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Department</th>
+                    <th>Users</th>
+                    <th>Delete</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="department-table">
-            <h2>Department Table</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Department</th>
-                  <th>Users</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {departmentList.map((department, index) => (
-                  <tr key={index}>
-                    <td>{department.department}</td>
-                    <td>{department.users ? department.users.join(', ') : ''}</td>
-                    <td><button className="delete-btn" onClick={() => handleDeleteDepartment(department.department)}>Delete</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {departmentList.map((department, index) => (
+                    <tr key={index}>
+                      <td>{department.department}</td>
+                      <td>{department.users ? department.users.join(', ') : ''}</td>
+                      <td><button className="delete-btn" onClick={() => handleDeleteDepartment(department.department)}>Delete</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {notification && <div className="notification">{notification}</div>}
     </div>
   );
