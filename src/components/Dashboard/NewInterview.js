@@ -11,6 +11,7 @@ function NewInterview() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [userDepartments, setUserDepartments] = useState([]);
+  const [username, setUsername] = useState('');
 
   const navigate = useNavigate();
 
@@ -32,27 +33,30 @@ function NewInterview() {
   }, []);
 
   useEffect(() => {
-    const fetchUserDepartments = async () => {
+    const fetchUserDetails = async () => {
       try {
         const currentUser = await getCurrentUser();
-        const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username: currentUser.username }),
-        });
-        const data = await response.json();
-        if (data && data.departments) {
-          setUserDepartments(data.departments);
+        setUsername(currentUser.username);
+        if (currentUser.username !== 'admin') {
+          const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: currentUser.username }),
+          });
+          const data = await response.json();
+          if (data && data.departments) {
+            setUserDepartments(data.departments);
+          }
         }
       } catch (error) {
-        console.error('Error fetching department:', error);
+        console.error('Error fetching user details:', error);
       }
     };
 
-    fetchUserDepartments();
+    fetchUserDetails();
   }, []);
 
   useEffect(() => {
@@ -60,18 +64,16 @@ function NewInterview() {
       const jobID = position['Job ID'].toString().toLowerCase();
       const jobPosition = position['Job Position'].toLowerCase();
       const department = position['Departments'] ? position['Departments'].join(',').toLowerCase() : '';
-      const username = position['Username'] ? position['Username'].toLowerCase() : '';
       const searchTermLower = searchTerm.toLowerCase();
 
       return jobID.includes(searchTermLower) ||
              jobPosition.includes(searchTermLower) ||
-             department.includes(searchTermLower) ||
-             username.includes(searchTermLower);
-    }).filter(position =>
-      position['Departments']?.some(dept => userDepartments.includes(dept))
+             department.includes(searchTermLower);
+    }).filter(position => 
+      username === 'admin' || position['Departments']?.some(dept => userDepartments.includes(dept))
     );
     setFilteredPositions(results);
-  }, [searchTerm, positions, userDepartments]);
+  }, [searchTerm, positions, userDepartments, username]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -107,9 +109,6 @@ function NewInterview() {
             </div>
             <div className="position-detail">
               <strong>Department:</strong> {position['Departments'] && position['Departments'].length > 0 ? position['Departments'].join(', ') : 'N/A'}
-            </div>
-            <div className="position-detail">
-              <strong>Added by:</strong> {position['Username'] || 'N/A'}
             </div>
           </div>
         ))}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getCurrentUser } from '@aws-amplify/auth';
 import './EditTemplates.css';
-import Loader from '../Loader'; // Import Loader component
+import Loader from '../Loader';
 import { Link, useNavigate } from 'react-router-dom';
 
 function EditTemplates() {
@@ -32,20 +32,22 @@ function EditTemplates() {
       try {
         const currentUser = await getCurrentUser();
         setUsername(currentUser.username);
-        const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username: currentUser.username }),
-        });
-        const data = await response.json();
-        if (data && data.departments) {
-          setUserDepartments(data.departments);
+        if (currentUser.username !== 'admin') {
+          const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: currentUser.username }),
+          });
+          const data = await response.json();
+          if (data && data.departments) {
+            setUserDepartments(data.departments);
+          }
         }
       } catch (error) {
-        console.error('Error fetching departments:', error);
+        console.error('Error fetching user information:', error);
       }
     };
 
@@ -100,17 +102,14 @@ function EditTemplates() {
   const filteredPositions = positions.filter(position => {
     const jobPositionLower = position['Job Position'].toLowerCase();
     const jobIDString = position['Job ID'].toString();
-    const departmentLower = Array.isArray(position['Departments']) ? 
-      position['Departments'].map(dept => dept.toLowerCase()) : [];
+    const departmentLower = Array.isArray(position['Departments']) ? position['Departments'].map(dept => dept.toLowerCase()) : [];
     const usernameLower = position['Username']?.toLowerCase();
 
     return jobPositionLower.includes(searchTerm.toLowerCase()) ||
       jobIDString.includes(searchTerm) ||
       (departmentLower && departmentLower.some(dept => dept.includes(searchTerm.toLowerCase()))) ||
       (usernameLower && usernameLower.includes(searchTerm.toLowerCase()));
-  }).filter(position =>
-    userDepartments.some(dept => position['Departments']?.includes(dept))
-  );
+  }).filter(position => username === 'admin' || userDepartments.some(dept => position['Departments']?.includes(dept)));
 
   function Modal({ isOpen, onClose, onSubmit }) {
     const [localFormData, setLocalFormData] = useState({ jobId: '', jobPosition: '', departments: [] });
@@ -137,11 +136,8 @@ function EditTemplates() {
     };
 
     const modal_handleSubmit = () => {
-      const isConfirmed = window.confirm('Are you sure you want to submit this job position?');
-      if (isConfirmed) {
-        onSubmit(localFormData);
-        setLocalFormData({ jobId: '', jobPosition: '', departments: [] });
-      }
+      onSubmit(localFormData);
+      setLocalFormData({ jobId: '', jobPosition: '', departments: [] });
     };
 
     return (
@@ -178,7 +174,7 @@ function EditTemplates() {
           className="search-bar"
         />
       </div>
-      {loading && <Loader />} {/* Loader component */}
+      {loading && <Loader />}
       <div className="position-list">
         {filteredPositions.map((position) => (
           <div key={position['Job ID']} className="position-item" onClick={() => handlePositionClick(position['Job ID'])}>
