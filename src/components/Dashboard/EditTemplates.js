@@ -8,6 +8,9 @@ import { Link, useNavigate } from 'react-router-dom';
 function EditTemplates() {
   const [loading, setLoading] = useState(false);
   const [positions, setPositions] = useState([]);
+  const [displayedPositions, setDisplayedPositions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [positionsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ jobId: '', jobPosition: '', departments: [] });
@@ -20,14 +23,21 @@ function EditTemplates() {
     try {
       const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
       setPositions(data);
+      const indexOfLastPosition = currentPage * positionsPerPage;
+      const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
+      setDisplayedPositions(data.slice(indexOfFirstPosition, indexOfLastPosition));
     } catch (error) {
       console.error('Error fetching positions:', error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     fetchPositions();
+  }, [currentPage, positionsPerPage]);
+
+  useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
         const currentUser = await getCurrentUser();
@@ -54,8 +64,29 @@ function EditTemplates() {
     fetchCurrentUser();
   }, []);
 
+  useEffect(() => {
+    const searchTermLower = searchTerm.toLowerCase();
+    const filtered = positions.filter(position => {
+      const jobPositionLower = position['Job Position'].toLowerCase();
+      const jobIDString = position['Job ID'].toString();
+      const departmentLower = Array.isArray(position['Departments']) ? 
+        position['Departments'].map(dept => dept.toLowerCase()) : [];
+      const usernameLower = position['Username']?.toLowerCase();
+
+      return jobPositionLower.includes(searchTermLower) ||
+        jobIDString.includes(searchTerm) ||
+        (departmentLower && departmentLower.some(dept => dept.includes(searchTermLower))) ||
+        (usernameLower && usernameLower.includes(searchTermLower));
+    }).filter(position => username === 'admin' || userDepartments.some(dept => position['Departments']?.includes(dept)));
+
+    const indexOfLastPosition = currentPage * positionsPerPage;
+    const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
+    setDisplayedPositions(filtered.slice(indexOfFirstPosition, indexOfLastPosition));
+  }, [searchTerm, positions, currentPage, userDepartments, username, positionsPerPage]);
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+    setCurrentPage(1);
   };
 
   const handlePositionClick = (JobID) => {
@@ -73,8 +104,8 @@ function EditTemplates() {
     try {
       await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', extendedFormData);
       setFormData({ jobId: '', jobPosition: '', departments: [] });
-      await fetchPositions();
       alert('Job position created successfully!');
+      fetchPositions();
     } catch (error) {
       console.error('Error creating job position:', error);
       alert('Failed to create job position.');
@@ -87,7 +118,7 @@ function EditTemplates() {
       try {
         await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/delete_job_position?jobId=${JobID}`);
         alert('Job position deleted successfully!');
-        await fetchPositions();
+        fetchPositions();
       } catch (error) {
         console.error(error);
         alert('Failed to delete the job position.');
@@ -99,17 +130,7 @@ function EditTemplates() {
     setShowModal(true);
   };
 
-  const filteredPositions = positions.filter(position => {
-    const jobPositionLower = position['Job Position'].toLowerCase();
-    const jobIDString = position['Job ID'].toString();
-    const departmentLower = Array.isArray(position['Departments']) ? position['Departments'].map(dept => dept.toLowerCase()) : [];
-    const usernameLower = position['Username']?.toLowerCase();
-
-    return jobPositionLower.includes(searchTerm.toLowerCase()) ||
-      jobIDString.includes(searchTerm) ||
-      (departmentLower && departmentLower.some(dept => dept.includes(searchTerm.toLowerCase()))) ||
-      (usernameLower && usernameLower.includes(searchTerm.toLowerCase()));
-  }).filter(position => username === 'admin' || userDepartments.some(dept => position['Departments']?.includes(dept)));
+  const totalPages = Math.ceil(positions.length / positionsPerPage);
 
   function Modal({ isOpen, onClose, onSubmit }) {
     const [localFormData, setLocalFormData] = useState({ jobId: '', jobPosition: '', departments: [] });
@@ -165,18 +186,29 @@ function EditTemplates() {
         <h1 className="recruiting-portal-header">Edit Templates</h1>
       </div>
       <button id="create-new-templates-btn" onClick={handleOpenModal}>Create New Job Position</button>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search by job ID, position, department, or username"
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-bar"
-        />
+      <div className="search-and-navigation-container">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search by job ID, position, department, or username"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="search-bar"
+          />
+        </div>
+        <div className="page-navigation">
+          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+            &lt;
+          </button>
+          Page {currentPage} of {totalPages}
+          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage >= totalPages}>
+            &gt;
+          </button>
+        </div>
       </div>
       {loading && <Loader />}
       <div className="position-list">
-        {filteredPositions.map((position) => (
+        {displayedPositions.map((position) => (
           <div key={position['Job ID']} className="position-item" onClick={() => handlePositionClick(position['Job ID'])}>
             <div className="position-detail"><strong>Job ID:</strong> {position['Job ID']}</div>
             <div className="position-detail"><strong>Job Position:</strong> {position['Job Position']}</div>

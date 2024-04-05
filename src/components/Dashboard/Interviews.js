@@ -9,18 +9,17 @@ function Interviews() {
   const [loading, setLoading] = useState(false);
   const [positions, setPositions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredPositions, setFilteredPositions] = useState([]);
-  const [userDepartments, setUserDepartments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [positionsPerPage] = useState(10);
   const [username, setUsername] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPositions = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
         setPositions(data);
-        setFilteredPositions(data);
       } catch (error) {
         console.error('Error fetching positions:', error);
       } finally {
@@ -35,20 +34,6 @@ function Interviews() {
       try {
         const currentUser = await getCurrentUser();
         setUsername(currentUser.username);
-        if (currentUser.username !== 'admin') {
-          const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: currentUser.username }),
-          });
-          const data = await response.json();
-          if (data && data.departments) {
-            setUserDepartments(data.departments);
-          }
-        }
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
@@ -57,24 +42,35 @@ function Interviews() {
     fetchUserDetails();
   }, []);
 
-  useEffect(() => {
-    const results = positions.filter(position => {
-      const jobID = position['Job ID'].toString().toLowerCase();
-      const jobPosition = position['Job Position'].toLowerCase();
-      const departmentLower = position['Departments']?.map(dept => dept.toLowerCase()) || [];
-      const searchTermLower = searchTerm.toLowerCase();
+  const indexOfLastPosition = currentPage * positionsPerPage;
+  const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
+  const currentPositions = positions.filter(position => {
+    const jobID = position['Job ID'].toString().toLowerCase();
+    const jobPosition = position['Job Position'].toLowerCase();
+    const departmentLower = position['Departments']?.map(dept => dept.toLowerCase()) || [];
+    return jobID.includes(searchTerm) ||
+           jobPosition.includes(searchTerm) ||
+           departmentLower.some(dept => dept.includes(searchTerm));
+  }).filter(position => 
+    username === 'admin' || position['Departments']?.some(dept => dept.includes(searchTerm))
+  ).slice(indexOfFirstPosition, indexOfLastPosition);
 
-      return jobID.includes(searchTermLower) ||
-             jobPosition.includes(searchTermLower) ||
-             departmentLower.some(dept => dept.includes(searchTermLower));
-    }).filter(position => 
-      username === 'admin' || position['Departments']?.some(dept => userDepartments.includes(dept))
-    );
-    setFilteredPositions(results);
-  }, [searchTerm, positions, userDepartments, username]);
+  const totalPages = Math.ceil(positions.filter(position => {
+    const jobID = position['Job ID'].toString().toLowerCase();
+    const jobPosition = position['Job Position'].toLowerCase();
+    const departmentLower = position['Departments']?.map(dept => dept.toLowerCase()) || [];
+    return jobID.includes(searchTerm) ||
+           jobPosition.includes(searchTerm) ||
+           departmentLower.some(dept => dept.includes(searchTerm));
+  }).filter(position => 
+    username === 'admin' || position['Departments']?.some(dept => dept.includes(searchTerm))
+  ).length / positionsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+    setSearchTerm(event.target.value.toLowerCase());
+    setCurrentPage(1);
   };
 
   const handlePositionClick = (jobId, jobPosition) => {
@@ -86,19 +82,29 @@ function Interviews() {
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Interviews</h1>
       </div>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search by job ID, position, department, or username"
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-bar"
-        />
+      <div className="search-and-navigation-container">
+        <div className="search-container"> {/* Change from input wrapper to div */}
+          <input
+            type="text"
+            placeholder="Search by job ID, position, department, or username"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="search-bar"
+          />
+        </div>
+        <div className="page-navigation">
+          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+            &lt;
+          </button>
+          Page {currentPage} of {totalPages}
+          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
+            &gt;
+          </button>
+        </div>
       </div>
       {loading && <Loader />}
-      {!loading && !filteredPositions.length && <div className="no-positions">No positions found</div>}
       <div className="position-list">
-        {filteredPositions.map((position) => (
+        {currentPositions.map((position) => (
           <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'], position['Job Position'])} className="position-item">
             <div className="position-detail">
               <strong>Job ID:</strong> {position['Job ID']}
@@ -120,3 +126,4 @@ function Interviews() {
 }
 
 export default Interviews;
+

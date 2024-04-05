@@ -9,7 +9,63 @@
 
 #create-new-templates-btn {
   position: absolute;
-  right: 10px;
+  left: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 1; /* Ensure button is clickable */
+}
+
+#create-new-templates-btn:hover {
+  background-color: #0056b3;
+}
+
+.search-and-navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.search-container {
+  flex: 1;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+}
+
+.page-navigation button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.page-navigation button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.page-navigation button:not(:disabled):hover {
+  background-color: #0056b3;
 }
 
 .positions-container {
@@ -50,11 +106,11 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  color: #000; /* Text color changed to black */
+  color: #000;
 }
 
-
-.modal h1, .modal h2 {
+.modal h1,
+.modal h2 {
   color: black;
 }
 
@@ -92,7 +148,7 @@
 
 .modal #modal_button {
   padding: 10px 20px;
-  background-color: #0056b3;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -104,7 +160,7 @@
 }
 
 .modal #modal_button:hover {
-  background-color: #004494;
+  background-color: #0056b3;
 }
 
 #edittemplate_delete {
