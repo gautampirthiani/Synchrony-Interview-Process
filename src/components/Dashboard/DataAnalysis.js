@@ -45,7 +45,7 @@ function DataAnalysis() {
   // State to flash interviewCount
   const [flashInterviewCount, setFlashInterviewCount] = useState(false);
 
-  // START BAR CHART COMPONENTS ********************************************
+  // START BAR CHART COMPONENTS ******************************************** working
 
   // Bar Chart data
   const barChartData = {
