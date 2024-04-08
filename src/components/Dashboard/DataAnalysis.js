@@ -126,7 +126,6 @@ function DataAnalysis() {
   // Function to update chart data
   const updateChartData = async () => {
     try {
-      // Example jobIDs, replace these with actual job IDs or fetch them as needed
       const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
       const interviewCountsForBarChart = await Promise.all(
         jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
@@ -136,7 +135,7 @@ function DataAnalysis() {
         ...prevChartData,
         datasets: [{
           ...prevChartData.datasets[0],
-          data: interviewCountsForBarChart, // Update the data array with fetched counts
+          data: interviewCountsForBarChart, // Updating the data array with fetched counts
         }]
       }));
     } catch (error) {
@@ -151,11 +150,11 @@ function DataAnalysis() {
 
   useEffect(() => {
     console.log('Updated chart data:', chartData);
-  }, [chartData]); // This will log when chartData updates
+  }, [chartData]); //  log when chartData updates
 
   // END BAR CHART COMPONENTS ********************************************
 
-  // above are all the states *************************************************************
+  // above are all the states and bar chart stuff *************************************************************
 
 
   // Fetch total open positions from API
