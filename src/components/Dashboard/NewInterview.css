@@ -1,74 +1,100 @@
+/* NewInterview.css */
+
 .new-interview-container {
   font-family: 'Arial', sans-serif;
-  background-color: #002244;
+  background-color: #002244; /* Dark blue background for the entire page */
   color: white;
   min-height: 100vh;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Logo to the left, navbar to the right */
+  background-color: #FFF;
+  padding: 0.5rem 1rem;
+}
+
+.logo {
+  height: 120px; /* Size of the logo */
+  margin-right: auto; /* Push the logo to the left */
+}
+
+/* Styles for the navigation bar */
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.navbar ul li {
+  margin-left: 20px; /* Space between navbar items */
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: black; /* Black text for navbar links */
+  font-size: 16px;
+  padding: 0.5rem 1rem; /* Padding around navbar links */
+}
+
 .portal-header-container {
-  text-align: center;
+  text-align: center; /* Center the header for the portal */
   margin: 20px 0;
 }
 
 .recruiting-portal-header {
   font-size: 24px;
-  color: white;
-}
-
-.search-navigation-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
+  color: white; /* White text for the main header */
 }
 
 .search-container {
-  flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Center the search bar horizontally */
+  padding: 20px;
 }
 
 .search-bar {
-  width: 50%;
+  width: 50%; /* Width of the search bar */
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #ddd; /* Light grey border */
   border-radius: 5px;
   font-size: 1rem;
-}
-
-.page-navigation {
-  display: flex;
-  align-items: center;
-}
-
-.page-navigation button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  margin-left: 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.page-navigation button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.page-navigation button:not(:disabled):hover {
-  background-color: #0056b3;
+  margin-bottom: 2rem; /* Space below the search bar */
 }
 
 .position-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Center job position items */
 }
 
 .position-item {
   background-color: #fff;
+  color: #000;
+  margin-bottom: 10px; /* Space between position items */
+  padding: 15px;
+  border-radius: 5px;
+  width: 80%; /* Width of position items */
+  cursor: pointer; /* Change cursor to pointer to indicate clickability */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+.position-item:hover {
+  background-color: #e8e8e8; /* Light grey background on hover */
+}
+/* NewInterview.css */
+
+/* ... (other styles) ... */
+
+.position-item {
+  background-color: #FFF;
   color: #002244;
   margin-bottom: 1rem;
   padding: 1rem;
@@ -89,3 +115,8 @@
 .position-detail strong {
   margin-right: 0.5rem;
 }
+
+/* ... (additional styles) ... */
+
+
+/* Add additional styles as needed */

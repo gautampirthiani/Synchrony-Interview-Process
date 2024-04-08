@@ -1,134 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getCurrentUser } from '@aws-amplify/auth';
+import logoImage from './synchrony-logo-1.png';
 import './NewInterview.css';
+import Navbar from '../Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../Loader';
 
 function NewInterview() {
   const [loading, setLoading] = useState(false);
-  const [allPositions, setAllPositions] = useState([]);
-  const [displayedPositions, setDisplayedPositions] = useState([]);
+  const [positions, setPositions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [positionsPerPage] = useState(10);
-  const [username, setUsername] = useState('');
-  const [addedBy, setAddedBy] = useState('');
+  const [filteredPositions, setFilteredPositions] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPositions = async () => {
-      setLoading(true);
       try {
-        const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
-        setAllPositions(data);
-        const indexOfLastPosition = currentPage * positionsPerPage;
-        const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
-        setDisplayedPositions(data.slice(indexOfFirstPosition, indexOfLastPosition));
+        setLoading(true);
+        const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access`);
+        setPositions(data);
+        setFilteredPositions(data); // Initially show all positions
       } catch (error) {
         console.error('Error fetching positions:', error);
-      } finally {
+      }
+      finally {
         setLoading(false);
       }
     };
-
     fetchPositions();
-  }, [currentPage, positionsPerPage]);
-
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        setUsername(currentUser.username);
-        setAddedBy(currentUser.username); // Set the addedBy state here
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    };
-
-    fetchUserDetails();
   }, []);
 
   useEffect(() => {
-    const filterAndDisplayPositions = () => {
+    const results = positions.filter(position => {
+      const jobID = position['Job ID'].toString().toLowerCase(); // Convert Job ID to string and lowercase
+      const jobPosition = position['Job Position'].toLowerCase();
       const searchTermLower = searchTerm.toLowerCase();
-      const filteredPositions = allPositions.filter(position => {
-        const jobID = position['Job ID'].toString().toLowerCase();
-        const jobPosition = position['Job Position'].toLowerCase();
-        const department = position['Departments'] ? position['Departments'].join(',').toLowerCase() : '';
 
-        return jobID.includes(searchTermLower) ||
-              jobPosition.includes(searchTermLower) ||
-              department.includes(searchTermLower);
-      }).filter(position => 
-        username === 'admin' || position['Departments']?.some(dept => dept.toLowerCase().includes(searchTermLower))
-      );
-
-      const indexOfLastPosition = currentPage * positionsPerPage;
-      const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
-      setDisplayedPositions(filteredPositions.slice(indexOfFirstPosition, indexOfLastPosition));
-    };
-
-    filterAndDisplayPositions();
-  }, [searchTerm, allPositions, currentPage, positionsPerPage]);
+      return jobID.includes(searchTermLower) || jobPosition.includes(searchTermLower);
+    });
+    setFilteredPositions(results);
+  }, [searchTerm, positions]); // Run the effect on searchTerm or positions change
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
-    setCurrentPage(1);
   };
 
   const handlePositionClick = (jobId) => {
     navigate(`/new-interview/conduct-interview/${jobId}`);
   };
 
-  const totalPages = Math.ceil(allPositions.filter(position => {
-    const searchTermLower = searchTerm.toLowerCase();
-    return position['Job ID'].toString().toLowerCase().includes(searchTermLower) ||
-           position['Job Position'].toLowerCase().includes(searchTermLower) ||
-           (position['Departments'] ? position['Departments'].join(',').toLowerCase() : '').includes(searchTermLower);
-  }).length / positionsPerPage);
-
   return (
     <div className="new-interview-container">
+      <div className="header">
+        <Link to="/">
+          <img src={logoImage} alt="Synchrony Logo" className="logo" />
+        </Link>
+        <Navbar />
+      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">New Interview</h1>
       </div>
-      <div className="search-navigation-container">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search by job ID, position, department, or username"
-            value={searchTerm}
-            onChange={handleSearch}
-            className="search-bar"
-          />
-        </div>
-        <div className="page-navigation">
-          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
-            &lt;
-          </button>
-          Page {currentPage} of {totalPages}
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage >= totalPages}>
-            &gt;
-          </button>
-        </div>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search by job ID or position"
+          value={searchTerm}
+          onChange={handleSearch}
+          className="search-bar"
+        />
       </div>
       {loading && <Loader />}
+      {/* Display the list of positions */}
       <div className="position-list">
-        {displayedPositions.map((position) => (
+        {filteredPositions.map((position) => (
           <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'])} className="position-item">
             <div className="position-detail">
               <strong>Job ID:</strong> {position['Job ID']}
             </div>
             <div className="position-detail">
               <strong>Job Position:</strong> {position['Job Position']}
-            </div>
-            <div className="position-detail">
-              <strong>Department:</strong> {position['Departments'] && position['Departments'].length > 0 ? position['Departments'].join(', ') : 'N/A'}
-            </div>
-            <div className="position-detail">
-              <strong>Added by:</strong> {addedBy || 'N/A'}
             </div>
           </div>
         ))}

@@ -1,90 +1,110 @@
+/* Interviews.css */
+
 .interviews-container {
-  font-family: 'Roboto', sans-serif;
-  background-color: #002244;
+  font-family: 'Arial', sans-serif;
+  background-color: #002244; /* Very dark blue background for the rest of the page */
   color: white;
   min-height: 100vh;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Align logo to the left and other items to the right */
+  background-color: #FFF;
+  padding: 0.5rem 1rem;
+}
+
+.logo {
+  height: 120px; /* Bigger logo as requested */
+  margin-left: left; /* Push the logo to the left */
+}
+
+/* Styles for the navbar links */
+.navbar {
+  margin-left: auto;
+}
+
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar ul li {
+  margin-left: 20px; /* Spacing between nav items */
+}
+
+.navbar ul li:last-child {
+  margin-right: 0; /* No margin for the last item */
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: black; /* Black font color for nav links */
+  font-size: 16px;
+  padding: 0.5rem 1rem; /* Padding for nav links */
+}
+
+
 .portal-header-container {
-  text-align: center;
+  text-align: center; /* Center the portal header text */
   margin: 20px 0;
 }
 
 .recruiting-portal-header {
   font-size: 24px;
-  color: white;
-}
-
-.search-and-navigation-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+  color: white; /* White text for the header */
 }
 
 .search-container {
-  flex: 1; /* Allow the search container to grow and fill the space */
+  display: flex;
+  justify-content: center; /* Center search bar container */
+  padding: 20px;
 }
 
 .search-bar {
-  width: 100%; /* Make the search bar fill the entire space */
+  width: 50%; /* Or any other width as per design */
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
+  margin-bottom: 2rem; /* Space after search bar */
 }
 
-.page-navigation {
-  position: absolute;
-  right: 0%;
-  display: flex;
-  align-items: center;
-}
-
-.page-navigation button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  margin: 0 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.page-navigation button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.page-navigation button:not(:disabled):hover {
-  background-color: #0056b3;
-}
-
-.position-list {
+.interviews-list {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.position-item {
-  background-color: #fff;
-  color: #000;
+.interview-item {
+  background-color: #fff; /* White background */
+  color: #000; /* Set text color to black for contrast */
   margin-bottom: 10px;
   padding: 15px;
   border-radius: 5px;
-  width: 80%;
+  width: 80%; /* Adjust the width as needed */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+  /* existing styles */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for click and hover effects */
+  cursor: pointer; /* Changes the cursor to indicate the item is clickable */
+}
+.interview-item:hover {
+  transform: translateY(-2px); /* Slightly raise the item to give a hover effect */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Increase the shadow to give depth */
+}
+.interview-item:active {
+  transform: translateY(1px); /* Move the item down to simulate a click */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Decrease the shadow to simulate being pressed */
+}
+.interview-item p {
+  margin: 5px 0;
+  color: #000; /* Ensuring that paragraph text is also black */
 }
 
-.position-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
 
-.position-item:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
+
+/* Add additional styles below */

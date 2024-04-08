@@ -1,3 +1,5 @@
+/* HomePage.css */
+
 .homepage-container {
     font-family: 'Arial', sans-serif;
     color: #333;
@@ -20,28 +22,6 @@
     text-align: center;
     color: #005AA7; 
     margin-top: 40px;
-}
-
-/* Added styles for the departments list */
-ul.departments-list {
-    list-style-type: none; 
-    padding: 0;
-    text-align: center;
-}
-
-ul.departments-list li {
-    display: inline-block;
-    margin: 5px 10px;
-    background-color: #EEE;
-    padding: 5px 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #DDD;
-}
-
-ul.departments-list li:hover {
-    background-color: #DDD;
-    cursor: pointer;
 }
 
 .footer {
@@ -82,3 +62,4 @@ ul.departments-list li:hover {
     align-items: center;
     padding: 10px 20px;
 }
+
