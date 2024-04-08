@@ -2,11 +2,29 @@
 //import React from "react";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import logoImage from './synchrony-logo-1.png'
 import './DataAnalysis.css'
 import Navbar from "../Navbar";
 
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 
 function DataAnalysis() {
@@ -26,6 +44,33 @@ function DataAnalysis() {
 
   // State to flash interviewCount
   const [flashInterviewCount, setFlashInterviewCount] = useState(false);
+
+  // Bar Chart data
+  const barChartData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: 'Monthly Sales',
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 1,
+        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+        hoverBorderColor: 'rgba(255,99,132,1)',
+        data: [65, 59, 80, 81, 56, 55, 40] 
+      }
+    ]
+  };
+
+  const barChartOptions = {
+    scales: {
+      x: { // labels are on the x-axis
+        type: 'category',
+      },
+      y: {
+        beginAtZero: true,
+      }
+    }
+  };
 
   // Fetch total open positions from API
   useEffect(() => {
@@ -197,7 +242,8 @@ function DataAnalysis() {
           </div>
           <div className="graph-container">
             {/* Graph will go here */}
-            Chart goes here and will update in real time based upon filter and option selection in left column.
+            {/* Chart goes here and will update in real time based upon filter and option selection in left column. */}
+            <Bar data={barChartData} options={barChartOptions} />
           </div>
         </div>
       </div>
