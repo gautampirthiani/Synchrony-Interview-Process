@@ -1,9 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate} from 'react-router-dom';
-import logoImage from '../synchrony-logo-1.png';
 import './UpdateTemplates.css';
-import Navbar from '../Navbar';
+import Loader from '../Loader';
 
 function UpdateTemplates() {
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
@@ -58,8 +57,6 @@ function UpdateTemplates() {
       //?jobId=${jobId}&templateId=${templateId}
       // add fetch API here
       const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Template?jobId=${jobId}&templateId=${templateId}`);
-      //console.log(response.data.Questions);
-      
       updateAdditionalInputsFromMultiple(response.data.Questions);
     } catch (error) {
       // console.error('Error fetching data:', error);
@@ -81,18 +78,12 @@ function UpdateTemplates() {
           }))
         };
         try {
-          //print sending data in console 
-          // console.log(data);
-          // Add API api for updating here
           const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Update_Questions?jobId=${jobId}&templateId=${templateId}`, data);
-          // console.log(response);
           alert('Updated successfully!');
-          navigate(-1); // 使用navigate回到上一页
-          // fetchdata();
+          navigate(-1); // Go back to the previous page
         } catch (error) {
           console.error('Error fetching data:', error);
         }
-
       }
     };
 
@@ -110,12 +101,6 @@ function UpdateTemplates() {
 
   return (
     <div className="update-templates">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Update Templates</h1>
       </div>

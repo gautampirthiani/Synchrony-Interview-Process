@@ -3,49 +3,71 @@
 .edit-templates-container {
   font-family: 'Arial', sans-serif;
   background-color: #002244;
-  /* Consistent with other pages */
   color: white;
   min-height: 100vh;
 }
 
-/* Reuse header and logo styles */
-.header {
-  /* ... */
+#create-new-templates-btn {
+  position: absolute;
+  left: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 1; /* Ensure button is clickable */
 }
 
-.logo {
-  /* ... */
+#create-new-templates-btn:hover {
+  background-color: #0056b3;
 }
 
-/* Reuse navbar styles */
-.navbar {
-  /* ... */
+.search-and-navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
 }
 
-/* Reuse portal header styles */
-.portal-header-container {
-  /* ... */
-}
-
-.recruiting-portal-header {
-  /* ... */
-}
-
-/* Reuse search bar styles */
 .search-container {
-  /* ... */
+  flex: 1;
 }
 
 .search-bar {
-  /* ... */
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
-#create-new-templates-btn {
-  position: absolute;
-  right: 10px;
+.page-navigation {
+  display: flex;
+  align-items: center;
 }
 
-/* Styles for the positions and templates lists */
+.page-navigation button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.page-navigation button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.page-navigation button:not(:disabled):hover {
+  background-color: #0056b3;
+}
+
 .positions-container {
   display: flex;
   flex-direction: column;
@@ -70,7 +92,6 @@
   padding: 0.5rem;
 }
 
-/* New styles for modal */
 .modal {
   position: fixed;
   z-index: 1;
@@ -85,12 +106,12 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  color: #000;
 }
-.modal h1 {
-  color: black; 
-}
+
+.modal h1,
 .modal h2 {
-  color: black; 
+  color: black;
 }
 
 .modal-content {
@@ -100,7 +121,6 @@
   align-items: center;
 }
 
-/* Close button inside the modal */
 .modal .close {
   color: #aaa;
   position: absolute;
@@ -113,12 +133,11 @@
 .modal .close:hover,
 .modal .close:focus {
   color: black;
-  text-decoration: none;
   cursor: pointer;
 }
 
-/* Text inputs inside the modal */
-.modal input[type="text"] {
+.modal input[type="text"],
+.modal select {
   width: 80%;
   padding: 10px;
   margin: 10px 0;
@@ -127,10 +146,9 @@
   border-radius: 5px;
 }
 
-/* Button inside the modal */
 .modal #modal_button {
   padding: 10px 20px;
-  background-color: #0056b3;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -142,7 +160,7 @@
 }
 
 .modal #modal_button:hover {
-  background-color: #004494;
+  background-color: #0056b3;
 }
 
 #edittemplate_delete {
@@ -152,16 +170,16 @@
   transform: translateY(-50%);
   padding: 8px;
   border: none;
-  background: url('../trash_can.svg') no-repeat center; 
-  background-size: contain; 
-  color: transparent; 
+  background: url('../trash_can.svg') no-repeat center;
+  background-size: contain;
+  color: transparent;
   font-weight: bold;
   font-size: 24px;
   cursor: pointer;
-  width: 24px; 
-  height: 24px; 
-  outline: none; 
-  border-radius: 4px; 
+  width: 24px;
+  height: 24px;
+  outline: none;
+  border-radius: 4px;
 }
 
 #edittemplate_delete:hover {
@@ -169,5 +187,5 @@
 }
 
 #edittemplate_delete::before {
-  content: ''; 
+  content: '';
 }
