@@ -65,3 +65,25 @@
   font-size: 16px;
   color: #000000;
 }
+
+[data-amplify-container] {
+  border: 5px !important;
+  border-color: #fbfbfb;
+  /* display: flex; */
+  position: absolute;
+  top:25%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+body {
+  background-color: #fbfbfb; 
+}
+
+
+[data-amplify-router] {
+  border: none !important;
+  border-color: #fbfbfb;
+}

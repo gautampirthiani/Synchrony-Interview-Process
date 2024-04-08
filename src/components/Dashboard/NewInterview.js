@@ -12,6 +12,9 @@ function NewInterview() {
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [userDepartments, setUserDepartments] = useState([]);
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,6 +88,7 @@ function NewInterview() {
     <div className="new-interview-container">
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">New Interview</h1>
+        <button id="interview-result-btn" onClick={() => window.location.href='/interview-result'} >Interview Result</button>
       </div>
       <div className="search-container">
         <input

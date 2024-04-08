@@ -16,6 +16,9 @@ function InterviewDetails() {
     name: ''
   });
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   function updateAdditionalInputsFromMultiple(items) {
     const newItems = items.map(item => ({
       question: item.QuestionText,

@@ -12,6 +12,9 @@ function Templates() {
   const [searchTerm, setSearchTerm] = useState('');
   const { JobID } = useParams();
   const navigate = useNavigate();
+
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
   
   const fetchTemplates = async () => {
     try {

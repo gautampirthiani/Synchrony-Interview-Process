@@ -5,6 +5,8 @@ import './Interviews.css';
 import Loader from '../Loader';
 import { Link, useNavigate } from 'react-router-dom';
 
+
+
 function Interviews() {
   const [loading, setLoading] = useState(false);
   const [positions, setPositions] = useState([]);
@@ -12,6 +14,10 @@ function Interviews() {
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [userDepartments, setUserDepartments] = useState([]);
   const navigate = useNavigate();
+
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
 
   useEffect(() => {
     const fetchPositions = async () => {
