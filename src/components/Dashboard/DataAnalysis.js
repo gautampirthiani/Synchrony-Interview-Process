@@ -45,6 +45,8 @@ function DataAnalysis() {
   // State to flash interviewCount
   const [flashInterviewCount, setFlashInterviewCount] = useState(false);
 
+  // START BAR CHART COMPONENTS ********************************************
+
   // Bar Chart data
   const barChartData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -71,6 +73,90 @@ function DataAnalysis() {
       }
     }
   };
+
+
+  // State to store chart data
+  const [chartData, setChartData] = useState({
+    labels: ['Code', 'DSA', 'Data Science', 'Algorithms', 'Marketing', 'Human Resources'], 
+    datasets: [
+      {
+        label: 'Department Interviews',
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 2,
+        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+        hoverBorderColor: 'rgba(255,99,132,1)',
+        data: [], // Initializing as empty array
+      }
+    ]
+  });
+
+  // Fetch the number of interviews for the selected job
+  const fetchInterviewCountForBarChart = async (jobID) => {
+    try {
+      const response = await fetch(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_getInterviewCountForJobID1?jobID=${jobID}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log('FETCHED interview count for selected job:', data.interviewCount);
+      return data.interviewCount; 
+    } catch (error) {
+      console.error('Error fetching interview count for selected job:', error);
+      return 0; // error return
+    }
+  };
+  const fetchInterviewCountForBarChartOld1 = async (jobID) => {
+    fetch(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_getInterviewCountForJobID1?jobID=${jobID}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // This already parses the JSON response
+      })
+      .then(data => {
+        console.log('FETCHED interview count for selected job:', data.interviewCount);
+        return data.interviewCount; // This will return the count for the job
+      })
+      .catch(error => {
+        console.error('Error fetching interview count for selected job:', error);
+      });
+  };
+
+  // Function to update chart data
+  const updateChartData = async () => {
+    try {
+      // Example jobIDs, replace these with actual job IDs or fetch them as needed
+      const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
+      const interviewCountsForBarChart = await Promise.all(
+        jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
+      );
+
+      setChartData(prevChartData => ({
+        ...prevChartData,
+        datasets: [{
+          ...prevChartData.datasets[0],
+          data: interviewCountsForBarChart, // Update the data array with fetched counts
+        }]
+      }));
+    } catch (error) {
+      console.error('Error updating chart data:', error);
+    }
+  };
+
+  // useEffect to call updateChartData when component mounts
+  useEffect(() => {
+    updateChartData();
+  }, []);
+
+  useEffect(() => {
+    console.log('Updated chart data:', chartData);
+  }, [chartData]); // This will log when chartData updates
+
+  // END BAR CHART COMPONENTS ********************************************
+
+  // above are all the states *************************************************************
+
 
   // Fetch total open positions from API
   useEffect(() => {
@@ -248,7 +334,8 @@ function DataAnalysis() {
           <div className="graph-container">
             {/* Graph will go here */}
             {/* Chart goes here and will update in real time based upon filter and option selection in left column. */}
-            <Bar data={barChartData} options={barChartOptions} />
+            {/* <Bar data={barChartData} options={barChartOptions} /> */}
+            <Bar data={chartData} options={barChartOptions} />
           </div>
         </div>
       </div>
