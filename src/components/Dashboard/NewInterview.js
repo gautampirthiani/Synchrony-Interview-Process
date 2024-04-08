@@ -23,7 +23,9 @@ function NewInterview() {
       try {
         const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
         setAllPositions(data);
-        setDisplayedPositions(data.slice(0, positionsPerPage));
+        const indexOfLastPosition = currentPage * positionsPerPage;
+        const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
+        setDisplayedPositions(data.slice(indexOfFirstPosition, indexOfLastPosition));
       } catch (error) {
         console.error('Error fetching positions:', error);
       } finally {
@@ -32,7 +34,7 @@ function NewInterview() {
     };
 
     fetchPositions();
-  }, []);
+  }, [currentPage, positionsPerPage]);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -49,23 +51,27 @@ function NewInterview() {
   }, []);
 
   useEffect(() => {
-    const searchTermLower = searchTerm.toLowerCase();
-    const filteredPositions = allPositions.filter(position => {
-      const jobID = position['Job ID'].toString().toLowerCase();
-      const jobPosition = position['Job Position'].toLowerCase();
-      const department = position['Departments'] ? position['Departments'].join(',').toLowerCase() : '';
+    const filterAndDisplayPositions = () => {
+      const searchTermLower = searchTerm.toLowerCase();
+      const filteredPositions = allPositions.filter(position => {
+        const jobID = position['Job ID'].toString().toLowerCase();
+        const jobPosition = position['Job Position'].toLowerCase();
+        const department = position['Departments'] ? position['Departments'].join(',').toLowerCase() : '';
 
-      return jobID.includes(searchTermLower) ||
-             jobPosition.includes(searchTermLower) ||
-             department.includes(searchTermLower);
-    }).filter(position => 
-      username === 'admin' || position['Departments']?.some(dept => dept.includes(searchTermLower))
-    );
+        return jobID.includes(searchTermLower) ||
+              jobPosition.includes(searchTermLower) ||
+              department.includes(searchTermLower);
+      }).filter(position => 
+        username === 'admin' || position['Departments']?.some(dept => dept.toLowerCase().includes(searchTermLower))
+      );
 
-    const indexOfLastPosition = currentPage * positionsPerPage;
-    const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
-    setDisplayedPositions(filteredPositions.slice(indexOfFirstPosition, indexOfLastPosition));
-  }, [searchTerm, allPositions, currentPage, username, positionsPerPage]);
+      const indexOfLastPosition = currentPage * positionsPerPage;
+      const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
+      setDisplayedPositions(filteredPositions.slice(indexOfFirstPosition, indexOfLastPosition));
+    };
+
+    filterAndDisplayPositions();
+  }, [searchTerm, allPositions, currentPage, positionsPerPage]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -76,7 +82,12 @@ function NewInterview() {
     navigate(`/new-interview/conduct-interview/${jobId}`);
   };
 
-  const totalPages = Math.ceil(displayedPositions.length / positionsPerPage);
+  const totalPages = Math.ceil(allPositions.filter(position => {
+    const searchTermLower = searchTerm.toLowerCase();
+    return position['Job ID'].toString().toLowerCase().includes(searchTermLower) ||
+           position['Job Position'].toLowerCase().includes(searchTermLower) ||
+           (position['Departments'] ? position['Departments'].join(',').toLowerCase() : '').includes(searchTermLower);
+  }).length / positionsPerPage);
 
   return (
     <div className="new-interview-container">
