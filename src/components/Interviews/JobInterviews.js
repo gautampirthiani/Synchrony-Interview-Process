@@ -1,9 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import logoImage from '../synchrony-logo-1.png';
 import './JobInterviews.css';
-import Navbar from '../Navbar';
 import Loader from '../Loader';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -93,12 +92,6 @@ function Interviews() {
 
   return (
     <div className="interviews-container">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Interviews for Job: {jobPosition}</h1>
       </div>
@@ -132,3 +125,4 @@ function Interviews() {
 }
 
 export default Interviews;
+

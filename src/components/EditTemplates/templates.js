@@ -1,8 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import logoImage from '../synchrony-logo-1.png';
-import Navbar from '../Navbar';
 import './templates.css';
 import Loader from '../Loader';
 import { FiArrowLeft } from 'react-icons/fi';
@@ -14,6 +13,7 @@ function Templates() {
   const [searchTerm, setSearchTerm] = useState('');
   const { JobID } = useParams();
   const navigate = useNavigate();
+
   var image_1 = document.getElementById("login_img_1");
   image_1.style.display = 'none';
   
@@ -115,12 +115,6 @@ function Templates() {
 
   return (
     <div className="templates-container">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
       <div className="back-button-container">
         <Link to="/dashboard/edit-templates" className="back-button">
           <FiArrowLeft /> Back
@@ -180,3 +174,4 @@ function Templates() {
 }
 
 export default Templates;
+

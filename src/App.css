@@ -1,3 +1,4 @@
+
 .App {
   text-align: center;
 }
@@ -66,11 +67,6 @@
   color: #000000;
 }
 
-/* .amplify-label{
-  font-size: 16px;
-  color: #ff0000;
-} */
-
 [data-amplify-container] {
   border: 5px !important;
   border-color: #fbfbfb;
@@ -102,5 +98,3 @@ body {
   border: none !important;
   border-color: #fbfbfb;
 }
-
-

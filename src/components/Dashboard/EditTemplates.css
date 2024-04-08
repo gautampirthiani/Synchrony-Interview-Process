@@ -1,3 +1,4 @@
+
 /* EditTemplates.css */
 
 .edit-templates-container {
@@ -5,34 +6,6 @@
   background-color: #002244;
   color: white;
   min-height: 100vh;
-}
-
-.header {
-  /* ... */
-}
-
-.logo {
-  /* ... */
-}
-
-.navbar {
-  /* ... */
-}
-
-.portal-header-container {
-  /* ... */
-}
-
-.recruiting-portal-header {
-  /* ... */
-}
-
-.search-container {
-  /* ... */
-}
-
-.search-bar {
-  /* ... */
 }
 
 #create-new-templates-btn {
@@ -78,7 +51,9 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  color: #000; /* Text color changed to black */
 }
+
 
 .modal h1, .modal h2 {
   color: black;
@@ -159,3 +134,4 @@
 #edittemplate_delete::before {
   content: '';
 }
+

@@ -1,3 +1,4 @@
+
 .lds-roller {
     display: block; /* changed from inline-block to block */
     position: fixed; /* changed from relative to fixed */

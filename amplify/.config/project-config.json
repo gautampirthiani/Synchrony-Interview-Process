@@ -1,5 +1,12 @@
 {
+<<<<<<< HEAD
   "projectName": "Amptest",
+=======
+  "providers": [
+    "awscloudformation"
+  ],
+  "projectName": "SynchronyInterviewPr",
+>>>>>>> e32e41f135c9c54120c75668459f25ad3348e401
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
@@ -10,8 +17,12 @@
       "BuildCommand": "npm run-script build",
       "StartCommand": "npm run-script start"
     }
+<<<<<<< HEAD
   },
   "providers": [
     "awscloudformation"
   ]
+=======
+  }
+>>>>>>> e32e41f135c9c54120c75668459f25ad3348e401
 }

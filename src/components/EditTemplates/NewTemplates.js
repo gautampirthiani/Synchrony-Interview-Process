@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import logoImage from '../synchrony-logo-1.png';
 import './NewTemplates.css';
-import Navbar from '../Navbar';
 import { useNavigate } from 'react-router-dom';
 
 function NewTemplates() {
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const { jobId } = useParams();
   const navigate = useNavigate();
-
 
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
@@ -22,6 +19,7 @@ function NewTemplates() {
     const timestamp = new Date().toISOString().replace(/[^0-9]/g, "");
     return `${jobId}_${timestamp}`;
   };
+
   var image_1 = document.getElementById("login_img_1");
   image_1.style.display = 'none';
 
@@ -68,12 +66,6 @@ function NewTemplates() {
 
   return (
     <div className="new-templates-container">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">New Templates</h1>
       </div>
@@ -110,3 +102,4 @@ function NewTemplates() {
 }
 
 export default NewTemplates;
+
