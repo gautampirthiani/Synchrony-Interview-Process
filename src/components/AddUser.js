@@ -16,6 +16,9 @@ function AddUserForm() {
   const [departmentList, setDepartmentList] = useState([]);
   const [notification, setNotification] = useState('');
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   useEffect(() => {
     async function fetchDepartments() {
       const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList';

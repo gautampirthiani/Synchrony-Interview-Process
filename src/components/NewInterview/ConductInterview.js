@@ -13,6 +13,9 @@ function ConductInterview() {
   const { jobId } = useParams();
   const navigate = useNavigate();
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   function updateAdditionalInputsFromMultiple(items, fetchedTemplateId) {
     const newItems = items.map(item => ({
       question: item.Question,

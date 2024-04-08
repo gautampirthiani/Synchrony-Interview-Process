@@ -14,6 +14,9 @@ function Interviews() {
   const [filteredInterviews, setFilteredInterviews] = useState([]);
   const { jobId, jobPosition } = useParams();
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   const fetchInterviews = async () => {
     try {
       console.log('Fetching interviews for job ID:', jobId);

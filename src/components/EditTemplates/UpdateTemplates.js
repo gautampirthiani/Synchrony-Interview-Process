@@ -9,6 +9,9 @@ function UpdateTemplates() {
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const { jobId, templateId } = useParams();
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   function updateAdditionalInputsFromMultiple(items) {
     const newItems = items.map(item => ({
       question: item.Question,

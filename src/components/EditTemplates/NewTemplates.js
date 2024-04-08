@@ -9,6 +9,9 @@ function NewTemplates() {
   const { jobId } = useParams();
   const navigate = useNavigate();
 
+  var image_1 = document.getElementById("login_img_1");
+  image_1.style.display = 'none';
+
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
       inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
