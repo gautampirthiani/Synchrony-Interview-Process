@@ -136,6 +136,11 @@ function DataAnalysis() {
     // Add code to apply filters here
   }
 
+  // function to fetch number of interviews for each job
+  // const fetchInterviewCountForBarChart = () => {
+    // Add code to fetch number of interviews for each job here
+  //}
+
   // Function to handle job change
   const handleJobChange = (event) => {
     setSelectedJob(event.target.value);
