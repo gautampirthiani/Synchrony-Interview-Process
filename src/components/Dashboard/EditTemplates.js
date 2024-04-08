@@ -233,4 +233,3 @@ function EditTemplates() {
 }
 
 export default EditTemplates;
-

@@ -6,7 +6,6 @@ import Loader from '../Loader';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
-
 function Interviews() {
   const [loading, setLoading] = useState(false);
   const [interviews, setInterviews] = useState([]);
@@ -16,18 +15,15 @@ function Interviews() {
 
   const fetchInterviews = async () => {
     try {
-      console.log('Fetching interviews for job ID:', jobId);
-      console.log('Fetching interviews for job Position:', jobPosition);
       setLoading(true);
       const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Interviews_Based_On_JobId?jobId=${jobId}`);
       const interviewsData = data.map(item => ({
         interviewID: item['Interview ID'],
         interviewer: item.Interviewer || 'N/A',
-        interviewee: item.Name, // Assuming 'Name' is the interviewee's name
+        interviewee: item.Name,
         jobPosition: jobPosition,
         jobID: item['Job ID'],
         interviewedOn: item['Interviewed On'],
-        // Add other attributes you need
       }));
       setInterviews(interviewsData);
     } catch (error) {
@@ -44,7 +40,6 @@ function Interviews() {
       const interviewer = interview.interviewer ? interview.interviewer.toLowerCase() : '';
       const interviewee = interview.interviewee ? interview.interviewee.toLowerCase() : '';
       const jobID = interview.jobID ? interview.jobID.toLowerCase() : '';
-      // Format 'Interviewed On' for easier searching, assuming it is a string.
       const interviewedOn = interview.interviewedOn ? interview.interviewedOn.toLowerCase() : '';
 
       return interviewer.includes(searchTerm.toLowerCase()) ||
@@ -61,22 +56,16 @@ function Interviews() {
   };
 
   const navigate = useNavigate();
-  // This function will be called when the user clicks on an interview item
   const handleInterviewItemClick = (interviewID) => {
     navigate(`/interview-details/${interviewID}`);
   };
 
-  // handle delete [TODO API needed]
   const handleDelete = async (interviewID, event) => {
     event.preventDefault();
     event.stopPropagation();
     if (window.confirm('Are you sure you want to delete this interview?')) {
-
-      console.log(interviewID);
-
       try {
         const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Delete_interviews?interviewID=${interviewID}`);
-        console.log(response.data);
         alert('Interview deleted successfully');
         fetchInterviews();
       } catch (error) {
@@ -84,7 +73,6 @@ function Interviews() {
       }
     }
   };
-
 
   return (
     <div className="interviews-container">
@@ -103,16 +91,14 @@ function Interviews() {
       {loading && <Loader />}
       <div className="interviews-list">
         {filteredInterviews.map((interview) => (
-          // The entire interview item is now clickable
           <div key={interview.interviewID} className="interview-item" onClick={() => handleInterviewItemClick(interview.interviewID)}>
-
             <p>Interviewer: {interview.interviewer}</p>
             <p>Interviewee: {interview.interviewee}</p>
             <p>Interviewed On: {interview.interviewedOn}</p>
             <p>Job Position: {interview.jobPosition}</p>
-            <button id="jobinterview-delete" onClick={(e) => {
-              handleDelete(interview.interviewID, e);
-            }}></button>
+            <div className="button-container">
+              <button className="jobinterview-delete" onClick={(e) => { handleDelete(interview.interviewID, e); }}></button>
+            </div>
           </div>
         ))}
       </div>
