@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import logoImage from '../synchrony-logo-1.png';
 import './ConductInterview.css';
 import Loader from '../Loader';
 
@@ -82,11 +81,6 @@ function ConductInterview() {
 
   return (
     <div className="update-templates">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">New Interview</h1>
       </div>

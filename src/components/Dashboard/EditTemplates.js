@@ -23,9 +23,7 @@ function EditTemplates() {
     try {
       const { data } = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/JobPosition_access');
       setPositions(data);
-      const indexOfLastPosition = currentPage * positionsPerPage;
-      const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
-      setDisplayedPositions(data.slice(indexOfFirstPosition, indexOfLastPosition));
+      filterAndDisplayPositions(data);
     } catch (error) {
       console.error('Error fetching positions:', error);
     } finally {
@@ -64,9 +62,9 @@ function EditTemplates() {
     fetchCurrentUser();
   }, []);
 
-  useEffect(() => {
+  const filterPositions = () => {
     const searchTermLower = searchTerm.toLowerCase();
-    const filtered = positions.filter(position => {
+    return positions.filter(position => {
       const jobPositionLower = position['Job Position'].toLowerCase();
       const jobIDString = position['Job ID'].toString();
       const departmentLower = Array.isArray(position['Departments']) ? 
@@ -78,10 +76,17 @@ function EditTemplates() {
         (departmentLower && departmentLower.some(dept => dept.includes(searchTermLower))) ||
         (usernameLower && usernameLower.includes(searchTermLower));
     }).filter(position => username === 'admin' || userDepartments.some(dept => position['Departments']?.includes(dept)));
+  };
 
+  const filterAndDisplayPositions = (data = positions) => {
+    const filtered = filterPositions(data);
     const indexOfLastPosition = currentPage * positionsPerPage;
     const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
     setDisplayedPositions(filtered.slice(indexOfFirstPosition, indexOfLastPosition));
+  };
+
+  useEffect(() => {
+    filterAndDisplayPositions();
   }, [searchTerm, positions, currentPage, userDepartments, username, positionsPerPage]);
 
   const handleSearch = (event) => {
@@ -130,7 +135,7 @@ function EditTemplates() {
     setShowModal(true);
   };
 
-  const totalPages = Math.ceil(positions.length / positionsPerPage);
+  const totalPages = Math.ceil(filterPositions().length / positionsPerPage);
 
   function Modal({ isOpen, onClose, onSubmit }) {
     const [localFormData, setLocalFormData] = useState({ jobId: '', jobPosition: '', departments: [] });
@@ -168,6 +173,7 @@ function EditTemplates() {
           <h1>New Job Position</h1>
           <input type="text" placeholder="Job ID" name="jobId" value={localFormData.jobId} onChange={handleChange} />
           <input type="text" placeholder="Job Position" name="jobPosition" value={localFormData.jobPosition} onChange={handleChange} />
+          <h2>Select Department(s) for The Job Position</h2>
           {userDepartments.map((dept, index) => (
             <div key={index}>
               <input type="checkbox" id={dept} name={dept} checked={localFormData.departments.includes(dept)} onChange={() => handleCheckboxChange(dept)} />
@@ -227,3 +233,4 @@ function EditTemplates() {
 }
 
 export default EditTemplates;
+

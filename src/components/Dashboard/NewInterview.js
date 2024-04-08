@@ -13,6 +13,7 @@ function NewInterview() {
   const [currentPage, setCurrentPage] = useState(1);
   const [positionsPerPage] = useState(10);
   const [username, setUsername] = useState('');
+  const [addedBy, setAddedBy] = useState('');
 
   const navigate = useNavigate();
 
@@ -38,6 +39,7 @@ function NewInterview() {
       try {
         const currentUser = await getCurrentUser();
         setUsername(currentUser.username);
+        setAddedBy(currentUser.username); // Set the addedBy state here
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
@@ -74,7 +76,7 @@ function NewInterview() {
     navigate(`/new-interview/conduct-interview/${jobId}`);
   };
 
-  const totalPages = Math.ceil(allPositions.length / positionsPerPage);
+  const totalPages = Math.ceil(displayedPositions.length / positionsPerPage);
 
   return (
     <div className="new-interview-container">
@@ -113,6 +115,9 @@ function NewInterview() {
             </div>
             <div className="position-detail">
               <strong>Department:</strong> {position['Departments'] && position['Departments'].length > 0 ? position['Departments'].join(', ') : 'N/A'}
+            </div>
+            <div className="position-detail">
+              <strong>Added by:</strong> {addedBy || 'N/A'}
             </div>
           </div>
         ))}

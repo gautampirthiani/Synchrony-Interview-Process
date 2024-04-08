@@ -19,7 +19,7 @@ import logo from './components/synchrony-logo-1.png';
 
 function App() {
   return (
-    <Authenticator>
+    <Authenticator hideSignUp>
       {({ signOut, user }) => (
         <Router>
           <div className="auth-wrapper">
