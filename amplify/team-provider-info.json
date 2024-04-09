@@ -10,6 +10,11 @@
       "StackName": "amplify-synchronyinterviewpr-dev-162737",
       "StackId": "arn:aws:cloudformation:us-east-1:730335583129:stack/amplify-synchronyinterviewpr-dev-162737/0b49f820-cc49-11ee-9ce6-0e71bd555a59",
       "AmplifyAppId": "d3bktdfic7uuax"
+    },
+    "categories": {
+      "auth": {
+        "synchronyinterviewprbfa7c454": {}
+      }
     }
   }
 }
