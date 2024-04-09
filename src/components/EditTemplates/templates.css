@@ -140,7 +140,7 @@
   cursor: pointer;
   position: absolute; /* Position the button absolutely within .templates-container */
   right: 20px; /* Adjust as per your layout */
-  top: px; /* Adjust this to align with the search bar */
+  top: 225px; /* Adjust this to align with the search bar */
 }
 .template-item {
   position: relative; /* Set the position to relative to contain the absolute corner */
