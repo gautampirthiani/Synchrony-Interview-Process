@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './ConductInterview.css';
 import Loader from '../Loader';
+import { getCurrentUser } from '@aws-amplify/auth'; // Import getCurrentUser
 
 function ConductInterview() {
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,11 @@ function ConductInterview() {
   const [templateId, setTemplateId] = useState(null);
   const { jobId } = useParams();
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    getCurrentUser().then(user => setUsername(user.username)); // Fetch current user's username
+  }, []);
 
   function updateAdditionalInputsFromMultiple(items, fetchedTemplateId) {
     const newItems = items.map(item => ({
@@ -31,12 +37,11 @@ function ConductInterview() {
       updateAdditionalInputsFromMultiple(questions, fetchedTemplateId);
     } catch (error) {
       console.error('Error fetching data:', error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     if (jobId) {
       fetchdata();
@@ -55,7 +60,8 @@ function ConductInterview() {
       try {
         const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
           Name: candidateName,
-          Questions: questionsPayload
+          Questions: questionsPayload,
+          Interviewer: username // Include username in the request payload
         });
 
         alert('Interview submitted successfully!');
@@ -64,9 +70,8 @@ function ConductInterview() {
         console.error('Error submitting new interview:', error);
       }
     }
-};
+  };
 
-  
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
       inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))

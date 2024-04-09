@@ -1,5 +1,5 @@
 .interviews-container {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: #002244;
   color: white;
   min-height: 100vh;
@@ -38,10 +38,10 @@
 
 .interview-item {
   background-color: #fff;
-  color: #002244;
+  color: #000;
   margin-bottom: 1rem;
-  padding: 1rem;
-  border-radius: 10px;
+  padding: 0.5rem; /* Adjusted padding */
+  border-radius: 5px;
   width: 80%;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);

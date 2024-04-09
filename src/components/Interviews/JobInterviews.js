@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './JobInterviews.css';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Loader from '../Loader';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import './JobInterviews.css';
 
 function Interviews() {
   const [loading, setLoading] = useState(false);
@@ -12,6 +10,7 @@ function Interviews() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredInterviews, setFilteredInterviews] = useState([]);
   const { jobId, jobPosition } = useParams();
+  const navigate = useNavigate();
 
   const fetchInterviews = async () => {
     try {
@@ -32,9 +31,11 @@ function Interviews() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchInterviews();
   }, [jobId, jobPosition]); 
+
   useEffect(() => {
     const results = interviews.filter(interview => {
       const interviewer = interview.interviewer ? interview.interviewer.toLowerCase() : '';
@@ -50,12 +51,10 @@ function Interviews() {
     setFilteredInterviews(results);
   }, [searchTerm, interviews]);
 
-
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const navigate = useNavigate();
   const handleInterviewItemClick = (interviewID) => {
     navigate(`/interview-details/${interviewID}`);
   };
@@ -92,10 +91,10 @@ function Interviews() {
       <div className="interviews-list">
         {filteredInterviews.map((interview) => (
           <div key={interview.interviewID} className="interview-item" onClick={() => handleInterviewItemClick(interview.interviewID)}>
-            <p>Interviewer: {interview.interviewer}</p>
-            <p>Interviewee: {interview.interviewee}</p>
-            <p>Interviewed On: {interview.interviewedOn}</p>
-            <p>Job Position: {interview.jobPosition}</p>
+            <p><strong>Interviewer:</strong> {interview.interviewer}</p>
+            <p><strong>Interviewee:</strong> {interview.interviewee}</p>
+            <p><strong>Interviewed On:</strong> {interview.interviewedOn}</p>
+            <p><strong>Job Position:</strong> {interview.jobPosition}</p>
             <div className="button-container">
               <button className="jobinterview-delete" onClick={(e) => { handleDelete(interview.interviewID, e); }}></button>
             </div>

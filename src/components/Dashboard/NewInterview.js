@@ -41,7 +41,7 @@ function NewInterview() {
       try {
         const currentUser = await getCurrentUser();
         setUsername(currentUser.username);
-        setAddedBy(currentUser.username); // Set the addedBy state here
+        setAddedBy(currentUser.username); 
       } catch (error) {
         console.error('Error fetching user details:', error);
       }

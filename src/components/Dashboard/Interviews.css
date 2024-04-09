@@ -7,7 +7,7 @@
 
 .portal-header-container {
   text-align: center;
-  margin: 20px 0;
+  margin: 0;
 }
 
 .recruiting-portal-header {
@@ -23,11 +23,11 @@
 }
 
 .search-container {
-  flex: 1; /* Allow the search container to grow and fill the space */
+  flex: 1;
 }
 
 .search-bar {
-  width: 100%; /* Make the search bar fill the entire space */
+  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -72,7 +72,7 @@
   color: #000;
   margin-bottom: 10px;
   padding: 15px;
-  border-radius: 5px;
+  border-radius: 10px;
   width: 80%;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
