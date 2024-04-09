@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import logoImage from '../synchrony-logo-1.png';
-import './JobInterviews.css';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
 import Loader from '../Loader';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-
+import './JobInterviews.css';
 
 function Interviews() {
   const [loading, setLoading] = useState(false);
@@ -15,21 +12,19 @@ function Interviews() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredInterviews, setFilteredInterviews] = useState([]);
   const { jobId, jobPosition } = useParams();
+  const navigate = useNavigate();
 
   const fetchInterviews = async () => {
     try {
-      console.log('Fetching interviews for job ID:', jobId);
-      console.log('Fetching interviews for job Position:', jobPosition);
       setLoading(true);
       const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Interviews_Based_On_JobId?jobId=${jobId}`);
       const interviewsData = data.map(item => ({
         interviewID: item['Interview ID'],
         interviewer: item.Interviewer || 'N/A',
-        interviewee: item.Name, // Assuming 'Name' is the interviewee's name
+        interviewee: item.Name,
         jobPosition: jobPosition,
         jobID: item['Job ID'],
         interviewedOn: item['Interviewed On'],
-        // Add other attributes you need
       }));
       setInterviews(interviewsData);
     } catch (error) {
@@ -38,15 +33,16 @@ function Interviews() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchInterviews();
   }, [jobId, jobPosition]); 
+
   useEffect(() => {
     const results = interviews.filter(interview => {
       const interviewer = interview.interviewer ? interview.interviewer.toLowerCase() : '';
       const interviewee = interview.interviewee ? interview.interviewee.toLowerCase() : '';
       const jobID = interview.jobID ? interview.jobID.toLowerCase() : '';
-      // Format 'Interviewed On' for easier searching, assuming it is a string.
       const interviewedOn = interview.interviewedOn ? interview.interviewedOn.toLowerCase() : '';
 
       return interviewer.includes(searchTerm.toLowerCase()) ||
@@ -57,28 +53,20 @@ function Interviews() {
     setFilteredInterviews(results);
   }, [searchTerm, interviews]);
 
-
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const navigate = useNavigate();
-  // This function will be called when the user clicks on an interview item
   const handleInterviewItemClick = (interviewID) => {
     navigate(`/interview-details/${interviewID}`);
   };
 
-  // handle delete [TODO API needed]
   const handleDelete = async (interviewID, event) => {
     event.preventDefault();
     event.stopPropagation();
     if (window.confirm('Are you sure you want to delete this interview?')) {
-
-      console.log(interviewID);
-
       try {
         const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Delete_interviews?interviewID=${interviewID}`);
-        console.log(response.data);
         alert('Interview deleted successfully');
         fetchInterviews();
       } catch (error) {
@@ -86,7 +74,6 @@ function Interviews() {
       }
     }
   };
-
 
   return (
     <div className="interviews-container">
@@ -111,16 +98,14 @@ function Interviews() {
       {loading && <Loader />}
       <div className="interviews-list">
         {filteredInterviews.map((interview) => (
-          // The entire interview item is now clickable
           <div key={interview.interviewID} className="interview-item" onClick={() => handleInterviewItemClick(interview.interviewID)}>
-
-            <p>Interviewer: {interview.interviewer}</p>
-            <p>Interviewee: {interview.interviewee}</p>
-            <p>Interviewed On: {interview.interviewedOn}</p>
-            <p>Job Position: {interview.jobPosition}</p>
-            <button id="jobinterview-delete" onClick={(e) => {
-              handleDelete(interview.interviewID, e);
-            }}></button>
+            <p><strong>Interviewer:</strong> {interview.interviewer}</p>
+            <p><strong>Interviewee:</strong> {interview.interviewee}</p>
+            <p><strong>Interviewed On:</strong> {interview.interviewedOn}</p>
+            <p><strong>Job Position:</strong> {interview.jobPosition}</p>
+            <div className="button-container">
+              <button className="jobinterview-delete" onClick={(e) => { handleDelete(interview.interviewID, e); }}></button>
+            </div>
           </div>
         ))}
       </div>

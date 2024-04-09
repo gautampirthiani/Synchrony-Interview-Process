@@ -50,8 +50,8 @@
 
 
 .portal-header-container {
-  text-align: center; /* Center the portal header text */
-  margin: 20px 0;
+  text-align: center;
+  margin: 0;
 }
 
 .recruiting-portal-header {
@@ -60,13 +60,11 @@
 }
 
 .search-container {
-  display: flex;
-  justify-content: center; /* Center search bar container */
-  padding: 20px;
+  flex: 1;
 }
 
 .search-bar {
-  width: 50%; /* Or any other width as per design */
+  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -85,8 +83,8 @@
   color: #000; /* Set text color to black for contrast */
   margin-bottom: 10px;
   padding: 15px;
-  border-radius: 5px;
-  width: 80%; /* Adjust the width as needed */
+  border-radius: 10px;
+  width: 80%;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   /* existing styles */
   transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for click and hover effects */

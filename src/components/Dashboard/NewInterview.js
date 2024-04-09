@@ -29,6 +29,20 @@ function NewInterview() {
       }
     };
     fetchPositions();
+  }, [currentPage, positionsPerPage]);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUsername(currentUser.username);
+        setAddedBy(currentUser.username); 
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    fetchUserDetails();
   }, []);
 
   useEffect(() => {

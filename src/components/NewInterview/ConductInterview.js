@@ -5,6 +5,7 @@ import logoImage from '../synchrony-logo-1.png';
 import './ConductInterview.css';
 import Navbar from '../Navbar';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentUser } from '@aws-amplify/auth'; // Import getCurrentUser
 
 function ConductInterview() {
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
@@ -32,6 +33,11 @@ function ConductInterview() {
       second_input.style.height = greater_height + 'px';
     });
   };
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    getCurrentUser().then(user => setUsername(user.username)); // Fetch current user's username
+  }, []);
 
   function updateAdditionalInputsFromMultiple(items, fetchedTemplateId) {
     const newItems = items.map(item => ({
@@ -52,6 +58,8 @@ function ConductInterview() {
       updateAdditionalInputsFromMultiple(questions, fetchedTemplateId);
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,7 +85,8 @@ function ConductInterview() {
         // Send the jobId as a query parameter and the rest of the body as JSON
         await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
           Name: candidateName,
-          Questions: questionsPayload
+          Questions: questionsPayload,
+          Interviewer: username // Include username in the request payload
         });
 
         alert('Interview submitted successfully!');
@@ -87,7 +96,6 @@ function ConductInterview() {
       }
     }
   };
-
 
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
