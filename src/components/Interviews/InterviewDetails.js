@@ -96,7 +96,6 @@ function InterviewDetails() {
       {loading && <Loader />}
       <div id="update-interview-info" >
         <p>Interviewer: {interviewDetails.interviewer}</p>
-        <p>Job ID: {interviewDetails.jobID}</p>
         <p>Interviewed On: {interviewDetails.interviewedOn}</p>
         <p>Candidate Name: {interviewDetails.name}</p>
       </div>

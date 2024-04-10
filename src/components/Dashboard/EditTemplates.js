@@ -13,7 +13,7 @@ function EditTemplates() {
   const [positionsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ jobId: '', jobPosition: '', departments: [] });
+  const [formData, setFormData] = useState({ jobPosition: '', departments: [] });
   const [username, setUsername] = useState('');
   const [userDepartments, setUserDepartments] = useState([]);
   const navigate = useNavigate();
@@ -108,7 +108,7 @@ function EditTemplates() {
     setShowModal(false);
     try {
       await axios.post('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/jobPosition_create', extendedFormData);
-      setFormData({ jobId: '', jobPosition: '', departments: [] });
+      setFormData({ jobPosition: '', departments: [] });
       alert('Job position created successfully!');
       fetchPositions();
     } catch (error) {
@@ -138,7 +138,7 @@ function EditTemplates() {
   const totalPages = Math.ceil(filterPositions().length / positionsPerPage);
 
   function Modal({ isOpen, onClose, onSubmit }) {
-    const [localFormData, setLocalFormData] = useState({ jobId: '', jobPosition: '', departments: [] });
+    const [localFormData, setLocalFormData] = useState({jobPosition: '', departments: [] });
 
     if (!isOpen) return null;
 
@@ -163,7 +163,7 @@ function EditTemplates() {
 
     const modal_handleSubmit = () => {
       onSubmit(localFormData);
-      setLocalFormData({ jobId: '', jobPosition: '', departments: [] });
+      setLocalFormData({ jobPosition: '', departments: [] });
     };
 
     return (
@@ -171,7 +171,6 @@ function EditTemplates() {
         <div className="modal-content">
           <span className="close" onClick={onClose}>&times;</span>
           <h1>New Job Position</h1>
-          <input type="text" placeholder="Job ID" name="jobId" value={localFormData.jobId} onChange={handleChange} />
           <input type="text" placeholder="Job Position" name="jobPosition" value={localFormData.jobPosition} onChange={handleChange} />
           <h2>Select Department(s) for The Job Position</h2>
           {userDepartments.map((dept, index) => (
@@ -216,7 +215,6 @@ function EditTemplates() {
       <div className="position-list">
         {displayedPositions.map((position) => (
           <div key={position['Job ID']} className="position-item" onClick={() => handlePositionClick(position['Job ID'])}>
-            <div className="position-detail"><strong>Job ID:</strong> {position['Job ID']}</div>
             <div className="position-detail"><strong>Job Position:</strong> {position['Job Position']}</div>
             <div className="position-detail">
               <strong>Department:</strong> 

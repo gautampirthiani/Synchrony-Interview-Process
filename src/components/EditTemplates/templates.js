@@ -111,11 +111,6 @@ function Templates() {
 
   return (
     <div className="templates-container">
-      <div className="back-button-container">
-        <Link to="/dashboard/edit-templates" className="back-button">
-          <FiArrowLeft /> Back
-        </Link>
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Templates</h1>
         <input
@@ -125,9 +120,11 @@ function Templates() {
           onChange={handleSearch}
           className="search-bar"
         />
+        <div className="create-new-templates-container">
         <button onClick={handleCreateNewClick} className="create-new-templates-btn">
           Create New Templates
         </button>
+        </div>
       </div>
       {loading && <Loader />}
       <div className="templates-list">
@@ -142,7 +139,6 @@ function Templates() {
           >
 
             <div className="template-details">
-              <div className="template-detail"><strong>Job ID:</strong> {template["Job ID"]}</div>
               <div className="template-detail"><strong>Template ID:</strong> {template["Template ID"]}</div>
               <div className="template-detail"><strong>Created On:</strong> {template["Created On"] || 'Not Available'}</div>
             </div>

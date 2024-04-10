@@ -107,9 +107,6 @@ function Interviews() {
         {currentPositions.map((position) => (
           <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'], position['Job Position'])} className="position-item">
             <div className="position-detail">
-              <strong>Job ID:</strong> {position['Job ID']}
-            </div>
-            <div className="position-detail">
               <strong>Job Position:</strong> {position['Job Position']}
             </div>
             <div className="position-detail">

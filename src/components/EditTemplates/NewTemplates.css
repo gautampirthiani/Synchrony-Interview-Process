@@ -8,6 +8,7 @@
     width: 100%; /* Ensure container takes full width */
     margin: 0; /* Reset any default margin */
     padding: 0; /* Reset any default padding */
+    padding-top: 0px;
   }
   
   /* Reuse header and logo styles */
@@ -135,6 +136,7 @@
   .templates-container {
     margin: 1rem;
     padding: 0.5rem;
+    
   }
 
   

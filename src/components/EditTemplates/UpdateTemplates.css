@@ -8,6 +8,7 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    padding-top: 10px; /* Reduce this value to decrease white space at the top */
 
 }
 
@@ -149,7 +150,3 @@
     color: black;
 }
 
-.templates-container {
-    margin: 1rem;
-    padding: 0.5rem;
-}

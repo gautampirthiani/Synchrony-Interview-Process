@@ -5,6 +5,7 @@
   background-color: #002244; /* Very dark blue background for the rest of the page */
   color: white;
   min-height: 100vh;
+  padding-top: 10px;
 }
 
 .header {

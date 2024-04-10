@@ -3,11 +3,12 @@
   background-color: #002244;
   color: white;
   min-height: 100vh;
+  padding-top: 10px;
 }
 
 .portal-header-container {
   text-align: center;
-  margin: 20px 0;
+  margin: 0;
 }
 
 .recruiting-portal-header {
