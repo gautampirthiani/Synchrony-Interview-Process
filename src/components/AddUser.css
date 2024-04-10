@@ -81,19 +81,22 @@
 }
 
 .add-btn,
-.remove-btn {
+.remove-btn,
+.update-btn,
+.delete-btn {
   padding: 8px 16px;
   font-size: 14px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  margin-left: 5px;
   background-color: #007bff;
   color: #fff;
 }
 
 .add-btn:hover,
-.remove-btn:hover {
+.remove-btn:hover,
+.update-btn:hover,
+.delete-btn:hover {
   background-color: #0056b3;
 }
 
@@ -154,7 +157,7 @@
 
 .delete-btn {
   padding: 8px 16px;
-  font-size: 2px;
+  font-size: 14px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
@@ -183,4 +186,35 @@
 .department-table td:last-child .delete-btn {
   margin-left: auto;
   display: block;
+}
+
+.update-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #17a2b8; 
+  color: #fff; 
+}
+
+.update-btn:hover {
+  background-color: #138496; 
+}
+
+.modal .update-btn {
+  background-color: #17a2b8; 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  display: block; 
+  margin: 20px 0; 
+}
+
+.modal .update-btn:hover {
+  background-color: #138496; 
 }

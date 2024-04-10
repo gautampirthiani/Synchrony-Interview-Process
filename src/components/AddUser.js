@@ -19,13 +19,14 @@ function AddUserForm() {
   const [notification, setNotification] = useState('');
   const [loadingData, setLoadingData] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedDepartmentsUpdate, setSelectedDepartmentsUpdate] = useState([]);
 
   useEffect(() => {
     getCurrentUser().then(user => {
       setCurrentUser(user);
       fetchInitialData();
     }).catch(error => {
-      console.log('Error fetching user:', error);
       setCurrentUser(null);
     });
   }, []);
@@ -40,9 +41,6 @@ function AddUserForm() {
     const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList';
     try {
       const response = await fetch(apiEndpoint);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
       const data = await response.json();
       setDepartments(data);
     } catch (error) {
@@ -54,9 +52,6 @@ function AddUserForm() {
     const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/PullData';
     try {
       const response = await fetch(apiEndpoint);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
       const data = await response.json();
       setUsers(data);
       setLoadingData(false);
@@ -69,9 +64,6 @@ function AddUserForm() {
     const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment';
     try {
       const response = await fetch(apiEndpoint);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
       const data = await response.json();
       setDepartmentList(data);
     } catch (error) {
@@ -121,9 +113,6 @@ function AddUserForm() {
       body: userData,
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
     setMessage("User Successfully Created");
     setUsername('');
     setPassword('');
@@ -143,10 +132,6 @@ function AddUserForm() {
         },
         body: JSON.stringify({ username: usernameToDelete }),
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
       const updatedUsers = users.filter(user => user.username !== usernameToDelete);
       setUsers(updatedUsers);
@@ -171,10 +156,6 @@ function AddUserForm() {
         body: JSON.stringify({ department_name: departmentNameToDelete }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       const updatedDepartments = departmentList.filter(department => department.department !== departmentNameToDelete);
       setDepartmentList(updatedDepartments);
       setNotification("Department Deleted Successfully");
@@ -187,75 +168,125 @@ function AddUserForm() {
     }
   };
 
+  const toggleUpdateModal = () => {
+    setIsUpdateModalOpen(!isUpdateModalOpen);
+    if (!isUpdateModalOpen) {
+      setSelectedDepartmentsUpdate([]);
+    }
+  };
+
+  const handleUpdateDepartmentChange = (department) => {
+    const index = selectedDepartmentsUpdate.indexOf(department);
+    if (index === -1) {
+      setSelectedDepartmentsUpdate([...selectedDepartmentsUpdate, department]);
+    } else {
+      const updatedDepartments = [...selectedDepartmentsUpdate];
+      updatedDepartments.splice(index, 1);
+      setSelectedDepartmentsUpdate(updatedDepartments);
+    }
+  };
+
+  const handleUpdate = async (usernameToUpdate) => {
+    const apiEndpoint = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/UpdateUser';
+    const updateData = JSON.stringify({
+      username: usernameToUpdate,
+      department: selectedDepartmentsUpdate,
+    });
+
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: updateData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setMessage("User Successfully Updated");
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+      toggleUpdateModal();
+    } catch (error) {
+      console.error('Error updating user:', error.message);
+      setMessage("Error updating user");
+    }
+  };
+
   if (currentUser?.username?.toLowerCase() !== 'admin') {
     return <div className="body-container">You do not have access to this page.</div>;
   }
 
-  return (
-    <div className="body-container">
-      <div className="logo-container">
-        <img src={logo} alt="Synchrony Logo" className="logo" />
-      </div>
-      {loadingData ? (
-        <Loader />
-      ) : (
-        <div className="content-container">
-          <div className="form-container">
-            <h2>Add Users</h2>
-            <form onSubmit={handleSubmit} className="form-container">
-              <div className="form-group">
-                <label htmlFor="username" className="form-label">Username:</label>
-                <input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  className="form-input"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password" className="form-label">Password:</label>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="form-input"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email" className="form-label">Email:</label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="form-input"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Departments:</label>
-                {selectedDepartments.map((department, index) => (
-                  <div key={index} className="dynamic-department">
-                    <select
-                      value={department}
-                      onChange={handleDepartmentChange(index)}
-                      required
-                      className="form-input"
-                    >
-                      <option value="">Select a Department</option>
-                      {departments.map((dept, i) => (
-                        <option key={i} value={dept}>
-                          {dept}
-                        </option>
-                      ))}
-                    </select>
-                    <button type="button" onClick={removeDepartmentField(index)} className="remove-btn">Remove</button>
-                  </div>
-                ))}
+return (
+  <div className="body-container">
+    <div className="logo-container">
+      <img src={logo} alt="Synchrony Logo" className="logo" />
+    </div>
+    {loadingData ? (
+      <Loader />
+    ) : (
+      <div className="content-container">
+        <div className="form-container">
+          <h2>Add Users</h2>
+          <form onSubmit={handleSubmit} className="form-container">
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">Username:</label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">Password:</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">Email:</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Departments:</label>
+              {selectedDepartments.map((department, index) => (
+                <div key={index} className="dynamic-department">
+                  <select
+                    value={department}
+                    onChange={handleDepartmentChange(index)}
+                    required
+                    className="form-input"
+                  >
+                    <option value="">Select a Department</option>
+                    {departments.map((dept, i) => (
+                      <option key={i} value={dept}>
+                        {dept}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="button" onClick={removeDepartmentField(index)} className="remove-btn">Remove</button>
+                </div>
+              ))}
+              <div className="department-buttons">
                 <button type="button" onClick={addDepartmentField} className="add-btn">Add Department</button>
                 {showCustomDepartmentField && (
                   <div className="dynamic-department">
@@ -272,63 +303,92 @@ function AddUserForm() {
                   Create New Department
                 </button>
               </div>
-              <button type="submit" className="form-button" disabled={isLoading}>
-                {isLoading ? 'Creating...' : 'Submit'}
-              </button>
-              {message && <div className={message.startsWith('ERROR') ? 'error-message' : 'success-message'}>{message}</div>}
-            </form>
+            </div>
+            <button type="submit" className="form-button" disabled={isLoading}>
+              {isLoading ? 'Creating...' : 'Submit'}
+            </button>
+            {message && <div className={message.startsWith('Error') ? 'error-message' : 'success-message'}>{message}</div>}
+          </form>
+        </div>
+        <div className="table-container">
+          <div className="user-table">
+            <h2>User Table</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Departments</th>
+                  <th>Delete</th>
+                  <th>Update</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user, index) => (
+                  <tr key={index}>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                    <td>{user.department ? user.department.join(', ') : ''}</td>
+                    <td><button className="delete-btn" onClick={() => handleDeleteUser(user.username)}>Delete</button></td>
+                    <td><button className="update-btn" onClick={() => { toggleUpdateModal(); setSelectedDepartmentsUpdate(user.department || []); setMessage(`Update User: ${user.username}`); }}>Update</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="table-container">
-            <div className="user-table">
-              <h2>User Table</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Departments</th>
-                    <th>Delete</th>
+          <div className="department-table">
+            <h2>Department Table</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th>Users</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {departmentList.map((department, index) => (
+                  <tr key={index}>
+                    <td>{department.department}</td>
+                    <td>{department.users ? department.users.join(', ') : ''}</td>
+                    <td><button className="delete-btn" onClick={() => handleDeleteDepartment(department.department)}>Delete</button></td>
                   </tr>
-                </thead>
-                <tbody>
-                  {users.map((user, index) => (
-                    <tr key={index}>
-                      <td>{user.username}</td>
-                      <td>{user.email}</td>
-                      <td>{user.department ? user.department.join(', ') : ''}</td>
-                      <td><button className="delete-btn" onClick={() => handleDeleteUser(user.username)}>Delete</button></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="department-table">
-              <h2>Department Table</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Department</th>
-                    <th>Users</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {departmentList.map((department, index) => (
-                    <tr key={index}>
-                      <td>{department.department}</td>
-                      <td>{department.users ? department.users.join(', ') : ''}</td>
-                      <td><button className="delete-btn" onClick={() => handleDeleteDepartment(department.department)}>Delete</button></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      )}
-      {notification && <div className="notification">{notification}</div>}
-    </div>
-  );
+      </div>
+    )}
+    {notification && <div className="notification">{notification}</div>}
+    {isUpdateModalOpen && (
+      <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={toggleUpdateModal}>&times;</span>
+          <h2>Update User: {message.split(": ")[1]}</h2>
+          <form onSubmit={(e) => { e.preventDefault(); handleUpdate(message.split(": ")[1]); }}>
+            {departments.map((department, index) => (
+              <div key={index} className="checkbox-group">
+                <input
+                  type="checkbox"
+                  id={`update-${department}`}
+                  value={department}
+                  checked={selectedDepartmentsUpdate.includes(department)}
+                  onChange={() => handleUpdateDepartmentChange(department)}
+                />
+                <label htmlFor={`update-${department}`}>{department}</label>
+              </div>
+            ))}
+            <button type="submit" className="update-btn">Update</button>
+          </form>
+        </div>
+      </div>
+    )}
+  </div>
+);
+
+  
 }
 
 export default AddUserForm;
+
