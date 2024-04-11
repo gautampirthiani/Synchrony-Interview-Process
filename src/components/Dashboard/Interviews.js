@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getCurrentUser } from '@aws-amplify/auth';
 import './Interviews.css';
 import Loader from '../Loader';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Interviews() {
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ function Interviews() {
   }, []);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
+    const fetchUserDetails = async () => {
       try {
         const currentUser = await getCurrentUser();
         setUsername(currentUser.username);
@@ -50,48 +50,43 @@ function Interviews() {
           }
         }
       } catch (error) {
-        console.error('Error fetching user information:', error);
+        console.error('Error fetching user details:', error);
       }
     };
 
-    fetchCurrentUser();
+    fetchUserDetails();
   }, []);
 
   const filterPositions = () => {
-    const searchTermLower = searchTerm.toLowerCase();
-    return positions.filter(position => {
-      const jobPositionLower = position['Job Position'].toLowerCase();
-      const jobIDString = position['Job ID'].toString();
-      const departmentLower = Array.isArray(position['Departments']) ? 
-        position['Departments'].map(dept => dept.toLowerCase()) : [];
-      const usernameLower = position['Username']?.toLowerCase();
-
-      return jobPositionLower.includes(searchTermLower) ||
-        jobIDString.includes(searchTerm) ||
-        (departmentLower && departmentLower.some(dept => dept.includes(searchTermLower))) ||
-        (usernameLower && usernameLower.includes(searchTermLower));
+    const filteredPositions = positions.filter(position => {
+      const jobID = position['Job ID'].toString().toLowerCase();
+      const jobPosition = position['Job Position'].toLowerCase();
+      const departmentLower = position['Departments']?.map(dept => dept.toLowerCase()) || [];
+      return jobID.includes(searchTerm) ||
+             jobPosition.includes(searchTerm) ||
+             departmentLower.some(dept => dept.includes(searchTerm));
     }).filter(position => 
       username === 'admin' || position['Departments']?.some(dept => userDepartments.includes(dept))
     );
+    return filteredPositions;
   };
 
-  const indexOfLastPosition = currentPage * positionsPerPage;
-  const indexOfFirstPosition = indexOfLastPosition - positionsPerPage;
-  const currentPositions = filterPositions().slice(indexOfFirstPosition, indexOfLastPosition);
-
+  const currentPositions = filterPositions().slice((currentPage - 1) * positionsPerPage, currentPage * positionsPerPage);
   const totalPages = Math.ceil(filterPositions().length / positionsPerPage);
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+
+  const handleSearch = event => {
+    setSearchTerm(event.target.value.toLowerCase());
     setCurrentPage(1);
   };
 
-  const handlePositionClick = (JobID) => {
-    navigate(`/dashboard/templates/${JobID}`);
+  const handlePositionClick = (jobId, jobPosition) => {
+    navigate(`/interviews/job-interviews/${jobId}/${jobPosition}`);
   };
 
   return (
-    <div className="edit-templates-container">
+    <div className="interviews-container">
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Interviews</h1>
       </div>
@@ -110,7 +105,7 @@ function Interviews() {
             &lt;
           </button>
           Page {currentPage} of {totalPages}
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage >= totalPages}>
+          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
             &gt;
           </button>
         </div>
@@ -118,13 +113,16 @@ function Interviews() {
       {loading && <Loader />}
       <div className="position-list">
         {currentPositions.map((position) => (
-          <div key={position['Job ID']} className="position-item" onClick={() => handlePositionClick(position['Job ID'])}>
-            <div className="position-detail"><strong>Job Position:</strong> {position['Job Position']}</div>
+          <div key={position['Job ID']} onClick={() => handlePositionClick(position['Job ID'], position['Job Position'])} className="position-item">
             <div className="position-detail">
-              <strong>Department:</strong> 
-              {Array.isArray(position['Departments']) ? position['Departments'].join(', ') : 'No Department'}
+              <strong>Job Position:</strong> {position['Job Position']}
             </div>
-            <div className="position-detail"><strong>Added by:</strong> {position['Username']}</div>
+            <div className="position-detail">
+              <strong>Added by:</strong> {position['Username'] || 'N/A'}
+            </div>
+            <div className="position-detail">
+              <strong>Departments:</strong> {position['Departments'] ? position['Departments'].join(', ') : 'N/A'}
+            </div>
           </div>
         ))}
       </div>
