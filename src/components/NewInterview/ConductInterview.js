@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ConductInterview.css';
 import Loader from '../Loader';
-import { getCurrentUser } from '@aws-amplify/auth'; // Import getCurrentUser
+import { getCurrentUser } from '@aws-amplify/auth';
 
 function ConductInterview() {
   const [loading, setLoading] = useState(false);
@@ -15,38 +15,64 @@ function ConductInterview() {
   const [username, setUsername] = useState('');
 
   useEffect(() => {
-    getCurrentUser().then(user => setUsername(user.username)); // Fetch current user's username
-  }, []);
-
-  function updateAdditionalInputsFromMultiple(items, fetchedTemplateId) {
-    const newItems = items.map(item => ({
-      question: item.Question,
-      answer: item.Answer,
-      score: item.Score
-    }));
-    setAdditionalInputs(newItems);
-    setTemplateId(fetchedTemplateId);
-  }
+    getCurrentUser().then(user => {
+      setUsername(user.username);
+      if (jobId) {
+        axios.post('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDefaultTemplate', {
+          username: user.username,
+          jobID: jobId
+        })
+        .then(response => {
+          setTemplateId(response.data.templateID);
+        })
+        .catch(error => console.error('Error fetching default template:', error));
+      }
+    });
+  }, [jobId]);
 
   const fetchdata = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/New-Interview?jobId=${jobId}`);
-      const fetchedTemplateId = response.data['Template ID'];
-      const questions = response.data.Questions || [];
-      updateAdditionalInputsFromMultiple(questions, fetchedTemplateId);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
+    if (templateId && jobId) {
+      try {
+        setLoading(true);
+        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/New-Interview`, {
+          params: { jobId, templateId }
+        });
+        const questions = response.data.questions || [];
+        updateAdditionalInputsFromMultiple(questions);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   useEffect(() => {
-    if (jobId) {
-      fetchdata();
-    }
-  }, [jobId]);
+    fetchdata();
+  }, [jobId, templateId]);
+
+  function updateAdditionalInputsFromMultiple(questions) {
+    const newItems = questions.map(q => ({
+      question: q.Question,
+      answer: q.Answer,
+      score: q.Score
+    }));
+    setAdditionalInputs(newItems);
+  }
+
+  const handleAdditionalInputChange = (index, key, value) => {
+    setAdditionalInputs(inputs =>
+      inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
+    );
+  };
+
+  const addInputPair = () => {
+    setAdditionalInputs([...additionalInputs, { question: '', answer: '', score: '' }]);
+  };
+
+  const removeInputPair = (index) => {
+    setAdditionalInputs(inputs => inputs.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -66,22 +92,10 @@ function ConductInterview() {
 
         alert('Interview submitted successfully!');
         navigate(`/dashboard/new-interview`);
-      } catch (error) {
+      } catch ( error) {
         console.error('Error submitting new interview:', error);
       }
     }
-  };
-
-  const handleAdditionalInputChange = (index, key, value) => {
-    setAdditionalInputs(inputs =>
-      inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
-    );
-  };
-  const addInputPair = () => {
-    setAdditionalInputs([...additionalInputs, { question: '', answer: '', score: '' }]);
-  };
-  const removeInputPair = (index) => {
-    setAdditionalInputs(inputs => inputs.filter((_, i) => i !== index));
   };
 
   return (
@@ -92,7 +106,7 @@ function ConductInterview() {
       {loading && <Loader />}
       <div id="job-template-info">
         <p>Job ID: {jobId}</p>
-        {templateId && <p>Template ID: {templateId}</p>}
+        <p>Template ID: {templateId}</p> {/* Display Template ID below Job ID */}
         <input
           type="text"
           placeholder="Candidate Name"
