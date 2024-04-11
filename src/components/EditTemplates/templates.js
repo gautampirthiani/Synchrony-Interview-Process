@@ -16,28 +16,25 @@ function Templates() {
 
   useEffect(() => {
     setLoading(true);
-    getCurrentUser()
-      .then(user => {
-        setUsername(user.username);
-        return axios.post('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDefaultTemplate', {
-          username: user.username,
-          jobID: JobID
-        });
-      })
-      .then(response => {
-        const defaultTemplateId = response.data.templateID;
-        setDefaultTemplateId(defaultTemplateId);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        setLoading(false);
+    getCurrentUser().then(user => {
+      setUsername(user.username);
+      return axios.post('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDefaultTemplate', {
+        username: user.username,
+        jobID: JobID
       });
+    }).then(response => {
+      const defaultTemplateId = response.data.templateID;
+      setDefaultTemplateId(defaultTemplateId);
+      setLoading(false);
+    }).catch(error => {
+      console.error('Error:', error);
+      setLoading(false);
+    });
   }, [JobID]);
 
   useEffect(() => {
     fetchTemplates();
-  }, []);
+  }, [JobID]);
 
   const fetchTemplates = async () => {
     try {
@@ -66,7 +63,6 @@ function Templates() {
   const toggleDefaultTemplate = async (event, templateId) => {
     event.stopPropagation();
     const apiUrl = 'https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/SetDefaultTemplate';
-
     try {
       await axios.post(apiUrl, {
         jobID: JobID,
@@ -77,11 +73,22 @@ function Templates() {
           'Content-Type': 'application/json'
         }
       });
-
       setDefaultTemplateId(templateId);
       await fetchTemplates();
     } catch (error) {
       console.error('Error setting default template:', error);
+    }
+  };
+
+  const handleDelete = async (templateId, event) => {
+    event.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this template?')) {
+      try {
+        await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/delete_templates?jobId=${JobID}&templateId=${templateId}`);
+        await fetchTemplates();
+      } catch (error) {
+        console.error('Error deleting template:', error);
+      }
     }
   };
 
@@ -95,19 +102,6 @@ function Templates() {
     template["Template ID"].toLowerCase().includes(searchTerm.toLowerCase()) ||
     template["Job ID"].toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleDelete = async (jobid, templateId, event) => {
-    event.stopPropagation();
-
-    if (window.confirm('Are you sure you want to delete this template?')) {
-      try {
-        await axios.delete(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/delete_templates?jobId=${jobid}&templateId=${templateId}`);
-        await fetchTemplates();
-      } catch (error) {
-        console.error('Error deleting template:', error);
-      }
-    }
-  };
 
   return (
     <div className="templates-container">
@@ -142,7 +136,7 @@ function Templates() {
             <div className="button-container">
               <button
                 className="delete-button"
-                onClick={(e) => handleDelete(JobID, template["Template ID"], e)}
+                onClick={(e) => handleDelete(template["Template ID"], e)}
               >
                 Delete
               </button>
