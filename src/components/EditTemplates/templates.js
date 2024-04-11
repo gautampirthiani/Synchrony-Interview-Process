@@ -19,33 +19,31 @@ function Templates() {
     getCurrentUser()
       .then(user => {
         setUsername(user.username);
-        return axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
+        return axios.post('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDefaultTemplate', {
+          username: user.username,
+          jobID: JobID
+        });
       })
       .then(response => {
-        const templatesData = response.data;
-        setTemplates(templatesData);
-        const defaultTemplate = templatesData.find(template => template.default === true);
-        if (defaultTemplate) {
-          setDefaultTemplateId(defaultTemplate['Template ID']);
-        }
+        const defaultTemplateId = response.data.templateID;
+        setDefaultTemplateId(defaultTemplateId);
+        setLoading(false);
       })
       .catch(error => {
         console.error('Error:', error);
-      })
-      .finally(() => {
         setLoading(false);
       });
   }, [JobID]);
+
+  useEffect(() => {
+    fetchTemplates();
+  }, []);
 
   const fetchTemplates = async () => {
     try {
       const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Get_Template?jobId=${JobID}`);
       const templatesData = response.data;
       setTemplates(templatesData);
-      const defaultTemplate = templatesData.find(template => template.default === true);
-      if (defaultTemplate) {
-        setDefaultTemplateId(defaultTemplate['Template ID']);
-      }
     } catch (error) {
       console.error('Error fetching templates:', error);
     } finally {
