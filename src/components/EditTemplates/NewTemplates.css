@@ -10,6 +10,14 @@
     padding: 0; /* Reset any default padding */
     padding-top: 0px;
   }
+  .template-name-input
+  {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 1000000px; 
+    margin-left: 0px;
+  }
   
   /* Reuse header and logo styles */
   .header {

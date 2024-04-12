@@ -130,8 +130,12 @@ function Templates() {
             style={{ cursor: 'pointer' }}
           >
             <div className="template-details">
-              <div className="template-detail"><strong>Template ID:</strong> {template["Template ID"]}</div>
+              <div className="template-detail"><strong>Template Name:</strong> {template["Template Name"]}</div>
               <div className="template-detail"><strong>Created On:</strong> {template["Created On"] || 'Not Available'}</div>
+               {/* Render Updated On only if it exists and is not 'N/A' */}
+               {template["Updated On"] && template["Updated On"] !== 'N/A' && (
+              <div className="template-detail"><strong>Updated On:</strong> {template["Updated On"]}</div>
+          )}
             </div>
             <div className="button-container">
               <button

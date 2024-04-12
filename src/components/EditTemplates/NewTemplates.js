@@ -8,6 +8,8 @@ function NewTemplates() {
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const { jobId } = useParams();
   const navigate = useNavigate();
+  const [templateName, setTemplateName] = useState('');
+
 
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
@@ -27,6 +29,7 @@ function NewTemplates() {
       const payload = {
         jobId,
         templateId,
+        templateName,
         questions: additionalInputs.map(({ question, answer, score }) => ({
           Question: question,
           Answer: answer,
@@ -61,10 +64,22 @@ function NewTemplates() {
     setAdditionalInputs(inputs => inputs.filter((_, i) => i !== index));
   };
 
+  const handleTemplateNameChange = (event) => {
+    setTemplateName(event.target.value);
+  };
+  
+
   return (
     <div className="new-templates-container">
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">New Templates</h1>
+        <input
+          type="text"
+          placeholder="Template Name"
+          value={templateName}
+          onChange={handleTemplateNameChange}
+          className="template-name-input"
+        />
       </div>
       <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
       <button id="save-new-templates-btn" onClick={handleSubmit}>Submit</button>
