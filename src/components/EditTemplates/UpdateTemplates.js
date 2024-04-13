@@ -8,6 +8,13 @@ function UpdateTemplates() {
   const [loading, setLoading] = useState(false);
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const { jobId, templateId } = useParams();
+  const [templateName, setTemplateName] = useState(''); 
+  const [jobPosition, setJobPosition] = useState(''); 
+
+  useEffect(() => {
+    fetchdata();
+    query_job_positon();
+  }, []);
 
   function updateAdditionalInputsFromMultiple(items) {
     const newItems = items.map(item => ({
@@ -17,6 +24,24 @@ function UpdateTemplates() {
     }));
     setAdditionalInputs(newItems);
   }
+  // Query job positon
+  const query_job_positon = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/get_jobPosition?jobId=${jobId}`);
+      // console.log("11")
+      // console.log(response.data)
+      setJobPosition(response.data)
+
+    } catch (error) {
+      // console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
+
   
 
   //Fetch
@@ -24,6 +49,10 @@ function UpdateTemplates() {
     try {
       setLoading(true);
       const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Template?jobId=${jobId}&templateId=${templateId}`);
+      // console.log(response.data)
+      // console.log(response.data['Template Name']);
+      // console.log(response.data['Template ID']);
+      setTemplateName(response.data['Template Name']);
       updateAdditionalInputsFromMultiple(response.data.Questions);
     } catch (error) {
       // console.error('Error fetching data:', error);
@@ -57,10 +86,6 @@ function UpdateTemplates() {
       }
     };
 
-    useEffect(() => {
-    fetchdata();
-  }, []);
-
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
       inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
@@ -80,8 +105,8 @@ function UpdateTemplates() {
       </div>
       {loading && <Loader />}
       <div id="job-template-info">
-        <p>Job ID: {jobId}</p>
-        <p>Template ID: {templateId}</p>
+        <p>Job Position: {jobPosition}</p>
+        <p>Template Name: {templateName}</p>
       </div>
       <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
       <button id="save-new-templates-btn" onClick={handleUpdate}>Update</button>

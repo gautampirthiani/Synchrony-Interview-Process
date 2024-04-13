@@ -13,6 +13,8 @@ function ConductInterview() {
   const { jobId } = useParams();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
+  const [templateName, setTemplateName] = useState('');
+  const [jobPosition, setJobPosition] = useState('');
 
   useEffect(() => {
     getCurrentUser().then(user => {
@@ -22,13 +24,35 @@ function ConductInterview() {
           username: user.username,
           jobID: jobId
         })
-        .then(response => {
-          setTemplateId(response.data.templateID);
-        })
-        .catch(error => console.error('Error fetching default template:', error));
+          .then(response => {
+            setTemplateId(response.data.templateID);
+          })
+          .catch(error => console.error('Error fetching default template:', error));
       }
     });
   }, [jobId]);
+
+  useEffect(() => {
+    fetchdata();
+    query_job_positon();
+  }, [jobId, templateId]);
+
+  // Query job positon
+  const query_job_positon = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/get_jobPosition?jobId=${jobId}`);
+      // console.log("11")
+      // console.log(response.data)
+      setJobPosition(response.data)
+
+    } catch (error) {
+      // console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
 
   const fetchdata = async () => {
     if (templateId && jobId) {
@@ -37,6 +61,9 @@ function ConductInterview() {
         const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/New-Interview`, {
           params: { jobId, templateId }
         });
+
+        // console.log(response)
+        setTemplateName(response.data['Template Name']);
         const questions = response.data.questions || [];
         updateAdditionalInputsFromMultiple(questions);
       } catch (error) {
@@ -46,10 +73,6 @@ function ConductInterview() {
       }
     }
   };
-
-  useEffect(() => {
-    fetchdata();
-  }, [jobId, templateId]);
 
   function updateAdditionalInputsFromMultiple(questions) {
     const newItems = questions.map(q => ({
@@ -92,7 +115,7 @@ function ConductInterview() {
 
         alert('Interview submitted successfully!');
         navigate(`/dashboard/new-interview`);
-      } catch ( error) {
+      } catch (error) {
         console.error('Error submitting new interview:', error);
       }
     }
@@ -105,8 +128,8 @@ function ConductInterview() {
       </div>
       {loading && <Loader />}
       <div id="job-template-info">
-        <p>Job ID: {jobId}</p>
-        <p>Template ID: {templateId}</p> {/* Display Template ID below Job ID */}
+        <p>Job Position: {jobPosition}</p>
+        <p>Template Name: {templateName}</p> {/* Display Template ID below Job ID */}
         <input
           type="text"
           placeholder="Candidate Name"
