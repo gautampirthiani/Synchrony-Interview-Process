@@ -9,6 +9,10 @@ import { useNavigate } from 'react-router-dom';
 function ConductInterview() {
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const [candidateName, setCandidateName] = useState('');
+
+  const [email, setEmail] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
   const [templateId, setTemplateId] = useState(null); // New state variable for storing templateId
   const { jobId } = useParams();
   const navigate = useNavigate();
@@ -63,31 +67,68 @@ function ConductInterview() {
   }, [jobId]);
 
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (window.confirm('Submit new interview?')) {
-      const questionsPayload = additionalInputs.map(({ question, answer, score }) => ({
-        QuestionText: question,
-        Answer: answer,
-        Score: score
-      }));
+  const handleSubmit = async () => {
+    // This function will now only handle the API submission
+    const questionsPayload = additionalInputs.map(({ question, answer, score }) => ({
+      QuestionText: question,
+      Answer: answer,
+      Score: score
+    }));
 
-      try {
-        // console.log(questionsPayload);
-        // Send the jobId as a query parameter and the rest of the body as JSON
-        await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
-          Name: candidateName,
-          Questions: questionsPayload
-        });
+    try {
+      await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
+        Name: candidateName,
+        Questions: questionsPayload,
+      });
 
-        alert('Interview submitted successfully!');
-        navigate(`/dashboard/new-interview`);
-      } catch (error) {
-        console.error('Error submitting new interview:', error);
-      }
+      alert('Interview submitted successfully!');
+      navigate(`/dashboard/new-interview`);
+    } catch (error) {
+      console.error('Error submitting new interview:', error);
     }
   };
 
+  const handleEmailSubmit = async (SendEmail) => {
+    const questionsPayload = additionalInputs.map(({ question, answer, score }) => ({
+      QuestionText: question,
+      Answer: answer,
+      Score: score
+    }));
+  
+    if (SendEmail && email) {
+      try {
+        const emailResponse = await axios.post('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/SendEmail', {
+          jobId: jobId,
+          email: email,
+          questions: questionsPayload
+        });
+        
+        console.log('Email response:', emailResponse);
+
+        // Check the response status code and the response data for a success message
+        if (emailResponse.status === 200 && emailResponse.data.message === 'Email sent successfully!') {
+          alert('Email sent successfully!');
+          handleSubmit();
+        } else {
+          alert('Received unexpected response: ' + JSON.stringify(emailResponse.data));
+        }
+      } catch (error) {
+          if (error.response) {
+            console.error('Error response:', error.response);
+            alert('Failed to send email: ' + error.response.data.message);
+          } else if (error.request) {
+            console.error('Error request:', error.request);
+            alert('Failed to send email, please check the email you submitted.');
+          } else {
+            console.error('Error message:', error.message);
+            alert('Failed to send email: ' + error.message);
+          }
+        }
+    } else {
+      // Submit the form if the email has been sent & chose not to sent
+      handleSubmit();
+    }
+  };
 
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
@@ -124,7 +165,7 @@ function ConductInterview() {
         />
       </div>
       <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
-      <button id="save-new-templates-btn" onClick={handleSubmit}>Submit</button>
+      <button id="save-new-templates-btn" onClick={() => setShowModal(true)}>Submit</button>
       {additionalInputs.map((input, index) => (
         <div key={index} className="additional-inputs-container">
           <textarea
@@ -155,8 +196,39 @@ function ConductInterview() {
           <button type="button" id="delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
         </div>
       ))}
+      <EmailTranscriptModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        email={email}
+        setEmail={setEmail}
+        onSubmit={handleEmailSubmit}
+      />
     </div>
   );
 }
 
-export default ConductInterview;
+function EmailTranscriptModal({ isOpen, onClose, email, setEmail, onSubmit }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>&times;</span>
+        <h2>Would you like to email the transcript?</h2>
+        <input
+          type="email"
+          placeholder="Enter email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <div className="modal-buttons">
+          <button onClick={() => onSubmit(true)}>Send Transcript & Submit</button>
+          <button onClick={() => onSubmit(false)}>Submit Without Sending</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+export default ConductInterview; 
