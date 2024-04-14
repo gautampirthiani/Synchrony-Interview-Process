@@ -1,78 +1,3 @@
-  .templates-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center template items */
-  }
-  
-  .template-item {
-    background-color: #fff;
-    color: #000;
-    margin-bottom: 10px; /* Space between template items */
-    padding: 15px;
-    border-radius: 5px;
-    width: 80%; /* Width of template items */
-    cursor: pointer; /* Change cursor to pointer to indicate clickability */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
-  }
-  
-  .template-item:hover {
-    background-color: #e8e8e8; /* Light grey background on hover */
-  }
-  
-  .template-detail {
-    margin: 0.5rem 0;
-  }
-  
-  .template-detail strong {
-    margin-right: 0.5rem;
-  }
-  
-  /* ... (rest of your styles) */
-  
-  .back-button-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 1rem; /* Adjust padding as necessary */
-    z-index: 10; /* Ensure it's above other content */
-  }
-  
-  .back-button {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: rgb(0, 0, 0); /* or any color you want for the text */
-    font-size: 1.2rem;
-  }
-  
-  /*
-  */
-  /* Styles for the main container */
-  .templates-container {
-    position: relative; /* Needed for absolute positioning of children */
-    /* ... other styles ... */
-  }
-  
-  /* Styles for the search container */
-  .search-container {
-    /* ... existing styles ... */
-  }
-  
-  /* Styles for the button */
-  .create-new-templates-btn {
-    padding: 10px 20px;
-    background-color: #007bff; /* or any other color that matches your design */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: absolute; /* Position the button absolutely within .templates-container */
-    right: 20px; /* Adjust as per your layout */
-    top: 225px; /* Adjust this to align with the search bar */
-  }
-  
-  /* 
-
   /* ConductInterview.css */
 
   .candidate-name-input {
@@ -81,10 +6,9 @@
     font-size: medium;
     height: 40px;
     position: relative;
-    top: -70px; /* Adjust this value to move the element up */
-    margin-bottom: -100px; /* Optional: to remove the space that the element would have occupied */
+    top: -70px;
+    margin-bottom: -100px;
   }
-
 
   /* Additional inputs container */
   .additional-inputs-container {
@@ -103,8 +27,8 @@
     border-radius: 4px;
     flex-grow: 1;
     flex-basis: 0;
-    resize: none; /* Disable resize */
-    overflow-y: hidden; /* Hide vertical scrollbar */
+    resize: none;
+    overflow-y: hidden;
     margin-right: 10px; 
     max-width: 66%;
     height: auto;
@@ -125,8 +49,8 @@
     border-radius: 4px;
     flex-grow: 1;
     flex-basis: 0;
-    resize: none; /* Disable resize */
-    overflow-y: hidden; /* Hide vertical scrollbar */
+    resize: none;
+    overflow-y: hidden;
     max-width: 66%;
     height: auto;
   }
@@ -151,6 +75,7 @@
     padding: 12px;
   }
 
+  /* the style for pop up window */
   .modal {
     position: fixed;
     z-index: 1;
@@ -177,7 +102,6 @@
     align-items: center;
   }
   
-  /* Close button inside the modal */
   .modal .close {
     color: #aaa;
     position: absolute;
@@ -194,8 +118,7 @@
     cursor: pointer;
   }
   
-  /* Text inputs inside the modal */
-  .modal input[type="email"] { /* Updated to type="email" */
+  .modal input[type="email"] {
     width: 80%;
     padding: 10px;
     margin: 10px 0;
@@ -204,18 +127,17 @@
     border-radius: 5px;
   }
   
-  /* Button styles inside the modal */
   .modal .modal-buttons button {
     padding: 10px 20px;
-    margin-top: 10px; /* added margin for better spacing */
+    margin-top: 10px;
     background-color: #0056b3;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    width: 80%; /* Adjusted width */
-    margin-bottom: 10px; /* added margin for better spacing */
+    width: 80%;
+    margin-bottom: 10px;
   }
   
   .modal .modal-buttons button:hover {

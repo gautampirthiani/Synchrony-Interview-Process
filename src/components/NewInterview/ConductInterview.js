@@ -113,7 +113,7 @@ function ConductInterview() {
       const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
         Name: candidateName,
         Questions: questionsPayload,
-        Interviewer: username // Include username in the request payload
+        Interviewer: username
       });
 
       alert('Interview submitted successfully!');
