@@ -11,6 +11,25 @@ function UpdateTemplates() {
   const [templateName, setTemplateName] = useState(''); 
   const [jobPosition, setJobPosition] = useState(''); 
 
+  const autoGrow = (element) => {
+    document.querySelectorAll('.update-template-inputs-container').forEach(container => {
+      var first_input = container.getElementsByClassName('update-template-question-input')[0];
+      var second_input = container.getElementsByClassName('update-template-answer-input')[0];
+  
+      // Reset the height to 'auto' before calculating the new height
+      // to allows the box to shrink if the content has been deleted
+      first_input.style.height = 'auto';
+      second_input.style.height = 'auto';
+  
+      let first_height = first_input.scrollHeight;
+      let second_height = second_input.scrollHeight;
+      
+      let greater_height = Math.max(first_height, second_height);
+      first_input.style.height = greater_height + 'px';
+      second_input.style.height = greater_height + 'px';
+    });
+  };
+
   useEffect(() => {
     fetchdata();
     query_job_positon();
@@ -24,7 +43,7 @@ function UpdateTemplates() {
     }));
     setAdditionalInputs(newItems);
   }
-  // Query job positon
+
   const query_job_positon = async () => {
     try {
       setLoading(true);
@@ -41,10 +60,6 @@ function UpdateTemplates() {
     }
   };
 
-
-  
-
-  //Fetch
   const fetchdata = async () => {
     try {
       setLoading(true);
@@ -63,7 +78,7 @@ function UpdateTemplates() {
   };
 
   const navigate = useNavigate();
-  //Update
+
   const handleUpdate = async (event) => {
       event.preventDefault();
       if (window.confirm('Update?')) {
@@ -79,7 +94,7 @@ function UpdateTemplates() {
         try {
           const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Update_Questions?jobId=${jobId}&templateId=${templateId}`, data);
           alert('Updated successfully!');
-          navigate(-1); // Go back to the previous page
+          navigate(-1);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -108,32 +123,36 @@ function UpdateTemplates() {
         <p>Job Position: {jobPosition}</p>
         <p>Template Name: {templateName}</p>
       </div>
-      <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
-      <button id="save-new-templates-btn" onClick={handleUpdate}>Update</button>
+      <button id="update-template-add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
+      <button id="update-template-save-new-templates-btn" onClick={handleUpdate}>Update</button>
       {additionalInputs.map((input, index) => (
-        <div key={index} className="additional-inputs-container">
-          <input
-            type="text"
+        <div key={index} className="update-template-inputs-container">
+          <textarea
             placeholder="Question"
             value={input.question}
-            onChange={(e) => handleAdditionalInputChange(index, 'question', e.target.value)}
-            className="additional-input"
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'question', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="update-template-question-input"
           />
-          <input
-            type="text"
+          <textarea
             placeholder="Answer"
             value={input.answer}
-            onChange={(e) => handleAdditionalInputChange(index, 'answer', e.target.value)}
-            className="additional-input"
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'answer', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="update-template-answer-input"
           />
           <input
             type="text"
             placeholder="Score"
             value={input.score}
             onChange={(e) => handleAdditionalInputChange(index, 'score', e.target.value)}
-            className="score-input"
+            className="update-template-score-input"
           />
-          <button id="delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
+          <button id="update-template-delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
         </div>
       ))}
     </div>

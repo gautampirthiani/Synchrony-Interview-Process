@@ -197,8 +197,8 @@ function ConductInterview() {
           className="candidate-name-input"
         />
       </div>
-      <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
-      <button id="save-new-templates-btn" onClick={() => setShowModal(true)}>Submit</button>
+      <button id="interview-details-add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
+      <button id="interview-details-save-new-templates-btn" onClick={() => setShowModal(true)}>Submit</button>
       {additionalInputs.map((input, index) => (
         <div key={index} className="conduct-interview-inputs-container">
           <textarea

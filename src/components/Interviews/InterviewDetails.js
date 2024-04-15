@@ -118,8 +118,8 @@ function InterviewDetails() {
         <p>Interviewed On: {interviewDetails.interviewedOn}</p>
         <p>Candidate Name: {interviewDetails.name}</p>
       </div>
-      <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
-      <button id="save-new-templates-btn" onClick={handleUpdate}>Update</button>
+      <button id="interview-details-add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
+      <button id="interview-details-save-new-templates-btn" onClick={handleUpdate}>Update</button>
       {additionalInputs.map((input, index) => (
         <div key={index} className="interview-details-inputs-container">
           <textarea
