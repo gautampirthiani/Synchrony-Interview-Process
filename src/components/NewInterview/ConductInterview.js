@@ -19,9 +19,9 @@ function ConductInterview() {
   const [showModal, setShowModal] = useState(false);
 
   const autoGrow = (element) => {
-    document.querySelectorAll('.additional-inputs-container').forEach(container => {
-      var first_input = container.getElementsByClassName('additional-input')[0];
-      var second_input = container.getElementsByClassName('second-input')[0];
+    document.querySelectorAll('.conduct-interview-inputs-container').forEach(container => {
+      var first_input = container.getElementsByClassName('conduct-interview-question-input')[0];
+      var second_input = container.getElementsByClassName('conduct-interview-answer-input')[0];
   
       // Reset the height to 'auto' before calculating the new height
       // to allows the box to shrink if the content has been deleted
@@ -66,7 +66,6 @@ function ConductInterview() {
     }
   };
 
-
   useEffect(() => {
     getCurrentUser().then(user => {
       setUsername(user.username);
@@ -110,7 +109,7 @@ function ConductInterview() {
     }));
 
     try {
-      const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
+      await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
         Name: candidateName,
         Questions: questionsPayload,
         Interviewer: username
@@ -201,7 +200,7 @@ function ConductInterview() {
       <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
       <button id="save-new-templates-btn" onClick={() => setShowModal(true)}>Submit</button>
       {additionalInputs.map((input, index) => (
-        <div key={index} className="additional-inputs-container">
+        <div key={index} className="conduct-interview-inputs-container">
           <textarea
             placeholder="Question"
             value={input.question}
@@ -209,7 +208,7 @@ function ConductInterview() {
               handleAdditionalInputChange(index, 'question', e.target.value);
               autoGrow(e.target);
             }}
-            className="additional-input"
+            className="conduct-interview-question-input"
           />
           <textarea
             placeholder="Answer"
@@ -218,16 +217,16 @@ function ConductInterview() {
               handleAdditionalInputChange(index, 'answer', e.target.value);
               autoGrow(e.target);
             }}
-            className="second-input"
+            className="conduct-interview-answer-input"
           />
           <input
             type="text"
             placeholder="Score"
             value={input.score}
             onChange={(e) => handleAdditionalInputChange(index, 'score', e.target.value)}
-            className="score-input"
+            className="conduct-interview-score-input"
           />
-          <button id="delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
+          <button id="conduct-interview-delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
         </div>
       ))}
       <EmailTranscriptModal
