@@ -130,6 +130,35 @@ function DataAnalysis() {
     }
   };
 
+  //const updateChartDataForSlider = async () => {
+    //try {
+      //const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
+      //const interviewData = await Promise.all(
+      //  jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
+      //);
+  
+      // Mapping counts to jobIDs before filtering
+      //const mappedData = interviewData.map((count, index) => ({
+      //  label: jobIDToLabelMap[jobIDs[index]],  // Using custom map to get human-readable label
+      //  count: count
+      //}));
+  
+      // Filtering data based on the slider value
+      //const filteredData = mappedData.filter(item => item.count >= sliderValue);
+  
+      //setChartData(prevChartData => ({
+      //  ...prevChartData,
+      //  labels: filteredData.map(item => item.label), // Update labels with human-readable names
+      //  datasets: [{
+      //    ...prevChartData.datasets[0],
+      //    data: filteredData.map(item => item.count) // Updating the data array with filtered counts
+      //  }]
+      //}));
+    //} catch (error) {
+    //  console.error('Error updating chart data:', error);
+    //}
+  //};
+
   // useEffect to call updateChartData when component mounts
   useEffect(() => {
     updateChartData();
