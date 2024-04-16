@@ -1,5 +1,4 @@
 // src/components/Dashboard/DataAnalyis.js
-//import React from "react";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Bar } from 'react-chartjs-2';
@@ -47,22 +46,6 @@ function DataAnalysis() {
 
   // START BAR CHART COMPONENTS ******************************************** working
 
-  // Bar Chart data
-  const barChartData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label: 'Monthly Sales',
-        backgroundColor: 'rgba(255,99,132,0.2)',
-        borderColor: 'rgba(255,99,132,1)',
-        borderWidth: 1,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
-        data: [65, 59, 80, 81, 56, 55, 40] 
-      }
-    ]
-  };
-
   const barChartOptions = {
     scales: {
       x: { // labels are on the x-axis
@@ -105,22 +88,6 @@ function DataAnalysis() {
       console.error('Error fetching interview count for selected job:', error);
       return 0; // error return
     }
-  };
-  const fetchInterviewCountForBarChartOld1 = async (jobID) => {
-    fetch(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/getDataAnalytics_getInterviewCountForJobID1?jobID=${jobID}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // This already parses the JSON response
-      })
-      .then(data => {
-        console.log('FETCHED interview count for selected job:', data.interviewCount);
-        return data.interviewCount; // This will return the count for the job
-      })
-      .catch(error => {
-        console.error('Error fetching interview count for selected job:', error);
-      });
   };
 
   // Function to update chart data
@@ -343,55 +310,5 @@ function DataAnalysis() {
 }
 
 
-//////////////////////////////////////// old code
-//  <select className="selection-box">
-//                <option value="select1">Select 1</option>
-//                <option value="select2">Select 2</option>
-//  </select>
-////////////////////////////////////////
-
-
-
-function DataAnalysis_old1() {
-
-  return (
-    <div className="data-analysis-container">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
-      <div className="data-analysis-header-container">
-        <h1 className="data-analysis-header">Data Analysis Dashboard</h1>
-      </div>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="What would you like to know?"
-          className="search-bar"
-        />
-      </div>
-      <div className="data-analysis-main">
-        Placeholder
-      </div>
-    </div>
-  )
-}
-
 export default DataAnalysis;
 
-
-// import React from 'react';
-// import Navbar from '../Navbar';
-
-// const DataAnalysis = () => {
-//   return (
-//     <div>
-//       <h2>Data Analysis Dashboard</h2>
-//       {/* Visualization will be added here */}
-//     </div>
-//   );
-// };
-
-// export default DataAnalysis;
