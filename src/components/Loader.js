@@ -1,5 +1,5 @@
 import React from 'react';
-import './Loader.css'; 
+import './Styles/Loader.css'; 
 
 const Loader = () => (
   <div className="lds-roller">

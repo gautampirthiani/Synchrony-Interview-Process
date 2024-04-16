@@ -18,7 +18,7 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  z-index: 1; /* Ensure button is clickable */
+  z-index: 1;
 }
 
 #create-new-templates-btn:hover {
@@ -171,7 +171,7 @@
   transform: translateY(-50%);
   padding: 8px;
   border: none;
-  background: url('../trash_can.svg') no-repeat center;
+  background: url('./trash_can.svg') no-repeat center;
   background-size: contain;
   color: transparent;
   font-weight: bold;

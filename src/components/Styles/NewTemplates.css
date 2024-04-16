@@ -2,12 +2,12 @@
 
 .new-templates-container {
   font-family: 'Arial', sans-serif;
-  background-color: #002244; /* Consistent with other pages */
+  background-color: #002244;
   color: white;
   min-height: 100vh;
-  width: 100%; /* Ensure container takes full width */
-  margin: 0; /* Reset any default margin */
-  padding: 0; /* Reset any default padding */
+  width: 100%;
+  margin: 0;
+  padding: 0;
   padding-top: 0px;
 }
 .template-name-input

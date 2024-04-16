@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import './InterviewDetails.css';
+import '../Styles/InterviewDetails.css';
 import Loader from '../Loader';
 
 function InterviewDetails() {

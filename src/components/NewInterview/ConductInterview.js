@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import './ConductInterview.css';
+import '../Styles/ConductInterview.css';
 import Loader from '../Loader';
 import { getCurrentUser } from '@aws-amplify/auth';
 import { v4 as uuidv4 } from 'uuid';

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import './HomePage.css';
+import './Styles/HomePage.css';
 import { getCurrentUser } from '@aws-amplify/auth';
-import Loader from './Loader'; // Make sure the path to your Loader component is correct
+import Loader from './Loader';
 
 const HomePage = () => {
   const [username, setUsername] = useState('');
   const [departments, setDepartments] = useState([]);
-  const [loading, setLoading] = useState(false); // Add a loading state
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true); // Start loading
+    setLoading(true);
     getCurrentUser()
       .then(user => {
         setUsername(user.username); 
@@ -29,7 +29,7 @@ const HomePage = () => {
         }
       })
       .catch(error => console.error('Error:', error))
-      .finally(() => setLoading(false)); // Stop loading once the data is fetched or an error occurs
+      .finally(() => setLoading(false));
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import './NewTemplates.css';
+import '../Styles/NewTemplates.css';
 import { useNavigate } from 'react-router-dom';
 
 function NewTemplates() {

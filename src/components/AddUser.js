@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getCurrentUser } from '@aws-amplify/auth';
-import './AddUser.css';
+import './Styles/AddUser.css';
 import Loader from './Loader';
 
 function AddUserForm() {

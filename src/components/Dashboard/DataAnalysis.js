@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import './DataAnalysis.css';
+import '../Styles/DataAnalysis.css';
 
 ChartJS.register(
   CategoryScale,

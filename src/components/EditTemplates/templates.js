@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from '@aws-amplify/auth';
-import './templates.css';
+import '../Styles/templates.css';
 import Loader from '../Loader';
 
 function Templates() {

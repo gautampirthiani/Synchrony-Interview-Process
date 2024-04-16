@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate} from 'react-router-dom';
-import './UpdateTemplates.css';
+import '../Styles/UpdateTemplates.css';
 import Loader from '../Loader';
 
 function UpdateTemplates() {

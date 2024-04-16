@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import Loader from '../Loader';
-import './JobInterviews.css';
+import '../Styles/JobInterviews.css';
 
 function Interviews() {
   const [loading, setLoading] = useState(false);

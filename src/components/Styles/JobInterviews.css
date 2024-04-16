@@ -40,7 +40,7 @@
   background-color: #fff;
   color: #000;
   margin-bottom: 1rem;
-  padding: 0.5rem; /* Adjusted padding */
+  padding: 0.5rem;
   border-radius: 5px;
   width: 80%;
   cursor: pointer;
@@ -55,7 +55,7 @@
   transform: translateY(-50%);
   padding: 8px;
   border: none;
-  background: url('../trash_can.svg') no-repeat center; 
+  background: url('./trash_can.svg') no-repeat center; 
   background-size: contain; 
   color: transparent; 
   font-weight: bold;
