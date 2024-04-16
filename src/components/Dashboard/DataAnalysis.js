@@ -16,6 +16,7 @@ import './DataAnalysis.css'
 import Navbar from "../Navbar";
 
 
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -97,29 +98,6 @@ function DataAnalysis() {
     } catch (error) {
       console.error('Error fetching interview count for selected job:', error);
       return 0; // error return
-    }
-  };
-
-  // Function to update chart data
-  const updateChartDataOld1 = async () => {
-    try {
-      const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
-      const interviewCountsForBarChart = await Promise.all(
-        jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
-      );
-
-      //const filteredData = interviewCountsForBarChart.filter(count => count >= sliderValue);
-
-      setChartData(prevChartData => ({
-        ...prevChartData,
-        datasets: [{
-          ...prevChartData.datasets[0],
-          data: interviewCountsForBarChart, // Updating the data array with fetched counts
-          //data: filteredData, // Updating the data array with fetched counts
-        }]
-      }));
-    } catch (error) {
-      console.error('Error updating chart data:', error);
     }
   };
 
@@ -353,4 +331,36 @@ function DataAnalysis() {
 
 
 export default DataAnalysis;
+
+
+
+
+
+
+
+
+
+
+  // (OLD) Function to update chart data
+  // const updateChartDataOld1 = async () => {
+  //   try {
+  //     const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
+  //     const interviewCountsForBarChart = await Promise.all(
+  //       jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
+  //     );
+
+  //     //const filteredData = interviewCountsForBarChart.filter(count => count >= sliderValue);
+
+  //     setChartData(prevChartData => ({
+  //       ...prevChartData,
+  //       datasets: [{
+  //         ...prevChartData.datasets[0],
+  //         data: interviewCountsForBarChart, // Updating the data array with fetched counts
+  //         //data: filteredData, // Updating the data array with fetched counts
+  //       }]
+  //     }));
+  //   } catch (error) {
+  //     console.error('Error updating chart data:', error);
+  //   }
+  // };
 
