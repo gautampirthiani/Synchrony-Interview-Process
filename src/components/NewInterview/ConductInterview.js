@@ -4,19 +4,22 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './ConductInterview.css';
 import Loader from '../Loader';
 import { getCurrentUser } from '@aws-amplify/auth';
+import { v4 as uuidv4 } from 'uuid';
 
 function ConductInterview() {
   const [loading, setLoading] = useState(false);
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const [candidateName, setCandidateName] = useState('');
   const [templateId, setTemplateId] = useState(null);
-  const { jobId } = useParams();
+  const {jobId} = useParams();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [templateName, setTemplateName] = useState('');
   const [jobPosition, setJobPosition] = useState('');
   const [email, setEmail] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [interviewId, setInterviewId] = useState('');
+  const [questionsPayload, setQuestionsPayload] = useState([]);
 
   const autoGrow = (element) => {
     document.querySelectorAll('.conduct-interview-inputs-container').forEach(container => {
@@ -101,74 +104,91 @@ function ConductInterview() {
     }
   };
 
-  // The email can only be sent or received by verified email in Amazon Simple Email Service website and 
-  // limited to 200 emails to be sent everyday for now. In order to send email to to any receiver, 
-  // a production access request needs to be made in below website. 
-  // https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html
-  
-  const handleSubmit = async (event) => {
-    const questionsPayload = additionalInputs.map(({ question, answer, score }) => ({
-      QuestionText: question,
-      Answer: answer,
-      Score: score
-    }));
-
-    try {
-      await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
-        Name: candidateName,
-        Questions: questionsPayload,
-        Interviewer: username
-      });
-
-      alert('Interview submitted successfully!');
-      navigate(`/dashboard/new-interview`);
-    } catch (error) {
-      console.error('Error submitting new interview:', error);
-    }
-  };
-
-  const handleEmailSubmit = async (SendEmail) => {
+  const handleSubmit = async () => {
     if (window.confirm('Submit new interview?')) {
+      const generatedId = uuidv4();
       const questionsPayload = additionalInputs.map(({ question, answer, score }) => ({
         QuestionText: question,
         Answer: answer,
         Score: score
       }));
-    
-      if (SendEmail && email) {
-        try {
-          const emailResponse = await axios.post('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/SendEmail', {
-            jobId: jobId,
-            email: email,
-            questions: questionsPayload
-          });
-          
-          console.log('Email response:', emailResponse);
+      setInterviewId(generatedId);  // Store the UUID in state
+      setQuestionsPayload(questionsPayload);  // Store the payload in state
 
-          // Check the response status code and the response data for a success message
-          if (emailResponse.status === 200 && emailResponse.data.message === 'Email sent successfully!') {
-            alert('Email sent successfully!');
-            handleSubmit();
-          } else {
-            alert('Received unexpected response: ' + JSON.stringify(emailResponse.data));
-          }
-        } catch (error) {
-            if (error.response) {
-              console.error('Error response:', error.response);
-              alert('Failed to send email: ' + error.response.data.message);
-            } else if (error.request) {
-              console.error('Error request:', error.request);
-              alert('Failed to send email, please check the email you submitted.');
-            } else {
-              console.error('Error message:', error.message);
-              alert('Failed to send email: ' + error.message);
-            }
-          }
-      } else {
-        // Submit the form if the email has been sent & chose not to sent
-        handleSubmit();
+      try {
+        await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Submit-Interview?JobId=${jobId}`, {
+          InterviewID: generatedId,
+          Name: candidateName,
+          Questions: questionsPayload,
+          Interviewer: username
+        });
+
+        alert('Interview submitted successfully!');
+
+      } catch (error) {
+        console.error('Error submitting new interview:', error);
+        alert('Failed to submit interview. Please try again.');
       }
     }
+  };
+
+  // The email can only be sent or received by verified email in Amazon Simple Email Service website and 
+  // limited to 200 emails to be sent everyday for now. In order to send email to to any receiver, 
+  // a production access request needs to be made in below website. 
+  // https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html
+
+  const handleEmailSubmit = async (SendEmail) => {
+    if (SendEmail && email) {
+      const { data } = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Interviews_Based_On_JobId?jobId=${jobId}`);
+      const interviewsData = data.map(item => ({
+        interviewID: item['Interview ID'],
+        interviewer: item.Interviewer || 'N/A',
+        interviewee: item.Name,
+        jobPosition: jobPosition,
+        jobID: item['Job ID'],
+        interviewedOn: item['Interviewed On'],
+      }));
+
+      try {
+        const emailResponse = await axios.post('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/SendEmail', {
+          jobId: jobId,
+          jobPosition: jobPosition,
+          candidateName: candidateName,
+          interviewId: interviewId,
+          interviewsData: interviewsData,
+          email: email,
+          questions: questionsPayload
+        });
+
+        console.log('Email response:', emailResponse);
+        if (emailResponse.status === 200 && emailResponse.data.message === 'Email sent successfully!') {
+          alert('Email sent successfully!');
+          navigate(`/dashboard/new-interview`);
+        } else {
+          alert('Received unexpected response: ' + JSON.stringify(emailResponse.data));
+        }
+      } catch (error) {
+        if (error.response) {
+          console.error('Error response:', error.response);
+          alert('Failed to send email: ' + error.response.data.message);
+        } else if (error.request) {
+          console.error('Error request:', error.request);
+          alert('Failed to send email, please check the email you submitted.');
+        } else {
+          console.error('Error message:', error.message);
+          alert('Failed to send email: ' + error.message);
+        }
+      }
+    } else {
+      navigate(`/dashboard/new-interview`);
+    }
+  };
+
+  const handleOpenModal = () => {
+    handleSubmit().then(() => {
+      // The modal will now only open if handleSubmit has successfully completed
+      setShowModal(true);
+    });
   };
 
   const handleAdditionalInputChange = (index, key, value) => {
@@ -203,7 +223,7 @@ function ConductInterview() {
         />
       </div>
       <button id="interview-details-add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
-      <button id="interview-details-save-new-templates-btn" onClick={() => setShowModal(true)}>Submit</button>
+      <button id="interview-details-save-new-templates-btn" onClick={handleOpenModal}>Submit</button>
       {additionalInputs.map((input, index) => (
         <div key={index} className="conduct-interview-inputs-container">
           <textarea

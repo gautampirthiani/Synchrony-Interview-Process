@@ -67,7 +67,7 @@ function InterviewDetails() {
   };
 
   const navigate = useNavigate();
-  //Update [TODO API needed]
+
   const handleUpdate = async (event) => {
     event.preventDefault();
     if (window.confirm('Update?')) {
