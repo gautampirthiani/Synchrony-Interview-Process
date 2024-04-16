@@ -101,6 +101,11 @@ function ConductInterview() {
     }
   };
 
+  // The email can only be sent or received by verified email in Amazon Simple Email Service website and 
+  // limited to 200 emails to be sent everyday for now. In order to send email to to any receiver, 
+  // a production access request needs to be made in below website. 
+  // https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html
+  
   const handleSubmit = async (event) => {
     const questionsPayload = additionalInputs.map(({ question, answer, score }) => ({
       QuestionText: question,
@@ -247,7 +252,8 @@ function EmailTranscriptModal({ isOpen, onClose, email, setEmail, onSubmit }) {
     <div className="modal">
       <div className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
-        <h2>Would you like to email the transcript?</h2>
+        <h1>Emailing Transcript</h1>
+        <h2>Use format "example1@gmail.com, example2@gmail.com, example3@gmail.com" for multiple email addresses</h2>
         <input
           type="email"
           placeholder="Enter email address"
