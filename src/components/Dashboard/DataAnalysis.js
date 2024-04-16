@@ -44,6 +44,16 @@ function DataAnalysis() {
   // State to flash interviewCount
   const [flashInterviewCount, setFlashInterviewCount] = useState(false);
 
+  const jobIDToLabelMap = {
+    '111111': 'Code',
+    '222': 'DSA',
+    '1729': 'Data Science',
+    '666': 'Algorithms',
+    'MarketingTest': 'Marketing',
+    '798': 'Human Resources'
+  };
+  
+
   // START BAR CHART COMPONENTS ******************************************** working
 
   const barChartOptions = {
@@ -91,18 +101,50 @@ function DataAnalysis() {
   };
 
   // Function to update chart data
-  const updateChartData = async () => {
+  const updateChartDataOld1 = async () => {
     try {
       const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
       const interviewCountsForBarChart = await Promise.all(
         jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
       );
 
+      //const filteredData = interviewCountsForBarChart.filter(count => count >= sliderValue);
+
       setChartData(prevChartData => ({
         ...prevChartData,
         datasets: [{
           ...prevChartData.datasets[0],
           data: interviewCountsForBarChart, // Updating the data array with fetched counts
+          //data: filteredData, // Updating the data array with fetched counts
+        }]
+      }));
+    } catch (error) {
+      console.error('Error updating chart data:', error);
+    }
+  };
+
+  const updateChartData = async () => {
+    try {
+      const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
+      const interviewData = await Promise.all(
+        jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
+      );
+  
+      // Mapping counts to jobIDs before filtering
+      const mappedData = interviewData.map((count, index) => ({
+        label: jobIDToLabelMap[jobIDs[index]],  // Using custom map to get human-readable label
+        count: count
+      }));
+  
+      // Filtering data based on the slider value
+      const filteredData = mappedData.filter(item => item.count >= sliderValue);
+  
+      setChartData(prevChartData => ({
+        ...prevChartData,
+        labels: filteredData.map(item => item.label), // Update labels with human-readable names
+        datasets: [{
+          ...prevChartData.datasets[0],
+          data: filteredData.map(item => item.count) // Updating the data array with filtered counts
         }]
       }));
     } catch (error) {
@@ -119,7 +161,21 @@ function DataAnalysis() {
     console.log('Updated chart data:', chartData);
   }, [chartData]); //  log when chartData updates
 
+
   // END BAR CHART COMPONENTS ********************************************
+
+  // START OF SLIDER COMPONENTS *************************************************************
+  const [sliderValue, setSliderValue] = useState(0);
+
+  const handleSliderChange = (event) => {
+    setSliderValue(event.target.value);
+  };
+
+  useEffect(() => {
+    updateChartData();
+  }, [sliderValue]);  // Depend on sliderValue to refetch and update chart
+  
+  // END OF SLIDER COMPONENTS *************************************************************
 
   // above are all the states and bar chart stuff *************************************************************
 
@@ -250,19 +306,11 @@ function DataAnalysis() {
             />
           </div>
           <div className="filter-section">
-            <h3>Filter</h3>
+            <h3>Filters</h3>
             <div className="filter-option">
-              <label>
-                <input type="radio" name="filter" value="option1" /> Option 1
-              </label>
-            </div>
-            <div className="filter-option">
-              <label>
-                <input type="radio" name="filter" value="option2" /> Option 2
-              </label>
-            </div>
-            <div className="filter-option">
-              <input type="range" min="1" max="100" className="slider" />
+              <h4>Minimum Interview Count to Chart</h4>
+              <input type="range" min="1" max="25" value={sliderValue} onChange={handleSliderChange} className="slider" />
+              <span className="slider-value">{sliderValue}</span>
             </div>
 
             <div className="filter-option">
@@ -285,22 +333,16 @@ function DataAnalysis() {
             </div>
 
           </div>
-          {/* Add more content here if needed */}
           <button className="apply-button" onClick={applyFilters}>Apply Filters</button>
         </div>
         <div className="right-column">
           <div className="stats-container">
             <div className="stat-box">Average candidacy length: 2 weeks</div>
             <div className="stat-box">Total open positions: {totalOpenPositions}</div>
-            {/* <div className="stat-box">Total interviews for selected job: {interviewsForSelectedJob}</div> */}
-            {/* <div className={flashInterviewCount ? 'flash' : ''}>Total interviews for selected job: {interviewsForSelectedJob}</div> */}
             <div className={`stat-box ${flashInterviewCount ? 'flash-interview-count' : ''}`}>Total interviews for selected job: {interviewsForSelectedJob}</div>
             {/* More stat boxes as needed */}
           </div>
           <div className="graph-container">
-            {/* Graph will go here */}
-            {/* Chart goes here and will update in real time based upon filter and option selection in left column. */}
-            {/* <Bar data={barChartData} options={barChartOptions} /> */}
             <Bar data={chartData} options={barChartOptions} />
           </div>
         </div>
