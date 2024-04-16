@@ -65,6 +65,7 @@
   resize: none;
   margin-right: 10px; 
   height: auto;
+  overflow-y: hidden;
 }
 
 /* Answer's style */
@@ -78,6 +79,7 @@
   flex-basis: 0;
   resize: none;
   height: auto;
+  overflow-y: hidden;
 }
 
 .new-template-score-input {

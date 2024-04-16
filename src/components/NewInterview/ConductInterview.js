@@ -61,6 +61,7 @@ function ConductInterview() {
         setTemplateName(response.data['Template Name']);
         const questions = response.data.questions || [];
         updateAdditionalInputsFromMultiple(questions);
+        autoGrow();
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {

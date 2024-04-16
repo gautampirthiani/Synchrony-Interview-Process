@@ -44,7 +44,6 @@ function InterviewDetails() {
     setAdditionalInputs(newItems);
   }
 
-  //Fetch
   const fetchdata = async () => {
     try {
       setLoading(true);
@@ -58,6 +57,7 @@ function InterviewDetails() {
         name: response.data.Name
       });
       updateAdditionalInputsFromMultiple(response.data.Questions);
+      autoGrow();
     } catch (error) {
       console.error('Error fetching data:', error);
     }

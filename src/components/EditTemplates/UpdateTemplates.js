@@ -69,6 +69,7 @@ function UpdateTemplates() {
       // console.log(response.data['Template ID']);
       setTemplateName(response.data['Template Name']);
       updateAdditionalInputsFromMultiple(response.data.Questions);
+      autoGrow();
     } catch (error) {
       // console.error('Error fetching data:', error);
     }
