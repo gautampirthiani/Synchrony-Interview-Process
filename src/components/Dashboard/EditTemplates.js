@@ -81,13 +81,11 @@ function EditTemplates() {
     const searchTermLower = searchTerm.toLowerCase();
     return positions.filter(position => {
       const jobPositionLower = position['Job Position'].toLowerCase();
-      const jobIDString = position['Job ID'].toString();
       const departmentLower = Array.isArray(position['Departments']) ? 
         position['Departments'].map(dept => dept.toLowerCase()) : [];
       const usernameLower = position['Username']?.toLowerCase();
 
       return jobPositionLower.includes(searchTermLower) ||
-        jobIDString.includes(searchTerm) ||
         (departmentLower && departmentLower.some(dept => dept.includes(searchTermLower))) ||
         (usernameLower && usernameLower.includes(searchTermLower));
     }).filter(position => username === 'admin' || userDepartments.some(dept => position['Departments']?.includes(dept)));
@@ -205,7 +203,7 @@ function EditTemplates() {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search by job ID, position, department, or username"
+            placeholder="Search by Job Position, Department, or Added By"
             value={searchTerm}
             onChange={handleSearch}
             className="search-bar"
