@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Loader from '../Loader';
 import '../Styles/JobInterviews.css';
 
@@ -9,7 +9,7 @@ function Interviews() {
   const [interviews, setInterviews] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredInterviews, setFilteredInterviews] = useState([]);
-  const { jobId, jobPosition } = useParams();
+  const { jobId, jobPosition } = useParams(); // Assuming jobPosition is still passed via URL and used for the header
   const navigate = useNavigate();
 
   const fetchInterviews = async () => {
@@ -20,8 +20,6 @@ function Interviews() {
         interviewID: item['Interview ID'],
         interviewer: item.Interviewer || 'N/A',
         interviewee: item.Name,
-        jobPosition: jobPosition,
-        jobID: item['Job ID'],
         interviewedOn: item['Interviewed On'],
       }));
       setInterviews(interviewsData);
@@ -34,18 +32,16 @@ function Interviews() {
 
   useEffect(() => {
     fetchInterviews();
-  }, [jobId, jobPosition]); 
+  }, [jobId]); 
 
   useEffect(() => {
     const results = interviews.filter(interview => {
       const interviewer = interview.interviewer ? interview.interviewer.toLowerCase() : '';
       const interviewee = interview.interviewee ? interview.interviewee.toLowerCase() : '';
-      const jobID = interview.jobID ? interview.jobID.toLowerCase() : '';
       const interviewedOn = interview.interviewedOn ? interview.interviewedOn.toLowerCase() : '';
 
       return interviewer.includes(searchTerm.toLowerCase()) ||
         interviewee.includes(searchTerm.toLowerCase()) ||
-        jobID.includes(searchTerm.toLowerCase()) ||
         interviewedOn.includes(searchTerm.toLowerCase());
     });
     setFilteredInterviews(results);
@@ -64,7 +60,7 @@ function Interviews() {
     event.stopPropagation();
     if (window.confirm('Are you sure you want to delete this interview?')) {
       try {
-        const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Delete_interviews?interviewID=${interviewID}`);
+        await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Delete_interviews?interviewID=${interviewID}`);
         alert('Interview deleted successfully');
         fetchInterviews();
       } catch (error) {
@@ -81,7 +77,7 @@ function Interviews() {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search by interviewer, applicant, or date"
+          placeholder="Search by interviewer, interviewee, or interviewed on"
           value={searchTerm}
           onChange={handleSearch}
           className="search-bar"
@@ -94,7 +90,6 @@ function Interviews() {
             <p><strong>Interviewer:</strong> {interview.interviewer}</p>
             <p><strong>Interviewee:</strong> {interview.interviewee}</p>
             <p><strong>Interviewed On:</strong> {interview.interviewedOn}</p>
-            <p><strong>Job Position:</strong> {interview.jobPosition}</p>
             <div className="button-container">
               <button className="jobinterview-delete" onClick={(e) => { handleDelete(interview.interviewID, e); }}></button>
             </div>
