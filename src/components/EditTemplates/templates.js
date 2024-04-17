@@ -92,16 +92,16 @@ function Templates() {
     }
   };
 
-  const sortedTemplates = [...templates].sort((a, b) => {
+  const filteredAndSortedTemplates = templates.filter(template => {
+    const nameMatches = template["Template Name"].toLowerCase().includes(searchTerm.toLowerCase());
+    const createdOnMatches = template["Created On"] && template["Created On"].toLowerCase().includes(searchTerm.toLowerCase());
+    const updatedOnMatches = template["Updated On"] && template["Updated On"].toLowerCase().includes(searchTerm.toLowerCase());
+    return nameMatches || createdOnMatches || updatedOnMatches;
+  }).sort((a, b) => {
     if (a['Template ID'] === defaultTemplateId) return -1;
     if (b['Template ID'] === defaultTemplateId) return 1;
     return 0;
   });
-
-  const filteredTemplates = sortedTemplates.filter(template =>
-    template["Template ID"].toLowerCase().includes(searchTerm.toLowerCase()) ||
-    template["Job ID"].toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="templates-container">
@@ -109,7 +109,7 @@ function Templates() {
         <h1 className="recruiting-portal-header">Templates</h1>
         <input
           type="text"
-          placeholder="Search by template ID or job ID"
+          placeholder="Search by template name, created on, or updated on"
           value={searchTerm}
           onChange={handleSearch}
           className="search-bar"
@@ -122,7 +122,7 @@ function Templates() {
       </div>
       {loading && <Loader />}
       <div className="templates-list">
-        {filteredTemplates.map((template) => (
+        {filteredAndSortedTemplates.map((template) => (
           <div
             key={template["Template ID"]}
             className="template-item"
@@ -132,10 +132,9 @@ function Templates() {
             <div className="template-details">
               <div className="template-detail"><strong>Template Name:</strong> {template["Template Name"]}</div>
               <div className="template-detail"><strong>Created On:</strong> {template["Created On"] || 'Not Available'}</div>
-               {/* Render Updated On only if it exists and is not 'N/A' */}
-               {template["Updated On"] && template["Updated On"] !== 'N/A' && (
-              <div className="template-detail"><strong>Updated On:</strong> {template["Updated On"]}</div>
-          )}
+              {template["Updated On"] && template["Updated On"] !== 'N/A' && (
+                <div className="template-detail"><strong>Updated On:</strong> {template["Updated On"]}</div>
+              )}
             </div>
             <div className="button-container">
               <button

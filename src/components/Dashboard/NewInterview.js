@@ -109,7 +109,7 @@ function NewInterview() {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search by Job Position, Department, or Added By"
+            placeholder="Search by job position, department, or added by"
             value={searchTerm}
             onChange={handleSearch}
             className="search-bar"
