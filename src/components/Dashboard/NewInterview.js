@@ -63,13 +63,13 @@ function NewInterview() {
     const filterAndDisplayPositions = () => {
       const searchTermLower = searchTerm.toLowerCase();
       const filteredPositions = allPositions.filter(position => {
-        const jobID = position['Job ID'].toString().toLowerCase();
         const jobPosition = position['Job Position'].toLowerCase();
         const department = position['Departments'] ? position['Departments'].join(',').toLowerCase() : '';
+        const addedBy = position['Username'] ? position['Username'].toLowerCase() : ''; // Adjusted to use Username
 
-        return jobID.includes(searchTermLower) ||
-              jobPosition.includes(searchTermLower) ||
-              department.includes(searchTermLower);
+        return jobPosition.includes(searchTermLower) ||
+              department.includes(searchTermLower) ||
+              addedBy.includes(searchTermLower);
       }).filter(position => 
         username === 'admin' || position['Departments']?.some(dept => userDepartments.includes(dept))
       );
@@ -93,9 +93,9 @@ function NewInterview() {
 
   const totalPages = Math.ceil(allPositions.filter(position => {
     const searchTermLower = searchTerm.toLowerCase();
-    return position['Job ID'].toString().toLowerCase().includes(searchTermLower) ||
-           position['Job Position'].toLowerCase().includes(searchTermLower) ||
-           (position['Departments'] ? position['Departments'].join(',').toLowerCase() : '').includes(searchTermLower);
+    return position['Job Position'].toLowerCase().includes(searchTermLower) ||
+           (position['Departments'] ? position['Departments'].join(',').toLowerCase() : '').includes(searchTermLower) ||
+           (position['Username'] ? position['Username'].toLowerCase().includes(searchTermLower) : false);  // Added Username in totalPages calculation
   }).filter(position => 
     username === 'admin' || position['Departments']?.some(dept => userDepartments.includes(dept))
   ).length / positionsPerPage);
@@ -109,7 +109,7 @@ function NewInterview() {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search by job ID, position, department, or username"
+            placeholder="Search by Job Position, Department, or Added By"
             value={searchTerm}
             onChange={handleSearch}
             className="search-bar"
@@ -136,7 +136,7 @@ function NewInterview() {
               <strong>Department:</strong> {position['Departments'] && position['Departments'].length > 0 ? position['Departments'].join(', ') : 'N/A'}
             </div>
             <div className="position-detail">
-              <strong>Added by:</strong> {username || 'N/A'}
+              <strong>Added by:</strong> {position['Username'] || 'N/A'}
             </div>
           </div>
         ))}
