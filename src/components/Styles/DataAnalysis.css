@@ -2,7 +2,7 @@
 
 .data-analysis-container {
   font-family: 'Arial', sans-serif;
-  background-color: #002244;
+  background-color: #002244; /* Very dark blue background for the rest of the page */
   color: white;
   min-height: 100vh;
 }
@@ -10,14 +10,14 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* Align logo to the left and other items to the right */
   background-color: #FFF;
   padding: 0.5rem 1rem;
 }
 
 .logo {
-  height: 120px;
-  margin-left: left;
+  height: 120px; /* Bigger logo as requested */
+  margin-left: left; /* Push the logo to the left */
 }
 
 /* Styles for the navbar links */
@@ -34,47 +34,48 @@
 }
 
 .navbar ul li {
-  margin-left: 20px;
+  margin-left: 20px; /* Spacing between nav items */
 }
 
 .navbar ul li:last-child {
-  margin-right: 0;
+  margin-right: 0; /* No margin for the last item */
 }
 
 .navbar ul li a {
   text-decoration: none;
-  color: black;
+  color: black; /* Black font color for nav links */
   font-size: 16px;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem; /* Padding for nav links */
 }
 
 
 .data-analysis-header-container {
-  text-align: center;
+  text-align: center; /* Center the portal header text */
   margin: 20px 0;
 }
 
 .data-analysis-header {
   font-size: 24px;
-  color: white;
+  color: white; /* White text for the header */
 }
 
 .search-container {
   display: flex;
-  justify-content: center; 
+  justify-content: center; /* Center search bar container */
   padding: 20px;
 }
 
 .search-bar {
-  width: 50%;
+  width: 50%; /* Or any other width as per design */
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2rem; /* Space after search bar */
 }
 
 /* Additional styles for two-column layout */
+
 .content-container {
   display: flex;
   margin: 1rem;
@@ -101,22 +102,29 @@
   align-items: center;
   padding: 1rem;
   flex-grow: 1;
+
+  /* You can set a specific height or leave it to grow as per content */
 }
 
 .graph-container {
   flex-grow: 2;
+  /* Set a background color or border for visual separation if desired */
   border: 1px solid #ffffff;
   padding: 1rem;
+  /* You can set a specific height or leave it to grow as per content */
   border-radius: 15px;
   margin-top: 1rem;
 }
 
 /* Adjust the search bar width in the left column */
 .search-bar {
-  width: 100%;
+  width: 100%; /* Adjust this as needed */
+  /* Other styles remain the same */
 }
 
+
 /* Styles for prettying filters and statistics boxes */
+
 .filter-section {
   margin-top: 1rem;
 }
@@ -126,7 +134,8 @@
 }
 
 .slider {
-  width: 100%;
+  width: 90%;
+  margin-right: 25px;
 }
 
 .selection-box {
@@ -143,12 +152,15 @@
   height: 70px;
   background-color: rgba(255, 255, 255, 0.5); /* Translucent white background */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
 }
 
+
 /* Apply Button */
+
 .apply-button {
   padding: 10px 20px;
   background-color: #0066ff; 
@@ -157,23 +169,24 @@
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  margin-top: 1rem;
+  margin-top: 1rem; /* Space above button */
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
 .apply-button:hover {
-  background-color: #0051cc;
+  background-color: #0051cc; /* Darker shade for hover effect */
 }
 
+
 .flash-interview-count {
-  animation: flash-animation 1s infinite alternate;
+  animation: flash-animation 1s infinite alternate; /* Define the flashing animation */
 }
 
 @keyframes flash-animation {
   from {
-    background-color: #007bff;
+    background-color: #007bff; /* Initial color */
   }
   to {
-    background-color: #80bfff;
+    background-color: #80bfff; /* Brighter color */
   }
 }
