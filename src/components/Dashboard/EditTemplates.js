@@ -18,6 +18,25 @@ function EditTemplates() {
   const [userDepartments, setUserDepartments] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUsername(currentUser.username);
+        if (currentUser.username === 'admin') {
+          fetchAllDepartments();
+        } else {
+          fetchUserDepartments(currentUser.username);
+        }
+      } catch (error) {
+        console.error('Error fetching user information:', error);
+      }
+    };
+
+    fetchPositions();
+    fetchCurrentUser();
+  }, [currentPage, positionsPerPage]);
+
   const fetchPositions = async () => {
     setLoading(true);
     try {
@@ -31,36 +50,32 @@ function EditTemplates() {
     }
   };
 
-  useEffect(() => {
-    fetchPositions();
-  }, [currentPage, positionsPerPage]);
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        setUsername(currentUser.username);
-        if (currentUser.username !== 'admin') {
-          const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: currentUser.username }),
-          });
-          const data = await response.json();
-          if (data && data.departments) {
-            setUserDepartments(data.departments);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user information:', error);
+  const fetchAllDepartments = async () => {
+    const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartmantList', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
       }
-    };
+    });
+    const data = await response.json();
+    setUserDepartments(data);
+  };
 
-    fetchCurrentUser();
-  }, []);
+  const fetchUserDepartments = async (username) => {
+    const response = await fetch('https://h60ydhn92g.execute-api.us-east-1.amazonaws.com/dev/GetDepartment', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username: username }),
+    });
+    const data = await response.json();
+    if (data && data.departments) {
+      setUserDepartments(data.departments);
+    }
+  };
 
   const filterPositions = () => {
     const searchTermLower = searchTerm.toLowerCase();
@@ -161,11 +176,6 @@ function EditTemplates() {
       });
     };
 
-    const modal_handleSubmit = () => {
-      onSubmit(localFormData);
-      setLocalFormData({ jobPosition: '', departments: [] });
-    };
-
     return (
       <div className="modal">
         <div className="modal-content">
@@ -179,7 +189,7 @@ function EditTemplates() {
               <label htmlFor={dept}>{dept}</label>
             </div>
           ))}
-          <button id="modal_button" onClick={modal_handleSubmit}>Submit</button>
+          <button id="modal_button" onClick={() => onSubmit(localFormData)}>Submit</button>
         </div>
       </div>
     );
