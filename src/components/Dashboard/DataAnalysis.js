@@ -303,9 +303,19 @@ function DataAnalysis() {
       console.log("Fetching data for department: ", selectedDepartment);
       // calling lambda function 1 with the selected department
       const fetchJobAndInterviewCountDataForDepartment = async () => {
-
+        try {
+          const response = await axios.post(
+            'https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Test_Gautam',
+            { department: selectedDepartment },
+            { headers: { "Content-Type": "application/json" } }
+          );
+          console.log("Data fetched for department:", response.data);
+          // Here you would handle setting this data into state to be used in the chart
+        } catch (error) {
+          console.error('Error fetching job and interview count data:', error);
+        }
       };
-  
+
       fetchJobAndInterviewCountDataForDepartment();
     }
   }, [selectedDepartment]); // Effect runs when selectedDepartment changes
