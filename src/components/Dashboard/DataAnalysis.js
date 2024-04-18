@@ -285,6 +285,35 @@ function DataAnalysis() {
 
 
 
+  // State to store a list of Departments to populate the dropdown menu
+  const [departments, setDepartments] = useState([]);
+  
+  // State to store the currently chosen department
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  
+  // function to fetch new data for job-interview chart upon change of department
+  const handleDepartmentChange = (event) => {
+    setSelectedDepartment(event.target.value);
+    console.log("Set the selected department to " + event.target.value)
+  };
+
+  // whenever the selected department is changed by user, the chart will change
+  useEffect(() => {
+    if (selectedDepartment) {
+      console.log("Fetching data for department: ", selectedDepartment);
+      // calling lambda function 1 with the selected department
+      const fetchJobAndInterviewCountDataForDepartment = async () => {
+
+      };
+  
+      fetchJobAndInterviewCountDataForDepartment();
+    }
+  }, [selectedDepartment]); // Effect runs when selectedDepartment changes
+  
+
+
+  // above are stuff for the job-interviewCount (for a single department) chart
+  // below is stuff for the department-interviewCount simple-no-input chart
 
 
   // State to store the fetched data for lambda function 2 (department and interview count pairs)
@@ -311,6 +340,14 @@ function DataAnalysis() {
       try {
         const response = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Test_yzheng');
         setDepartmentAndInterviewCountData(response.data);
+
+        // This part of function for the OTHER chart, the job-interviews for chosen dept chart ----
+        // Extracting just the departments from the fetched data
+        const departmentList = Object.keys(response.data);
+        setDepartments(departmentList);
+        setSelectedDepartment(departmentList[0]);
+        // End of part of function for the job-interviews for chosen dept chart -------------------
+
 
         // Preparing to actually go from raw data to chart data
         const chartLabels = Object.keys(response.data);
@@ -387,6 +424,15 @@ function DataAnalysis() {
                 <option value="">Select a job</option>
                 {jobData.map((job, index) => (
                   <option key={index} value={job.jobID}>{job.jobName}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-option">
+              <h4>Department to Chart</h4>
+              <select id="department-select" className="selection-box" value={selectedDepartment} onChange={handleDepartmentChange}>
+                {departments.map(dept => (
+                  <option key={dept} value={dept}>{dept}</option>
                 ))}
               </select>
             </div>
