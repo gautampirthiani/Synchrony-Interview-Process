@@ -125,11 +125,14 @@ function ConductInterview() {
         });
 
         alert('Interview submitted successfully!');
-
+        setShowModal(true);
       } catch (error) {
         console.error('Error submitting new interview:', error);
         alert('Failed to submit interview. Please try again.');
       }
+    }
+    else{
+      setShowModal(false);
     }
   };
 
@@ -185,12 +188,7 @@ function ConductInterview() {
     }
   };
 
-  const handleOpenModal = () => {
-    handleSubmit().then(() => {
-      // The modal will now only open if handleSubmit has successfully completed
-      setShowModal(true);
-    });
-  };
+
 
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
@@ -224,7 +222,7 @@ function ConductInterview() {
         />
       </div>
       <button id="interview-details-add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
-      <button id="interview-details-save-new-templates-btn" onClick={handleOpenModal}>Submit</button>
+      <button id="interview-details-save-new-templates-btn" onClick={handleSubmit}>Submit</button>
       {additionalInputs.map((input, index) => (
         <div key={index} className="conduct-interview-inputs-container">
           <textarea
