@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import axios from 'axios'; // Using axios for HTTP requests
 import logoImage from './synchrony-logo-1.png'
 import './DataAnalysis.css'
 import Navbar from "../Navbar";
@@ -130,34 +131,7 @@ function DataAnalysis() {
     }
   };
 
-  //const updateChartDataForSlider = async () => {
-    //try {
-      //const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
-      //const interviewData = await Promise.all(
-      //  jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
-      //);
-  
-      // Mapping counts to jobIDs before filtering
-      //const mappedData = interviewData.map((count, index) => ({
-      //  label: jobIDToLabelMap[jobIDs[index]],  // Using custom map to get human-readable label
-      //  count: count
-      //}));
-  
-      // Filtering data based on the slider value
-      //const filteredData = mappedData.filter(item => item.count >= sliderValue);
-  
-      //setChartData(prevChartData => ({
-      //  ...prevChartData,
-      //  labels: filteredData.map(item => item.label), // Update labels with human-readable names
-      //  datasets: [{
-      //    ...prevChartData.datasets[0],
-      //    data: filteredData.map(item => item.count) // Updating the data array with filtered counts
-      //  }]
-      //}));
-    //} catch (error) {
-    //  console.error('Error updating chart data:', error);
-    //}
-  //};
+
 
   // useEffect to call updateChartData when component mounts
   useEffect(() => {
@@ -251,10 +225,6 @@ function DataAnalysis() {
     // Add code to apply filters here
   }
 
-  // function to fetch number of interviews for each job
-  // const fetchInterviewCountForBarChart = () => {
-    // Add code to fetch number of interviews for each job here
-  //}
 
   // Function to handle job change
   const handleJobChange = (event) => {
@@ -291,6 +261,88 @@ function DataAnalysis() {
       });
   };  // interview count based on selecting job working!
 
+
+  // New redesign code below ****************************************************************************************
+
+  
+  // useEffect(() => {
+  //   // fetching lambda function 2 to get department and interview count pairs in json
+  //   const fetchDepartmentAndInterviewCountData = async () => {
+  //     try {
+  //       const response = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Test_yzheng');
+  //       setdepartmentAndInterviewCountData(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data: ', error);
+  //     }
+  //   };
+  //   fetchDepartmentAndInterviewCountData();
+  // }, []);
+
+
+
+
+
+
+
+
+
+
+  // State to store the fetched data for lambda function 2 (department and interview count pairs)
+  const [departmentAndInterviewCountData, setDepartmentAndInterviewCountData] = useState({});
+  
+  // State to store the chart data
+  const [departmentAndInterviewCountChartData, setDepartmentAndInterviewCountChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: 'Interview Count for Department',
+        data: [],
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+        hoverBorderColor: 'rgba(255,99,132,1)',
+        borderWidth: 2,
+      }
+    ]
+  });
+
+  useEffect(() => {
+    const fetchDepartmentAndInterviewCountData = async () => {
+      try {
+        const response = await axios.get('https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Test_yzheng');
+        setDepartmentAndInterviewCountData(response.data);
+
+        // Preparing to actually go from raw data to chart data
+        const chartLabels = Object.keys(response.data);
+        const chartDataValues = Object.values(response.data);
+        setDepartmentAndInterviewCountChartData({
+          labels: chartLabels,
+          datasets: [{
+            label: 'Interview Count for Department',
+            data: chartDataValues,
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            borderWidth: 2,
+          }]
+        });
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
+    };
+
+    fetchDepartmentAndInterviewCountData();
+  }, []);
+
+
+
+
+
+
+
+
+  // return part of the  function below ****************************************************************************************
 
   return (
     <div className="data-analysis-container">
@@ -352,6 +404,11 @@ function DataAnalysis() {
           <div className="graph-container">
             <Bar data={chartData} options={barChartOptions} />
           </div>
+          <div className="graph-container">
+            <pre>{JSON.stringify(departmentAndInterviewCountData, null, 2)}</pre>
+            {/* Above is just temporarily displaying data for debugging */}
+            <Bar data={departmentAndInterviewCountChartData} options={barChartOptions} />
+          </div>
         </div>
       </div>
     </div>
@@ -360,36 +417,4 @@ function DataAnalysis() {
 
 
 export default DataAnalysis;
-
-
-
-
-
-
-
-
-
-
-  // (OLD) Function to update chart data
-  // const updateChartDataOld1 = async () => {
-  //   try {
-  //     const jobIDs = ['111111', '222', '1729', '666', 'MarketingTest', '798'];
-  //     const interviewCountsForBarChart = await Promise.all(
-  //       jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
-  //     );
-
-  //     //const filteredData = interviewCountsForBarChart.filter(count => count >= sliderValue);
-
-  //     setChartData(prevChartData => ({
-  //       ...prevChartData,
-  //       datasets: [{
-  //         ...prevChartData.datasets[0],
-  //         data: interviewCountsForBarChart, // Updating the data array with fetched counts
-  //         //data: filteredData, // Updating the data array with fetched counts
-  //       }]
-  //     }));
-  //   } catch (error) {
-  //     console.error('Error updating chart data:', error);
-  //   }
-  // };
 
