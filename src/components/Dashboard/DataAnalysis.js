@@ -54,7 +54,7 @@ function DataAnalysis() {
     'MarketingTest': 'Marketing',
     '798': 'Human Resources'
   };
-  
+
 
   // START BAR CHART COMPONENTS ******************************************** working
 
@@ -72,7 +72,7 @@ function DataAnalysis() {
 
   // State to store chart data
   const [chartData, setChartData] = useState({
-    labels: ['Code', 'DSA', 'Data Science', 'Algorithms', 'Marketing', 'Human Resources'], 
+    labels: ['Code', 'DSA', 'Data Science', 'Algorithms', 'Marketing', 'Human Resources'],
     datasets: [
       {
         label: 'Department Interviews',
@@ -95,7 +95,7 @@ function DataAnalysis() {
       }
       const data = await response.json();
       console.log('FETCHED interview count for selected job:', data.interviewCount);
-      return data.interviewCount; 
+      return data.interviewCount;
     } catch (error) {
       console.error('Error fetching interview count for selected job:', error);
       return 0; // error return
@@ -108,16 +108,16 @@ function DataAnalysis() {
       const interviewData = await Promise.all(
         jobIDs.map(jobID => fetchInterviewCountForBarChart(jobID))
       );
-  
+
       // Mapping counts to jobIDs before filtering
       const mappedData = interviewData.map((count, index) => ({
         label: jobIDToLabelMap[jobIDs[index]],  // Using custom map to get human-readable label
         count: count
       }));
-  
+
       // Filtering data based on the slider value
       const filteredData = mappedData.filter(item => item.count >= sliderValue);
-  
+
       setChartData(prevChartData => ({
         ...prevChartData,
         labels: filteredData.map(item => item.label), // Update labels with human-readable names
@@ -155,7 +155,7 @@ function DataAnalysis() {
   useEffect(() => {
     updateChartData();
   }, [sliderValue]);  // Depend on sliderValue to refetch and update chart
-  
+
   // END OF SLIDER COMPONENTS *************************************************************
 
   // above are all the states and bar chart stuff *************************************************************
@@ -210,7 +210,7 @@ function DataAnalysis() {
         }
         return response.json(); // This already parses the JSON response
       })
-      .then(data => {        
+      .then(data => {
         console.log('FETCHED job_data :    ', data.job_data);
         //setJobData(data.Items.map(item => [item.jobName.S, item.jobID.S]));
         setJobData(data.job_data);
@@ -264,7 +264,7 @@ function DataAnalysis() {
 
   // New redesign code below ****************************************************************************************
 
-  
+
   // useEffect(() => {
   //   // fetching lambda function 2 to get department and interview count pairs in json
   //   const fetchDepartmentAndInterviewCountData = async () => {
@@ -287,10 +287,10 @@ function DataAnalysis() {
 
   // State to store a list of Departments to populate the dropdown menu
   const [departments, setDepartments] = useState([]);
-  
+
   // State to store the currently chosen department
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-  
+  const [selectedDepartment, setSelectedDepartment] = useState('Writing Code');
+
   // function to fetch new data for job-interview chart upon change of department
   const handleDepartmentChange = (event) => {
     setSelectedDepartment(event.target.value);
@@ -310,7 +310,33 @@ function DataAnalysis() {
             { headers: { "Content-Type": "application/json" } }
           );
           console.log("Data fetched for department:", response.data);
-          // Here you would handle setting this data into state to be used in the chart
+          console.log("Response in its raw form: " + response);
+
+          // new code for actually storing data fetched from that one department --------
+          // Store the raw data
+          setJobAndInterviewCountData(response.data.job_interview_counts);
+          console.log("Stored to raw data state only this part: " + response.data.job_interview_counts)
+
+          // Format and store the chart data
+          const chartLabels = Object.keys(response.data.job_interview_counts);
+          const chartDataValues = Object.values(response.data.job_interview_counts);
+          setJobAndInterviewCountChartData({
+            labels: chartLabels,
+            datasets: [{
+              label: 'Interview Count for Job',
+              data: chartDataValues,
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+              hoverBorderColor: 'rgba(255,99,132,1)',
+              borderWidth: 2,
+            }]
+          });
+          console.log("Finished setting up job-interviewCount data and chartData.")
+
+          // end of new code for storing in raw and chart format ------------------------
+
+
         } catch (error) {
           console.error('Error fetching job and interview count data:', error);
         }
@@ -319,7 +345,28 @@ function DataAnalysis() {
       fetchJobAndInterviewCountDataForDepartment();
     }
   }, [selectedDepartment]); // Effect runs when selectedDepartment changes
-  
+
+  // above was stuff to actually get data from the selected dept, and the states to store dept and selectedDept
+  // now below is the states to store raw and formatted job-interviewCount data for the job-interviewCount-in-this-dept chart
+
+  // State to store the job and interview count data fetched from the Lambda function
+  const [jobAndInterviewCountData, setJobAndInterviewCountData] = useState({});
+
+  // State to store the formatted chart data
+  const [jobAndInterviewCountChartData, setJobAndInterviewCountChartData] = useState({
+    labels: [],
+    datasets: [{
+      label: 'Interview Count for Job',
+      data: [],
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+      hoverBorderColor: 'rgba(255,99,132,1)',
+      borderWidth: 2,
+    }]
+  });
+
+
 
 
   // above are stuff for the job-interviewCount (for a single department) chart
@@ -328,7 +375,7 @@ function DataAnalysis() {
 
   // State to store the fetched data for lambda function 2 (department and interview count pairs)
   const [departmentAndInterviewCountData, setDepartmentAndInterviewCountData] = useState({});
-  
+
   // State to store the chart data
   const [departmentAndInterviewCountChartData, setDepartmentAndInterviewCountChartData] = useState({
     labels: [],
@@ -355,7 +402,7 @@ function DataAnalysis() {
         // Extracting just the departments from the fetched data
         const departmentList = Object.keys(response.data);
         setDepartments(departmentList);
-        setSelectedDepartment(departmentList[0]);
+        //setSelectedDepartment(departmentList[0]);
         // End of part of function for the job-interviews for chosen dept chart -------------------
 
 
@@ -460,10 +507,16 @@ function DataAnalysis() {
           <div className="graph-container">
             <Bar data={chartData} options={barChartOptions} />
           </div>
+
           <div className="graph-container">
             <pre>{JSON.stringify(departmentAndInterviewCountData, null, 2)}</pre>
             {/* Above is just temporarily displaying data for debugging */}
             <Bar data={departmentAndInterviewCountChartData} options={barChartOptions} />
+          </div>
+
+          <div className="graph-container">
+            <pre>{JSON.stringify(jobAndInterviewCountData, null, 2)}</pre>
+            <Bar data={jobAndInterviewCountChartData} options={barChartOptions} />
           </div>
         </div>
       </div>
