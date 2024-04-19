@@ -124,7 +124,7 @@ function ConductInterview() {
           Interviewer: username
         });
 
-        alert('Interview submitted successfully!');
+      
         setShowModal(true);
       } catch (error) {
         console.error('Error submitting new interview:', error);
@@ -271,7 +271,7 @@ function EmailTranscriptModal({ isOpen, onClose, email, setEmail, onSubmit }) {
     <div className="modal">
       <div className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
-        <h1>Emailing Transcript</h1>
+        <h1>Interview Successfully Submitted</h1>
         <h2>Use format "example1@gmail.com, example2@gmail.com, example3@gmail.com" for multiple email addresses</h2>
         <input
           type="email"
@@ -280,8 +280,8 @@ function EmailTranscriptModal({ isOpen, onClose, email, setEmail, onSubmit }) {
           onChange={(e) => setEmail(e.target.value)}
         />
         <div className="modal-buttons">
-          <button onClick={() => onSubmit(true)}>Send Transcript & Submit</button>
-          <button onClick={() => onSubmit(false)}>Submit Without Sending</button>
+          <button onClick={() => onSubmit(true)}>Send Transcript of this Interview</button>
+          <button onClick={() => onSubmit(false)}>No Transcript Needed</button>
         </div>
       </div>
     </div>
