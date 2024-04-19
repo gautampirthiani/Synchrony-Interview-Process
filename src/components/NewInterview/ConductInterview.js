@@ -271,8 +271,9 @@ function EmailTranscriptModal({ isOpen, onClose, email, setEmail, onSubmit }) {
     <div className="modal">
       <div className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
-        <h1>Interview Successfully Submitted</h1>
-        <h2>Use format "example1@gmail.com, example2@gmail.com, example3@gmail.com" for multiple email addresses</h2>
+        <h1>Interview Successfully Submitted!</h1>
+        <h2>Would you like a email transcript?</h2>
+        <h3>Use format "example1@gmail.com, example2@gmail.com, example3@gmail.com" for multiple email addresses</h3>
         <input
           type="email"
           placeholder="Enter email address"
