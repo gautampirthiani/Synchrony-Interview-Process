@@ -81,13 +81,23 @@
   margin: 1rem;
 }
 
-.left-column {
-  flex: 1; /* 1/4 of the space */
+.left-column{
+  flex:1.5;
+  flex-grow: 1;
+}
+
+.left-column-upper {
+
   padding: 1rem;
+  flex-grow: 2;
+  
   background: white;
   border-radius: 15px;
   color:black;
 }
+
+
+
 
 .right-column {
   flex: 2; /* 3/4 of the space */
@@ -191,4 +201,3 @@
     background-color: #80bfff; /* Brighter color */
   }
 }
-

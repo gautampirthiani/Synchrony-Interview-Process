@@ -8,41 +8,8 @@
     width: 100%;
     margin: 0;
     padding: 0;
-
+    padding-top: 10px;
 }
-
-/* Reuse header and logo styles */
-.header {
-    /* ... */
-}
-
-.logo {
-    /* ... */
-}
-
-/* Reuse navbar styles */
-.navbar {
-    /* ... */
-}
-
-/* Reuse portal header styles */
-.portal-header-container {
-    /* ... */
-}
-
-.recruiting-portal-header {
-    /* ... */
-}
-
-/* Reuse search bar styles */
-.search-container {
-    /* ... */
-}
-
-.search-bar {
-    /* ... */
-}
-
 
 #job-template-info p {
     margin-top: 0;
@@ -51,13 +18,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    line-height: 1.1; /* 可选的，如果你还想减小行间距 */
+    line-height: 1.1; 
 }
 
-
-
-
-#add-question-answer-btn {
+#update-template-add-question-answer-btn {
     display: inline-block;
     margin-right: 8px;
     padding: 8px 16px;
@@ -70,7 +34,7 @@
     vertical-align: middle;
 }
 
-#save-new-templates-btn {
+#update-template-save-new-templates-btn {
     display: inline-block;
     float: right;
     padding: 8px 16px;
@@ -83,48 +47,61 @@
     vertical-align: middle;
 }
 
-#delete-btn {
-    color: red;
-
-}
-
-
-
-/* 附加输入框的容器 */
-.additional-inputs-container {
+/* Question & Answer's container */
+.update-template-inputs-container {
     display: flex;
-    justify-content: space-between;
-    margin: 1rem 2rem;
-    padding: 0;
-}
-
-/* 修改后的附加输入框样式 */
-.additional-input {
+    justify-content: space-between; 
+    margin: 1rem 2rem; 
+    padding: 0; 
+  }
+  
+/* Question styles */
+.update-template-question-input {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-}
-
-/* 第一个附加输入框，占2/3宽度 */
-.additional-input:first-child {
-    flex-grow: 2;
+    flex-grow: 6.6;
     flex-basis: 0;
-    margin-right: 10px;
+    resize: none;
+    margin-right: 10px; 
+    height: auto;
+    overflow-y: hidden;
 }
-
-/* 第二个附加输入框，占1/3宽度 */
-.additional-input:last-child {
-    flex-grow: 1;
-    flex-basis: 0;
-    margin-left: 10px;
-}
-
-.score-input {
+  
+/* Answer's style */
+.update-template-answer-input {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-right: 10px;
+    flex-grow: 3.4;
+    flex-basis: 0;
+    resize: none;
+    height: auto;
+    overflow-y: hidden;
+}
+  
+.update-template-score-input {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px; 
     margin-left: 10px;
+    width: 75px;
+}
+  
+#update-template-delete-btn {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    color: red;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
 }
 
 /* Styles for the positions and templates lists */
@@ -149,7 +126,3 @@
     color: black;
 }
 
-.templates-container {
-    margin: 1rem;
-    padding: 0.5rem;
-}

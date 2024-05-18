@@ -1,0 +1,92 @@
+.new-interview-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #002244;
+  color: white;
+  min-height: 100vh;
+  padding-top: 10px;
+}
+
+.portal-header-container {
+  text-align: center;
+  margin: 0;
+}
+
+.recruiting-portal-header {
+  font-size: 24px;
+  color: white;
+}
+
+.search-navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.search-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar {
+  width: 50%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+}
+
+.page-navigation button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin-left: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.page-navigation button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.page-navigation button:not(:disabled):hover {
+  background-color: #0056b3;
+}
+
+.position-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.position-item {
+  background-color: #fff;
+  color: #002244;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 80%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.position-detail {
+  margin: 0.5rem 0;
+}
+
+.position-detail strong {
+  margin-right: 0.5rem;
+}

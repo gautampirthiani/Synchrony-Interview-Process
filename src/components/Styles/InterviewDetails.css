@@ -1,0 +1,118 @@
+/* InterviewDetails.css */
+
+.interview-details {
+  font-family: 'Arial', sans-serif;
+  background-color: #002244;
+  color: white;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  padding-top: 10px; /* Reduce this value to decrease white space at the top */
+}
+
+#update-interview-info p {
+  margin-top: 0;
+  margin-bottom: 0;
+  display: flex;
+  align-items: left;
+  line-height: 1.1; 
+}
+
+#update-interview-info{
+  margin-bottom: 1rem;
+}
+
+.interview-details {
+  font-family: 'Arial', sans-serif;
+  background-color: #002244;
+  color: white;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  padding-top: 10px; /* Reduce this value to decrease white space at the top */
+}
+
+#interview-details-add-question-answer-btn {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+#interview-details-save-new-templates-btn {
+  display: inline-block;
+  float: right;
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+/* Question & Answer's container */
+.interview-details-inputs-container {
+  display: flex;
+  justify-content: space-between; 
+  margin: 1rem 2rem; 
+  padding: 0; 
+}
+
+/* Question styles */
+.interview-details-question-input {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex-grow: 6.6;
+  flex-basis: 0;
+  resize: none;
+  margin-right: 10px; 
+  height: auto;
+  overflow-y: hidden;
+}
+
+/* Answer's style */
+.interview-details-answer-input {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex-grow: 3.4;
+  flex-basis: 0;
+  resize: none;
+  height: auto;
+  overflow-y: hidden;
+}
+
+.interview-details-score-input {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px; 
+  margin-left: 10px;
+  width: 75px;
+}
+
+#interview-details-delete-btn {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: red;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px;
+}

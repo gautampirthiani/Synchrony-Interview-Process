@@ -1,0 +1,220 @@
+/* AddUser.css */
+
+.body-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background-color: #e6e7e8;
+  font-family: Arial, sans-serif;
+  padding-top: 20px;
+}
+
+.logo-container {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.dynamic-department {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.form-input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.form-button {
+  background-color: #0071e3;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+.add-btn,
+.remove-btn,
+.update-btn,
+.delete-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.add-btn:hover,
+.remove-btn:hover,
+.update-btn:hover,
+.delete-btn:hover {
+  background-color: #0056b3;
+}
+
+.add-btn {
+  margin-bottom: 20px;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px; 
+  margin-top: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 240px);
+}
+
+.user-table,
+.department-table {
+  width: 100%;
+  max-width: 1200px; 
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  table-layout: fixed;
+}
+
+.user-table h2,
+.department-table h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.user-table table,
+.department-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td,
+.department-table th,
+.department-table td {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 15px;
+  text-align: left;
+}
+
+.user-table th,
+.department-table th {
+  color: #0071e3;
+}
+
+.delete-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background: url('./trash_can.svg') no-repeat center;
+  background-size: contain;
+  color: transparent;
+}
+
+.delete-btn:hover {
+  opacity: 0.8;
+}
+
+.form-container,
+.table-container {
+  padding: 0 20px;
+}
+
+.user-table th:last-child,
+.department-table th:last-child,
+.user-table td:last-child,
+.department-table td:last-child {
+  text-align: right;
+}
+
+.user-table td:last-child .delete-btn,
+.department-table td:last-child .delete-btn {
+  margin-left: auto;
+  display: block;
+}
+
+.update-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #17a2b8; 
+  color: #fff; 
+}
+
+.update-btn:hover {
+  background-color: #138496; 
+}
+
+.modal .update-btn {
+  background-color: #17a2b8; 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  display: block; 
+  margin: 20px 0; 
+}
+
+.modal .update-btn:hover {
+  background-color: #138496; 
+}

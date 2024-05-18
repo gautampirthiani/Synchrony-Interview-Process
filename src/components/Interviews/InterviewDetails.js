@@ -1,97 +1,153 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import logoImage from '../synchrony-logo-1.png';
-import './InterviewDetails.css';
-import Navbar from '../Navbar';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../Styles/InterviewDetails.css';
+import Loader from '../Loader';
 
 function InterviewDetails() {
-  const [interview, setInterview] = useState({
-    "Interview ID": "",
-    "Interviewer": "",
-    "Job ID": "",
-    "Questions": [],
-    "Interviewed On": "",
-    "Name": ""
+  const [loading, setLoading] = useState(false);
+  const {jobId,interviewId} = useParams();
+  const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
+  const [interviewDetails, setInterviewDetails] = useState({
+    interviewID: '',
+    interviewedOn: '',
+    interviewer: 'N/A',
+    jobID: '',
+    name: ''
   });
-  const [loading, setLoading] = useState(true);
-  const { interviewId } = useParams();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log('interviewId:', interviewId);
-        const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Interview?interviewId=${interviewId}`);
-        setInterview(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching interview data:', error);
-      }
-    };
-
-    fetchData();
-  }, [interviewId]);
-
-  const handleInputChange = (index, key, value) => {
-    const updatedQuestions = interview.Questions.map((question, i) =>
-      i === index ? { ...question, [key]: value } : question
-    );
-    setInterview({ ...interview, Questions: updatedQuestions });
+  const autoGrow = (element) => {
+    document.querySelectorAll('.interview-details-inputs-container').forEach(container => {
+      var first_input = container.getElementsByClassName('interview-details-question-input')[0];
+      var second_input = container.getElementsByClassName('interview-details-answer-input')[0];
+  
+      // Reset the height to 'auto' before calculating the new height
+      // to allows the box to shrink if the content has been deleted
+      first_input.style.height = 'auto';
+      second_input.style.height = 'auto';
+  
+      let first_height = first_input.scrollHeight;
+      let second_height = second_input.scrollHeight;
+      
+      let greater_height = Math.max(first_height, second_height);
+      first_input.style.height = greater_height + 'px';
+      second_input.style.height = greater_height + 'px';
+    });
   };
 
-  const handleUpdate = async (event) => {
-    event.preventDefault();
-    if (window.confirm('Are you sure you want to update this interview?')) {
-      try {
-        await axios.put(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Update_Interview?interviewId=${interviewId}`, interview);
-        alert('Interview updated successfully!');
-        navigate('/dashboard');
-      } catch (error) {
-        console.error('Error updating interview:', error);
-      }
+  function updateAdditionalInputsFromMultiple(items) {
+    const newItems = items.map(item => ({
+      question: item.QuestionText,
+      answer: item.Answer,
+      score: item.Score
+    }));
+    setAdditionalInputs(newItems);
+  }
+
+  const fetchdata = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Interview?interviewId=${interviewId}`);
+      console.log(response.data);
+      setInterviewDetails({
+        interviewID: response.data["Interview ID"],
+        interviewedOn: response.data["Interviewed On"],
+        interviewer: response.data.Interviewer,
+        jobID: response.data["Job ID"],
+        name: response.data.Name
+      });
+      updateAdditionalInputsFromMultiple(response.data.Questions);
+      autoGrow();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const navigate = useNavigate();
+
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+    if (window.confirm('Update?')) {
+      const data = {
+        interviewId,
+        questions: additionalInputs.map(({ question, answer, score }) => ({
+          QuestionText: question,
+          Answer: answer,
+          Score: score
+        }))
+      };
+      try {
+        console.log(data.interviewid);
+        await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/update_interview?interviewId=${data.interviewId}`, data);
+        // console.log(response);
+        alert('Updated successfully!');
+        navigate(-1); 
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+
+    }
+  };
+  useEffect(() => {
+    fetchdata();
+  }, []);
+  
+  const handleAdditionalInputChange = (index, key, value) => {
+    setAdditionalInputs(inputs =>
+      inputs.map((input, i) => (i === index ? { ...input, [key]: value } : input))
+    );
+  };
+  const addInputPair = () => {
+    setAdditionalInputs([...additionalInputs, { question: '', answer: '', score: '' }]);
+  };
+  const removeInputPair = (index) => {
+    setAdditionalInputs(inputs => inputs.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="interview-details">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Update Interview</h1>
       </div>
-      <div id="interview-info">
-        <p>Interviewer: {interview.Interviewer}</p>
-        <p>Job ID: {interview["Job ID"]}</p>
-        <p>Interviewed On: {interview["Interviewed On"]}</p>
-        <p>Candidate Name: {interview.Name}</p>
+      {loading && <Loader />}
+      <div id="update-interview-info" >
+        <p>Interviewer: {interviewDetails.interviewer}</p>
+        <p>Interviewed On: {interviewDetails.interviewedOn}</p>
+        <p>Candidate Name: {interviewDetails.name}</p>
       </div>
-      <button onClick={handleUpdate}>Update Interview</button>
-      {interview.Questions.map((question, index) => (
-        <div key={index} className="question-inputs-container">
+      <button id="interview-details-add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
+      <button id="interview-details-save-new-templates-btn" onClick={handleUpdate}>Update</button>
+      {additionalInputs.map((input, index) => (
+        <div key={index} className="interview-details-inputs-container">
           <textarea
             placeholder="Question"
-            value={question.QuestionText}
-            onChange={(e) => handleInputChange(index, 'QuestionText', e.target.value)}
+            value={input.question}
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'question', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="interview-details-question-input"
           />
           <textarea
             placeholder="Answer"
-            value={question.Answer}
-            onChange={(e) => handleInputChange(index, 'Answer', e.target.value)}
+            value={input.answer}
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'answer', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="interview-details-answer-input"
           />
-          <textarea
+          <input
+            type="text"
             placeholder="Score"
-            value={question.Score}
-            onChange={(e) => handleInputChange(index, 'Score', e.target.value)}
+            value={input.score}
+            onChange={(e) => handleAdditionalInputChange(index, 'score', e.target.value)}
+            className="interview-details-score-input"
           />
+          <button id="interview-details-delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
         </div>
       ))}
     </div>

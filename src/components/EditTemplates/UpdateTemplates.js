@@ -1,13 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
-import logoImage from '../synchrony-logo-1.png';
-import './UpdateTemplates.css';
-import Navbar from '../Navbar';
+import { useParams, Link, useNavigate} from 'react-router-dom';
+import '../Styles/UpdateTemplates.css';
+import Loader from '../Loader';
 
 function UpdateTemplates() {
+  const [loading, setLoading] = useState(false);
   const [additionalInputs, setAdditionalInputs] = useState([{ question: '', answer: '', score: '' }]);
   const { jobId, templateId } = useParams();
+  const [templateName, setTemplateName] = useState(''); 
+  const [jobPosition, setJobPosition] = useState(''); 
+
+  const autoGrow = (element) => {
+    document.querySelectorAll('.update-template-inputs-container').forEach(container => {
+      var first_input = container.getElementsByClassName('update-template-question-input')[0];
+      var second_input = container.getElementsByClassName('update-template-answer-input')[0];
+  
+      // Reset the height to 'auto' before calculating the new height
+      // to allows the box to shrink if the content has been deleted
+      first_input.style.height = 'auto';
+      second_input.style.height = 'auto';
+  
+      let first_height = first_input.scrollHeight;
+      let second_height = second_input.scrollHeight;
+      
+      let greater_height = Math.max(first_height, second_height);
+      first_input.style.height = greater_height + 'px';
+      second_input.style.height = greater_height + 'px';
+    });
+  };
+
+  useEffect(() => {
+    fetchdata();
+    query_job_positon();
+  }, []);
 
   function updateAdditionalInputsFromMultiple(items) {
     const newItems = items.map(item => ({
@@ -17,31 +43,43 @@ function UpdateTemplates() {
     }));
     setAdditionalInputs(newItems);
   }
-  
 
-  //Fetch
-  const fetchdata = async () => {
+  const query_job_positon = async () => {
     try {
-      //local test data
-      // const testData = [
-      //   { question: 'What is React?', answer: 'A JavaScript library for building user interfaces', score: '5' },
-      //   { question: 'What is useState?', answer: 'A Hook that lets you add React state to function components', score: '4' },
-      //   { question: 'What is useEffect?', answer: 'A Hook that lets you perform side effects in function components', score: '5' }
-      // ];
-      // setAdditionalInputs(testData);
-      // console.log(testData);
-      //?jobId=${jobId}&templateId=${templateId}
-      // add fetch API here
-      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Template?jobId=${jobId}&templateId=${templateId}`);
-      //console.log(response.data.Questions);
-      
-      updateAdditionalInputsFromMultiple(response.data.Questions);
+      setLoading(true);
+      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/get_jobPosition?jobId=${jobId}`);
+      // console.log("11")
+      // console.log(response.data)
+      setJobPosition(response.data)
+
     } catch (error) {
       // console.error('Error fetching data:', error);
     }
+    finally {
+      setLoading(false);
+    }
   };
 
-  //Update
+  const fetchdata = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Fetch_Template?jobId=${jobId}&templateId=${templateId}`);
+      // console.log(response.data)
+      // console.log(response.data['Template Name']);
+      // console.log(response.data['Template ID']);
+      setTemplateName(response.data['Template Name']);
+      updateAdditionalInputsFromMultiple(response.data.Questions);
+      autoGrow();
+    } catch (error) {
+      // console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
+  const navigate = useNavigate();
+
   const handleUpdate = async (event) => {
       event.preventDefault();
       if (window.confirm('Update?')) {
@@ -55,23 +93,14 @@ function UpdateTemplates() {
           }))
         };
         try {
-          //print sending data in console 
-          // console.log(data);
-          // Add API api for updating here
           const response = await axios.post(`https://rv0femjg65.execute-api.us-east-1.amazonaws.com/default/Update_Questions?jobId=${jobId}&templateId=${templateId}`, data);
-          // console.log(response);
           alert('Updated successfully!');
-          // fetchdata();
+          navigate(-1);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
-
       }
     };
-
-    useEffect(() => {
-    fetchdata();
-  }, []);
 
   const handleAdditionalInputChange = (index, key, value) => {
     setAdditionalInputs(inputs =>
@@ -87,45 +116,44 @@ function UpdateTemplates() {
 
   return (
     <div className="update-templates">
-      <div className="header">
-        <Link to="/">
-          <img src={logoImage} alt="Synchrony Logo" className="logo" />
-        </Link>
-        <Navbar />
-      </div>
       <div className="portal-header-container">
         <h1 className="recruiting-portal-header">Update Templates</h1>
       </div>
+      {loading && <Loader />}
       <div id="job-template-info">
-        <p>Job ID: {jobId}</p>
-        <p>Template ID: {templateId}</p>
+        <p>Job Position: {jobPosition}</p>
+        <p>Template Name: {templateName}</p>
       </div>
-      <button id="add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
-      <button id="save-new-templates-btn" onClick={handleUpdate}>Update</button>
+      <button id="update-template-add-question-answer-btn" onClick={addInputPair}>Add Question & Answer</button>
+      <button id="update-template-save-new-templates-btn" onClick={handleUpdate}>Update</button>
       {additionalInputs.map((input, index) => (
-        <div key={index} className="additional-inputs-container">
-          <input
-            type="text"
+        <div key={index} className="update-template-inputs-container">
+          <textarea
             placeholder="Question"
             value={input.question}
-            onChange={(e) => handleAdditionalInputChange(index, 'question', e.target.value)}
-            className="additional-input"
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'question', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="update-template-question-input"
           />
-          <input
-            type="text"
+          <textarea
             placeholder="Answer"
             value={input.answer}
-            onChange={(e) => handleAdditionalInputChange(index, 'answer', e.target.value)}
-            className="additional-input"
+            onChange={(e) => {
+              handleAdditionalInputChange(index, 'answer', e.target.value);
+              autoGrow(e.target);
+            }}
+            className="update-template-answer-input"
           />
           <input
             type="text"
             placeholder="Score"
             value={input.score}
             onChange={(e) => handleAdditionalInputChange(index, 'score', e.target.value)}
-            className="score-input"
+            className="update-template-score-input"
           />
-          <button id="delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
+          <button id="update-template-delete-btn" onClick={() => removeInputPair(index)}>Delete</button>
         </div>
       ))}
     </div>
