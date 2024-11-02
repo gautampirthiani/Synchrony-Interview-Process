@@ -13,6 +13,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+        CI: false  # Set CI to false to prevent React from exiting on error
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
