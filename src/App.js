@@ -16,8 +16,54 @@ import JobInterviews from './components/Interviews/JobInterviews';
 import AddUser from './components/AddUser';
 import './App.css';
 import logo from './components/synchrony-logo-1.png';
+import { Amplify } from 'aws-amplify';
+
+// Check if AWS Amplify is configured
+const isAmplifyConfigured = () => {
+  try {
+    return !!Amplify._config;
+  } catch {
+    return false;
+  }
+};
 
 function App() {
+  const amplifyConfigured = isAmplifyConfigured();
+
+  if (!amplifyConfigured) {
+    // Render without authentication if Amplify is not configured
+    return (
+      <Router>
+        <div className="auth-wrapper">
+          <nav className="navbar">
+            <img src={logo} alt="Company Logo" className="company-logo" />
+            <ul className="navbar-nav">
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/dashboard/interviews">Interviews</Link></li>
+              <li><Link to="/dashboard/new-interview">New Interview</Link></li>
+              <li><Link to="/dashboard/edit-templates">Edit Templates</Link></li>
+              <li><Link to="/dashboard/data-analysis">Data Analysis</Link></li>
+            </ul>
+          </nav>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/dashboard/interviews" element={<Interviews />} />
+            <Route path="/dashboard/new-interview" element={<NewInterview />} />
+            <Route path="/dashboard/edit-templates" element={<EditTemplates />} />
+            <Route path="/interview-details/:interviewId" element={<InterviewDetails />} />
+            <Route path="/new-interview/conduct-interview/:jobId" element={<ConductInterview />} />
+            <Route path="/dashboard/new-templates" element={<NewTemplates />} />
+            <Route path="/dashboard/data-analysis" element={<DataAnalysis />} />
+            <Route path="/dashboard/templates/:JobID" element={<Templates />} />
+            <Route path="/dashboard/update-templates/:jobId/:templateId" element={<UpdateTemplates />} />
+            <Route path="/dashboard/new-templates/:jobId" element={<NewTemplates />} />
+            <Route path="/interviews/job-interviews/:jobId/:jobPosition" element={<JobInterviews />} />
+          </Routes>
+        </div>
+      </Router>
+    );
+  }
+
   return (
     <Authenticator hideSignUp>
       {({ signOut, user }) => (

@@ -1,0 +1,35 @@
+# .github/workflows/build.yml
+name: Build Verification
+
+on:
+  push:
+    branches:
+      - main   # Runs on push to main branch
+  pull_request:
+    branches:
+      - main   # Runs on pull requests to main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+        CI: false  # Set CI to false to prevent React from exiting on error
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Specify your Node.js version; commonly 14, 16, or 18 for React
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the React project
+        run: npm run build
+
+      - name: Verify Build Output
+        run: ls -la build  # Lists the contents of the build directory
